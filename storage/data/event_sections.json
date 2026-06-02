@@ -1,0 +1,85 @@
+[
+  {
+    "id": "sec-objectives",
+    "event_slug": "global-gut-summit-2026",
+    "type": "outcomes",
+    "enabled": true,
+    "sort_order": 10,
+    "title": "What You Will Learn",
+    "subtitle": "A clinical learning path built for practitioners.",
+    "body": "",
+    "items": [
+      "Latest gut health and microbiome research",
+      "Clinical applications of probiotics",
+      "Prebiotic strategies for practice",
+      "Evidence-based gut health protocols",
+      "International expert insights"
+    ]
+  },
+  {
+    "id": "sec-event-proof",
+    "event_slug": "global-gut-summit-2026",
+    "type": "trust",
+    "enabled": true,
+    "sort_order": 5,
+    "title": "A Focused International Gut Health Conference",
+    "subtitle": "Built from the official team brief and speaker profiles.",
+    "body": "",
+    "items": [
+      "3rd international edition",
+      "Online international access",
+      "E-certificate for participants",
+      "Organized by Alpha Naturals & Salus Nutri",
+      "Speakers from Australia, United Kingdom, India, and USA"
+    ]
+  },
+  {
+    "id": "sec-audience",
+    "event_slug": "global-gut-summit-2026",
+    "type": "audience",
+    "enabled": true,
+    "sort_order": 20,
+    "title": "Designed For",
+    "subtitle": "Built for clinical, integrative, and nutrition-focused professionals.",
+    "body": "",
+    "items": [
+      "BNYS, BAMS, BHMS, and MBBS practitioners",
+      "Functional medicine practitioners",
+      "Nutritionists and dietitians",
+      "Physiotherapists",
+      "Medical students"
+    ]
+  },
+  {
+    "id": "sec-trust",
+    "event_slug": "global-gut-summit-2026",
+    "type": "trust",
+    "enabled": true,
+    "sort_order": 30,
+    "title": "Why This Conference Stands Apart",
+    "subtitle": "Inspired by high-conversion workshop pages, but kept professional for a medical audience.",
+    "body": "The page should make registration obvious while preserving a credible clinical tone.",
+    "items": [
+      "International speakers from Australia, United Kingdom, India, and USA",
+      "Online access for practitioners across regions",
+      "E-certificate for participants",
+      "Affordable Rs.299 registration"
+    ]
+  },
+  {
+    "id": "sec-faq",
+    "event_slug": "global-gut-summit-2026",
+    "type": "faq",
+    "enabled": true,
+    "sort_order": 40,
+    "title": "Frequently Asked Questions",
+    "subtitle": "",
+    "body": "",
+    "items": [
+      "Is this online? Yes, this is an online international conference.",
+      "Will participants receive a certificate? Yes, an e-certificate is planned for participants.",
+      "Who can attend? Medical, nutrition, integrative health, and student audiences are welcome.",
+      "How much is registration? The listed fee is Rs.299."
+    ]
+  }
+]

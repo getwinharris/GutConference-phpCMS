@@ -1,0 +1,20 @@
+[
+  {
+    "id": "media-gutconference-logo-png",
+    "filename": "gutconference-logo.png",
+    "original_name": "logo gut final.png",
+    "path": "/assets/images/media/gutconference-logo.png",
+    "context": "events",
+    "mime": "image/png",
+    "created_at": "2026-06-02T00:00:00+05:30"
+  },
+  {
+    "id": "media-gutconference-logo-jpg",
+    "filename": "gutconference-logo.jpg",
+    "original_name": "LOGO GUT final.jpg",
+    "path": "/assets/images/media/gutconference-logo.jpg",
+    "context": "events",
+    "mime": "image/jpeg",
+    "created_at": "2026-06-02T00:00:00+05:30"
+  }
+]

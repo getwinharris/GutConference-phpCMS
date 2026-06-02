@@ -1,0 +1,51 @@
+# Project Map
+
+- `/` → `PublicController@home` → EventService
+- `/about` → `PublicController@about` → none
+- `/events` → `PublicController@events` → EventService
+- `/events/{slug}` → `PublicController@event` → EventService, SecretService
+- `/conference/{slug}` → `PublicController@event` → EventService, SecretService
+- `/contact` → `PublicController@contact` → none
+- `/contact` → `PublicController@contact` → ContactService
+- `/login` → `PublicController@login` → AuthService
+- `/forgot-password` → `AuthController@forgotPassword` → PasswordResetService
+- `/forgot-password` → `AuthController@forgotPasswordPost` → PasswordResetService
+- `/reset-password` → `AuthController@resetPassword` → PasswordResetService
+- `/reset-password` → `AuthController@resetPasswordPost` → PasswordResetService
+- `/login` → `AuthController@loginPost` → JsonStoreService
+- `/logout` → `AuthController@logout` → AuthService
+- `/admin` → `AdminController@dashboard` → ResourceService, AuthService
+- `/admin/events` → `AdminController@events` → ResourceService, SchemaService, AuthService
+- `/admin/events/save` → `AdminController@saveEvent` → ResourceService, AuditLogService, AuthService
+- `/admin/events/delete` → `AdminController@deleteEvent` → ResourceService, AuditLogService, AuthService
+- `/admin/event_sections` → `AdminController@eventSections` → ResourceService, SchemaService, AuthService
+- `/admin/event_sections/save` → `AdminController@saveEventSection` → ResourceService, AuditLogService, AuthService
+- `/admin/event_sections/delete` → `AdminController@deleteEventSection` → ResourceService, AuditLogService, AuthService
+- `/admin/speakers` → `AdminController@speakers` → ResourceService, SchemaService, AuthService
+- `/admin/speakers/save` → `AdminController@saveSpeaker` → ResourceService, AuditLogService, AuthService
+- `/admin/speakers/delete` → `AdminController@deleteSpeaker` → ResourceService, AuditLogService, AuthService
+- `/admin/sessions` → `AdminController@sessions` → ResourceService, SchemaService, AuthService
+- `/admin/sessions/save` → `AdminController@saveSession` → ResourceService, AuditLogService, AuthService
+- `/admin/sessions/delete` → `AdminController@deleteSession` → ResourceService, AuditLogService, AuthService
+- `/admin/venues` → `AdminController@venues` → ResourceService, SchemaService, AuthService
+- `/admin/venues/save` → `AdminController@saveVenue` → ResourceService, AuditLogService, AuthService
+- `/admin/venues/delete` → `AdminController@deleteVenue` → ResourceService, AuditLogService, AuthService
+- `/admin/registrations` → `AdminController@registrations` → ResourceService, AuthService
+- `/admin/notification_templates` → `AdminController@notificationTemplates` → ResourceService, SchemaService, AuthService
+- `/admin/notification_templates/save` → `AdminController@saveNotificationTemplate` → ResourceService, AuditLogService, AuthService
+- `/admin/notification_templates/delete` → `AdminController@deleteNotificationTemplate` → ResourceService, AuditLogService, AuthService
+- `/admin/notification_queue` → `AdminController@notificationQueue` → ResourceService, AuthService
+- `/admin/settings` → `AdminController@settings` → SettingsService, AuthService
+- `/admin/settings/save` → `AdminController@saveSettings` → SettingsService, AuthService
+- `/admin/settings/admin-credentials` → `AdminController@saveAdminCredentials` → EnvService, AuthService
+- `/admin/integrations` → `AdminController@integrations` → SecretService, AuthService
+- `/admin/integrations/save` → `AdminController@saveIntegrations` → SecretService, AuthService
+- `/admin/contact-submissions` → `AdminController@contactSubmissions` → ContactService, AuthService
+- `/admin/media` → `AdminController@media` → MediaService, AuthService
+- `/admin/media/upload` → `AdminController@uploadMedia` → MediaService, AuditLogService, AuthService
+- `/admin/audit-log` → `AdminController@audit` → AuditLogService, AuthService
+- `/admin/backups` → `AdminController@backups` → JsonStoreService, AuthService
+- `/admin/environment` → `AdminController@environment` → EnvService, StoragePermissionService, AuthService
+- `/admin/environment/save` → `AdminController@saveEnvironment` → EnvService, AuditLogService, AuthService
+- `/admin/environment/fix-permissions` → `AdminController@fixPermissions` → StoragePermissionService, AuditLogService, AuthService
+- `/admin/developer/project-map` → `AdminController@projectMap` → ProjectMapService, AuthService

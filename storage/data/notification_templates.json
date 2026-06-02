@@ -1,0 +1,22 @@
+[
+  {
+    "id": "tpl-registration-confirmed-email",
+    "key": "registration-confirmed",
+    "channel": "email",
+    "enabled": true,
+    "subject": "Your Global Gut Summit registration",
+    "template_name": "",
+    "language": "en",
+    "body": "Thank you for registering. Your conference details will be shared before the event."
+  },
+  {
+    "id": "tpl-payment-confirmed-whatsapp",
+    "key": "payment-confirmed",
+    "channel": "whatsapp",
+    "enabled": false,
+    "subject": "",
+    "template_name": "payment_confirmed",
+    "language": "en",
+    "body": "Official Meta WhatsApp template name to be configured after approval."
+  }
+]

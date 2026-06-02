@@ -1,0 +1,90 @@
+[
+  {
+    "id": "spk-siba-dolai",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 10,
+    "name": "Dr. Siba Dolai",
+    "country": "Australia",
+    "topic": "The Role of Gut Microbiome in Health and Disease",
+    "session_time": "09:45 AM - 10:35 AM IST",
+    "profile": "Experienced clinician and educator with a special interest in microbiome science and clinical practice.",
+    "photo_url": ""
+  },
+  {
+    "id": "spk-vijay-murthy",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 20,
+    "name": "Dr. Vijay Murthy",
+    "country": "United Kingdom",
+    "topic": "META-GUT: From Microbiome to Meta-Phenotype",
+    "session_time": "10:35 AM - 11:25 AM IST",
+    "profile": "Works at the intersection of functional medicine, systems biology, and personalized healthcare.",
+    "photo_url": ""
+  },
+  {
+    "id": "spk-sanjay-sachdeva",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 30,
+    "name": "Dr. Sanjay Sachdeva",
+    "country": "India",
+    "topic": "Topic To Be Confirmed",
+    "session_time": "11:25 AM - 11:55 AM IST",
+    "profile": "Conference organizer and healthcare leader involved in practitioner education and integrative health initiatives.",
+    "photo_url": ""
+  },
+  {
+    "id": "spk-praveen-jacob",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 40,
+    "name": "Dr. Praveen Jacob",
+    "country": "India",
+    "topic": "Topic To Be Confirmed",
+    "session_time": "11:55 AM - 12:50 PM IST",
+    "profile": "Integrative healthcare practitioner focusing on gut health, functional medicine, and clinical nutrition.",
+    "photo_url": ""
+  },
+  {
+    "id": "spk-ayurveda-guest",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 50,
+    "name": "Ayurveda Guest Speaker",
+    "country": "India",
+    "topic": "Topic To Be Confirmed",
+    "session_time": "12:50 PM - 01:20 PM IST",
+    "profile": "Speaker details awaited.",
+    "photo_url": ""
+  },
+  {
+    "id": "spk-mili-shah",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 60,
+    "name": "Dr. Mili Shah",
+    "country": "India",
+    "topic": "Ozone Therapy in Gut Health",
+    "session_time": "02:00 PM - 02:40 PM IST",
+    "profile": "Experienced practitioner with expertise in ozone therapy and integrative gastrointestinal health.",
+    "photo_url": ""
+  },
+  {
+    "id": "spk-alejandro-diaz",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 70,
+    "name": "Dr. Alejandro Diaz",
+    "country": "USA",
+    "topic": "Gut-Brain Connection",
+    "session_time": "02:40 PM - 03:35 PM IST",
+    "profile": "International speaker focusing on gastrointestinal health, neurological function, and overall wellbeing.",
+    "photo_url": ""
+  },
+  {
+    "id": "spk-daryl-turner",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 80,
+    "name": "Daryl Turner",
+    "country": "USA",
+    "topic": "Hashimoto's and Stress Impact on Gut Health",
+    "session_time": "03:35 PM - 04:30 PM IST",
+    "profile": "Health educator focusing on stress physiology, thyroid disorders, immune function, and gut health.",
+    "photo_url": ""
+  }
+]

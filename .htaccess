@@ -1,0 +1,16 @@
+Options -Indexes
+RewriteEngine On
+
+# Block access to sensitive directories
+RewriteRule ^(app|integrations|storage|tools|tests|docs)/ - [F,L]
+
+# API routes
+RewriteRule ^api/(.*)$ api/index.php [QSA,L]
+
+# Admin routes
+RewriteRule ^admin(.*)$ index.php [QSA,L]
+
+# All other routes - PHP serves views directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]

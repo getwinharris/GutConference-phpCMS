@@ -1,0 +1,25 @@
+[
+  {
+    "id": "evt-global-gut-summit-2026",
+    "slug": "global-gut-summit-2026",
+    "status": "published",
+    "featured": true,
+    "name": "The Global Gut Summit 2026",
+    "eyebrow": "3rd International Conference on Gut Health, Probiotics & Prebiotics",
+    "headline": "The Global Gut Summit 2026",
+    "subheadline": "Bridging Science & Clinical Healing",
+    "description": "3rd International Conference on Gut Health, Probiotics & Prebiotics for clinicians, nutrition experts, integrative practitioners, and medical students who want practical, evidence-based gut health education.",
+    "date_label": "28 June 2026",
+    "time_label": "9:30 AM - 4:30 PM IST",
+    "mode": "Online International Conference",
+    "price": 299,
+    "currency": "INR",
+    "registration_url": "",
+    "cta_label": "Register for Rs.299",
+    "logo_url": "/assets/images/media/gutconference-logo.png",
+    "hero_image_url": "/assets/images/media/gutconference-logo.jpg",
+    "organizers": "Alpha Naturals & Salus Nutri",
+    "contact_email": "gutconference2026@gmail.com",
+    "contact_phone": "+91 97314 82585"
+  }
+]

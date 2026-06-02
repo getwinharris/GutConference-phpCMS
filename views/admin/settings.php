@@ -1,0 +1,23 @@
+<div class="admin-card">
+    <h2>Admin Login</h2>
+    <p style="color:var(--muted)">These credentials are loaded from <code>.env</code>. Change them before production use.</p>
+    <form class="admin-form" method="post" action="/admin/settings/admin-credentials">
+        <div class="admin-form__row">
+            <label>Admin Username<input type="text" name="admin_username" value="<?= e($adminCredentials['username'] ?? '') ?>" autocomplete="username" required></label>
+            <label>Admin Email<input type="email" name="admin_email" value="<?= e($adminCredentials['email'] ?? '') ?>" autocomplete="email" required></label>
+            <label>Admin Password<input type="password" name="admin_password" value="<?= e($adminCredentials['password'] ?? '') ?>" autocomplete="new-password" required></label>
+        </div>
+        <br><button class="btn btn-primary">Save Admin Login</button>
+    </form>
+</div>
+<div class="admin-card">
+    <h2>Site Settings</h2>
+    <form class="admin-form" method="post" action="/admin/settings/save">
+        <div class="admin-form__row">
+            <label>Featured Event Slug<input name="featured_event_slug" value="<?= e($settings['featured_event_slug'] ?? 'global-gut-summit-2026') ?>"></label>
+            <label>Currency<input name="currency" value="<?= e($settings['currency'] ?? 'INR') ?>"></label>
+            <label>Timezone<input name="timezone" value="<?= e($settings['timezone'] ?? 'Asia/Kolkata') ?>"></label>
+        </div>
+        <br><button class="btn btn-primary">Save Settings</button>
+    </form>
+</div>
