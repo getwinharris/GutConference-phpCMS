@@ -1,6 +1,8 @@
 <section class="hero">
     <div class="container hero-grid">
         <div>
+            <?php $eventTime = $eventService->timeRange($event); ?>
+            <?php $slotSummary = $eventService->slotSummary($event, $sessions); ?>
             <p class="eyebrow"><?= e($event['eyebrow'] ?? 'Microbiome Conference') ?></p>
             <h1><?= e($event['headline'] ?? $event['name']) ?></h1>
             <p class="lede"><?= e($event['subheadline'] ?? '') ?></p>
@@ -9,31 +11,32 @@
             
             <div class="hero-actions">
                 <?php if(!empty($event['registration_url'])): ?>
-                    <a class="btn btn-cta" href="<?= e($event['registration_url']) ?>" target="_blank" rel="noopener"><?= e($event['cta_label'] ?? 'Register Now') ?></a>
+                    <a class="link-arrow link-arrow-primary" href="<?= e($event['registration_url']) ?>" target="_blank" rel="noopener"><?= e($event['cta_label'] ?? 'Register Now') ?> <span aria-hidden="true">→</span></a>
                 <?php else: ?>
-                    <a class="btn btn-cta" href="#registration"><?= e($event['cta_label'] ?? 'Register Now') ?></a>
+                    <a class="link-arrow link-arrow-primary" href="#registration"><?= e($event['cta_label'] ?? 'Register Now') ?> <span aria-hidden="true">→</span></a>
                 <?php endif; ?>
-                <a class="btn btn-outline" href="#agenda">View Agenda</a>
+                <a class="link-arrow" href="#agenda">View Agenda <span aria-hidden="true">→</span></a>
             </div>
             
             <p class="conference-note">Official online conference access includes live sessions, international speaker learning, and planned E-certificate support.</p>
 
             <div class="stats">
                 <div class="stat"><strong><?= e($event['date_label'] ?? '') ?></strong><span>Date</span></div>
-                <div class="stat"><strong><?= e($event['time_label'] ?? '') ?></strong><span>Time</span></div>
+                <div class="stat"><strong><?= e($eventTime) ?></strong><span>Time</span></div>
                 <div class="stat"><strong><?= e($event['mode'] ?? '') ?></strong><span>Mode</span></div>
-                <div class="stat"><strong>Rs.<?= e((string)($event['price'] ?? 0)) ?></strong><span>Fee</span></div>
+                <div class="stat"><strong><?= e($slotSummary) ?></strong><span>Slots</span></div>
             </div>
             
             <div class="trust-strip">
                 <div class="trust-item">E-certificate included</div>
                 <div class="trust-item">International speakers</div>
                 <div class="trust-item">Clinical application focus</div>
-                <div class="trust-item">Rs.<?= e((string)($event['price'] ?? 0)) ?> registration</div>
+                <div class="trust-item"><?= count($sessions) ?> agenda slots</div>
                 <div class="trust-item"><?= e($event['organizers'] ?? 'Organized event') ?></div>
             </div>
         </div>
         <div class="hero-media">
+            <img class="event-thumbnail" src="<?= e($event['thumbnail_url'] ?? $event['hero_image_url'] ?? '/assets/images/media/gutconference-logo.jpg') ?>" alt="<?= e($event['name'] ?? 'Conference thumbnail') ?>">
             <div class="brand-hero">
                 <img src="/assets/images/media/gutconference-mark.png" alt="GutConference circular mark">
                 <div class="brand-hero-title">
@@ -106,7 +109,7 @@
         <p class="eyebrow">Agenda</p>
         <h2>Conference Schedule</h2>
         <div class="timeline" style="margin-top: 30px;">
-            <?php foreach($sessions as $session): ?>
+            <?php foreach($sessions as $index => $session): ?>
                 <div class="timeline-row">
                     <div class="time"><?= e($session['time_label'] ?? '') ?></div>
                     <div>
@@ -114,6 +117,7 @@
                         <?php if(!empty($session['speaker_name'])): ?>
                             <span>🎙️ <?= e($session['speaker_name']) ?></span>
                         <?php endif; ?>
+                        <span class="slot-chip">Slot <?= e((string)($index + 1)) ?></span>
                         <?php if(!empty($session['description'])): ?>
                             <p style="font-size: 13px; color: var(--muted); margin-top: 6px;"><?= e($session['description']) ?></p>
                         <?php endif; ?>
@@ -146,15 +150,11 @@
             <p class="eyebrow">Registration</p>
             <h2>Reserve Your Seat</h2>
             
-            <div class="price-container">
-                <span class="price-active">Rs.<?= e((string)($event['price'] ?? 0)) ?></span>
-            </div>
-            
             <?php if(!empty($event['registration_url'])): ?>
-                <a class="btn btn-primary" href="<?= e($event['registration_url']) ?>" target="_blank" rel="noopener"><?= e($event['cta_label'] ?? 'Register Now') ?></a>
+                <a class="link-arrow link-arrow-primary" href="<?= e($event['registration_url']) ?>" target="_blank" rel="noopener"><?= e($event['cta_label'] ?? 'Register Now') ?> <span aria-hidden="true">→</span></a>
             <?php else: ?>
                 <p style="color: var(--muted); font-size: 14px; margin-bottom: 20px;">Secure checkout is available. Standard registration fee covers full session access, live Q&amp;A, and your verified E-certificate.</p>
-                <a class="btn btn-primary" href="/contact?subject=Registration%20for%20<?= e($event['slug']) ?>">Contact to Register</a>
+                <a class="link-arrow link-arrow-primary" href="/contact?subject=Registration%20for%20<?= e($event['slug']) ?>">Contact to Register <span aria-hidden="true">→</span></a>
             <?php endif; ?>
             
             <p style="margin-top: 18px; font-size: 12px; color: var(--muted);">Questions: <?= e($event['contact_email'] ?? '') ?> · <?= e($event['contact_phone'] ?? '') ?></p>
@@ -188,9 +188,9 @@
     <div class="container">
         <div>
             <strong><?= e($event['name'] ?? 'Conference') ?></strong>
-            <span><?= e($event['date_label'] ?? '') ?> · <?= e($event['time_label'] ?? '') ?> · Rs.<?= e((string)($event['price'] ?? 0)) ?></span>
+            <span><?= e($event['date_label'] ?? '') ?> · <?= e($eventTime) ?> · <?= e($slotSummary) ?></span>
         </div>
-        <a class="btn btn-primary" href="#registration"><?= e($event['cta_label'] ?? 'Register Now') ?></a>
+        <a class="link-arrow link-arrow-primary" href="#registration"><?= e($event['cta_label'] ?? 'Register Now') ?> <span aria-hidden="true">→</span></a>
     </div>
 </div>
 <?php endif; ?>
@@ -202,7 +202,7 @@
             <p class="lede">Get practical, evidence-based training and clinical protocols directly from international experts.</p>
         </div>
         <div style="text-align:right">
-            <a class="btn btn-primary" href="#registration"><?= e($event['cta_label'] ?? 'Register Now') ?></a>
+            <a class="link-arrow link-arrow-invert" href="#registration"><?= e($event['cta_label'] ?? 'Register Now') ?> <span aria-hidden="true">→</span></a>
         </div>
     </div>
 </section>

@@ -26,15 +26,22 @@ foreach ($required as $collection) {
 
 assertTrue((new SchemaService())->adminFields('events') !== [], 'events expose admin fields');
 assertTrue(in_array('slug', (new SchemaService())->adminFields('events'), true), 'events admin can edit slug');
+assertTrue(in_array('thumbnail_url', (new SchemaService())->adminFields('events'), true), 'events admin can edit thumbnail');
+assertTrue(in_array('start_time', (new SchemaService())->adminFields('events'), true) && in_array('remaining_slots', (new SchemaService())->adminFields('events'), true), 'events admin can edit real time and slots');
 assertTrue(in_array('items', (new SchemaService())->adminFields('event_sections'), true), 'event sections expose editable items');
 
 $events = new EventService();
 $featured = $events->featured();
+$settings = (new \App\Services\SettingsService())->public();
 assertTrue($featured !== null, 'featured published event exists');
 assertTrue(($featured['slug'] ?? '') === 'global-gut-summit-2026', 'featured event slug is seeded');
+assertTrue(($featured['name'] ?? '') === 'International Conference On Microbiome, Probiotics & Gut Nutrition', 'featured event uses admin-hosted conference name');
+assertTrue($events->timeRange($featured) === '9:30 AM - 4:30 PM IST', 'featured event time comes from event fields');
+assertTrue(str_contains($events->slotSummary($featured), '500') && str_contains($events->shortSlotSummary($featured), '500'), 'featured event slots come from event fields');
 assertTrue(count($events->speakers('global-gut-summit-2026')) >= 8, 'seed includes conference speakers');
 assertTrue(count($events->sessions('global-gut-summit-2026')) >= 8, 'seed includes agenda sessions');
 assertTrue($events->venue('global-gut-summit-2026') !== null, 'seed includes venue or online room');
+assertTrue(($settings['product_owner_handle'] ?? '') === '@the.gut.expert', 'settings include product owner social handle');
 
 $map = ProjectMapService::registry();
 $validation = ProjectMapService::validate($map);
@@ -50,9 +57,11 @@ foreach (['/','/events','/events/{slug}','/admin/events','/admin/event_sections'
 $home = file_get_contents(app_path('views/public/home.php')) ?: '';
 $event = file_get_contents(app_path('views/public/event.php')) ?: '';
 $admin = file_get_contents(app_path('views/layouts/admin.php')) ?: '';
-assertTrue(str_contains($home, 'GutConference Online'), 'home is rebranded');
+assertTrue(str_contains($home, 'GutConference'), 'home is rebranded');
+assertTrue(str_contains($home, 'data-carousel') && str_contains($home, 'Product Owner'), 'home includes owner and insights carousel sections');
 assertTrue(str_contains($event, 'Speaker Lineup') && str_contains($event, 'Reserve Your Seat'), 'event page includes conversion sections');
 assertTrue(str_contains($event, 'sticky-register') && str_contains($event, 'section-nav'), 'event page includes sticky registration and section navigation');
+assertTrue(str_contains($event, 'event-thumbnail') && str_contains($event, 'slot-chip'), 'event page includes thumbnail and agenda slot display');
 assertTrue(str_contains($event, 'E-certificate included') && str_contains($featured['organizers'] ?? '', 'Alpha Naturals'), 'event page uses official brief content');
 assertTrue(str_contains($admin, '/admin/events') && str_contains($admin, '/admin/venues'), 'admin nav exposes conference resources');
 assertTrue(!str_contains($admin, 'legacy-marketplace') && !str_contains($home, 'legacy-source-brand'), 'active UI does not expose old domain labels');

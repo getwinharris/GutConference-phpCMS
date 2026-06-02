@@ -1,6 +1,6 @@
-# GutConference Online PHP CMS
+# GutConference PHP CMS
 
-GutConference Online is a PHP/JSON conference CMS for `gutconference.online`. It is built for shared PHP hosting with no Node build step and no SQL requirement.
+GutConference is a PHP/JSON conference CMS for `gutconference.online`. It is built for shared PHP hosting with no Node build step and no SQL requirement.
 
 The app is brand-owned: public users cannot post events. Admins create and edit conferences, page sections, speakers, agenda sessions, venues/maps, registrations, payment links, notification templates, media, settings, and integrations.
 
@@ -16,10 +16,11 @@ The app is brand-owned: public users cannot post events. Admins create and edit 
 
 ## Current Seed Event
 
-- Event: The Global Gut Summit 2026
+- Event: International Conference On Microbiome, Probiotics & Gut Nutrition
 - Slug: `/events/global-gut-summit-2026`
-- Theme: Microbiome, Probiotics & Gut Nutrition
+- Edition copy: The Global Gut Summit 2026
 - Date/time: 28 June 2026, 9:30 AM - 4:30 PM IST
+- Slots: 500 live online access slots seeded from the event record
 - Fee: Rs.299
 - Organizers: Alpha Naturals & Salus Nutri
 
@@ -27,7 +28,7 @@ The app is brand-owned: public users cannot post events. Admins create and edit 
 
 Admins can manage:
 
-- `events`: event identity, slug URL, CTA, price, organizer/contact, logo and hero image
+- `events`: event identity, slug URL, CTA, price, organizer/contact, logo, hero image, thumbnail, start/end time, timezone, and slots
 - `event_sections`: editable landing-page sections such as outcomes, audience, trust, FAQ, policy, and custom blocks
 - `speakers`: speaker cards and session topics
 - `sessions`: agenda timeline

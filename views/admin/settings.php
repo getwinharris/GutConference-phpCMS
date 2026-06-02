@@ -17,6 +17,10 @@
             <label>Featured Event Slug<input name="featured_event_slug" value="<?= e($settings['featured_event_slug'] ?? 'global-gut-summit-2026') ?>"></label>
             <label>Currency<input name="currency" value="<?= e($settings['currency'] ?? 'INR') ?>"></label>
             <label>Timezone<input name="timezone" value="<?= e($settings['timezone'] ?? 'Asia/Kolkata') ?>"></label>
+            <label>Product Owner Name<input name="product_owner_name" value="<?= e($settings['product_owner_name'] ?? 'Dr. Praveen Jacob') ?>"></label>
+            <label>Product Owner Title<input name="product_owner_title" value="<?= e($settings['product_owner_title'] ?? 'The Gut Expert') ?>"></label>
+            <label>Product Owner Handle<input name="product_owner_handle" value="<?= e($settings['product_owner_handle'] ?? '@the.gut.expert') ?>"></label>
+            <label>Owner Instagram<input type="url" name="product_owner_instagram" value="<?= e($settings['product_owner_instagram'] ?? 'https://www.instagram.com/the.gut.expert') ?>"></label>
         </div>
         <br><button class="btn btn-primary">Save Settings</button>
     </form>

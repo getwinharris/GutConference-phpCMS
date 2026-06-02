@@ -1,1 +1,11 @@
-[{"currency":"INR","timezone":"Asia/Kolkata","featured_event_slug":"global-gut-summit-2026"}]
+[
+  {
+    "currency": "INR",
+    "timezone": "Asia/Kolkata",
+    "featured_event_slug": "global-gut-summit-2026",
+    "product_owner_name": "Dr. Praveen Jacob",
+    "product_owner_title": "The Gut Expert",
+    "product_owner_handle": "@the.gut.expert",
+    "product_owner_instagram": "https://www.instagram.com/the.gut.expert"
+  }
+]

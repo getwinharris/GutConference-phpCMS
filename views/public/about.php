@@ -1,7 +1,7 @@
 <section class="section">
     <div class="container">
         <p class="eyebrow">About</p>
-        <h1>GutConference Online</h1>
+        <h1>GutConference</h1>
         <p class="lede">A brand-owned CMS for professional gut health and microbiome conferences. The platform is designed for admin-managed landing pages, not public event posting.</p>
         <div class="grid" style="margin-top: 30px;">
             <div class="card">

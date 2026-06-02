@@ -4,7 +4,7 @@ The schema is `storage/schema/collections.json`.
 
 Core collections:
 
-- `events`: event identity, slug, status, CTA, fee, contact, logo, and hero data.
+- `events`: event identity, slug, status, CTA, fee, contact, logo, hero/thumbnail media, real start/end time, timezone, and slot capacity data.
 - `event_sections`: admin-editable landing-page blocks.
 - `speakers`: event speaker cards.
 - `sessions`: agenda timeline.

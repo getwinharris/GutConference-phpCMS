@@ -1,6 +1,6 @@
 <?php
 namespace App\Controllers;
-use App\Services\{ContactService,EventService,SecretService};
+use App\Services\{ContactService,EventService,SecretService,SettingsService};
 final class PublicController extends BaseController {
     
     protected function detectApiRequest(): void {
@@ -13,6 +13,8 @@ final class PublicController extends BaseController {
         $this->render('public/home', [
             'featuredEvent' => $events->featured(),
             'events' => $events->published(),
+            'eventService' => $events,
+            'settings' => (new SettingsService())->public(),
         ]);
     }
     
@@ -23,7 +25,8 @@ final class PublicController extends BaseController {
     
     public function events(): void {
         $this->detectApiRequest();
-        $this->render('public/events', ['events' => (new EventService())->published()]);
+        $events = new EventService();
+        $this->render('public/events', ['events' => $events->published(), 'eventService' => $events]);
     }
 
     public function event(string $slug): void {
@@ -42,6 +45,7 @@ final class PublicController extends BaseController {
             'sessions' => $events->sessions($slug),
             'venue' => $events->venue($slug),
             'secrets' => (new SecretService())->all(),
+            'eventService' => $events,
         ]);
     }
     
