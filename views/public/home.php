@@ -6,7 +6,7 @@
             <h1><?= e($event['headline'] ?? 'Microbiome, Probiotics & Gut Nutrition') ?></h1>
             <p class="lede"><?= e($event['description'] ?? 'Professional online conferences for clinical gut-health education.') ?></p>
             <div class="hero-actions">
-                <a class="btn btn-primary" href="<?= $event ? '/events/' . e($event['slug']) : '/events' ?>"><?= e($event['cta_label'] ?? 'View Current Conference') ?></a>
+                <a class="btn btn-cta" href="<?= $event ? '/events/' . e($event['slug']) : '/events' ?>"><?= e($event['cta_label'] ?? 'View Current Conference') ?></a>
                 <a class="btn btn-outline" href="/contact">Talk to the Team</a>
             </div>
             <?php if($event): ?>
@@ -14,7 +14,10 @@
                     <div class="stat"><strong><?= e($event['date_label']) ?></strong><span>Date</span></div>
                     <div class="stat"><strong><?= e($event['time_label']) ?></strong><span>Schedule</span></div>
                     <div class="stat"><strong><?= e($event['mode']) ?></strong><span>Mode</span></div>
-                    <div class="stat"><strong>Rs.<?= e((string)$event['price']) ?></strong><span>Registration</span></div>
+                    <div class="stat">
+                        <strong>Rs.<?= e((string)$event['price']) ?> <span style="text-decoration: line-through; font-size: 11px; opacity: 0.5; font-weight: normal; margin-left: 2px;">Rs.1,999</span></strong>
+                        <span>Registration</span>
+                    </div>
                 </div>
                 <div class="trust-strip">
                     <div class="trust-item">3rd international edition</div>
@@ -36,10 +39,19 @@
         <p class="eyebrow">Built for conversion and credibility</p>
         <h2>Conference pages that admins can run without developers</h2>
         <p class="lede">The CMS supports event slugs, editable content sections, speakers, agenda sessions, venue/map details, registration CTAs, Razorpay setup, and notification templates.</p>
-        <div class="grid">
-            <div class="card"><h3>Admin-created events</h3><p>Only the brand admin can create and publish conferences. Each event has its own slug URL.</p></div>
-            <div class="card"><h3>Sales-page structure</h3><p>Repeated CTAs, outcomes, audience, speaker trust, FAQ, and registration blocks inspired by strong workshop funnels.</p></div>
-            <div class="card"><h3>Clinical tone</h3><p>The visual language stays medical and professional: focused information, credible speakers, and no fake urgency.</p></div>
+        <div class="grid" style="margin-top: 30px;">
+            <div class="card">
+                <h3>Admin-created events</h3>
+                <p style="color: var(--muted); font-size: 14px; margin-top: 8px;">Only the brand admin can create and publish conferences. Each event has its own slug URL.</p>
+            </div>
+            <div class="card">
+                <h3>Sales-page structure</h3>
+                <p style="color: var(--muted); font-size: 14px; margin-top: 8px;">Repeated CTAs, outcomes, audience, speaker trust, FAQ, and registration blocks inspired by strong workshop funnels.</p>
+            </div>
+            <div class="card">
+                <h3>Clinical tone</h3>
+                <p style="color: var(--muted); font-size: 14px; margin-top: 8px;">The visual language stays medical and professional: focused information, credible speakers, and no fake urgency.</p>
+            </div>
         </div>
     </div>
 </section>
@@ -47,9 +59,9 @@
 <section class="section cta-band">
     <div class="container grid-2" style="align-items:center">
         <div>
-            <p class="eyebrow" style="color:#8ee6d7">Featured Conference</p>
-            <h2><?= e($event['name'] ?? 'The Global Gut Summit 2026') ?></h2>
-            <p class="lede"><?= e($event['subheadline'] ?? 'Bridging Science & Clinical Healing') ?></p>
+            <p class="eyebrow" style="color:var(--teal)">Featured Conference</p>
+            <h2 style="margin: 0; color: #fff; background: none; -webkit-text-fill-color: initial; font-size: 28px;"><?= e($event['name'] ?? 'The Global Gut Summit 2026') ?></h2>
+            <p class="lede" style="margin: 10px 0 0; font-size: 16px;"><?= e($event['subheadline'] ?? 'Bridging Science & Clinical Healing') ?></p>
         </div>
         <div style="text-align:right">
             <a class="btn btn-primary" href="<?= $event ? '/events/' . e($event['slug']) : '/events' ?>"><?= e($event['cta_label'] ?? 'Register') ?></a>

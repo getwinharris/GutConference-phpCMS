@@ -15,6 +15,14 @@ final class EventService {
     }
 
     public function featured(): ?array {
+        $settings = (new SettingsService())->public();
+        $slug = $settings['featured_event_slug'] ?? '';
+        if ($slug !== '') {
+            $event = $this->findBySlug($slug);
+            if ($event && ($event['status'] ?? 'draft') === 'published') {
+                return $event;
+            }
+        }
         foreach ($this->published() as $event) {
             if (!empty($event['featured'])) return $event;
         }

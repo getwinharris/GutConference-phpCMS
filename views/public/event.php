@@ -1,25 +1,42 @@
 <section class="hero">
     <div class="container hero-grid">
         <div>
-            <p class="eyebrow"><?= e($event['eyebrow'] ?? 'Conference') ?></p>
+            <p class="eyebrow"><?= e($event['eyebrow'] ?? 'Microbiome Conference') ?></p>
             <h1><?= e($event['headline'] ?? $event['name']) ?></h1>
             <p class="lede"><?= e($event['subheadline'] ?? '') ?></p>
-            <p><strong><?= e($event['name'] ?? '') ?></strong> is organized by <?= e($event['organizers'] ?? 'the conference team') ?>.</p>
+            <p style="margin-bottom: 20px;"><strong><?= e($event['name'] ?? '') ?></strong> is organized by <?= e($event['organizers'] ?? 'the conference team') ?>.</p>
             <p><?= e($event['description'] ?? '') ?></p>
+            
             <div class="hero-actions">
                 <?php if(!empty($event['registration_url'])): ?>
-                    <a class="btn btn-primary" href="<?= e($event['registration_url']) ?>" target="_blank" rel="noopener"><?= e($event['cta_label'] ?? 'Register') ?></a>
+                    <a class="btn btn-cta" href="<?= e($event['registration_url']) ?>" target="_blank" rel="noopener"><?= e($event['cta_label'] ?? 'Register Now') ?></a>
                 <?php else: ?>
-                    <a class="btn btn-primary" href="#registration"><?= e($event['cta_label'] ?? 'Register') ?></a>
+                    <a class="btn btn-cta" href="#registration"><?= e($event['cta_label'] ?? 'Register Now') ?></a>
                 <?php endif; ?>
                 <a class="btn btn-outline" href="#agenda">View Agenda</a>
             </div>
+            
+            <div class="countdown-box">
+                <div class="countdown-text">
+                    <span>⚡ Register in next to unlock E-certificate &amp; bonus resources:</span>
+                </div>
+                <div class="countdown-timer">
+                    <div class="timer-segment"><span class="timer-num" id="hours">02</span><span class="timer-label">Hrs</span></div>
+                    <div class="timer-segment"><span class="timer-num" id="minutes">00</span><span class="timer-label">Mins</span></div>
+                    <div class="timer-segment"><span class="timer-num" id="seconds">00</span><span class="timer-label">Secs</span></div>
+                </div>
+            </div>
+
             <div class="stats">
                 <div class="stat"><strong><?= e($event['date_label'] ?? '') ?></strong><span>Date</span></div>
                 <div class="stat"><strong><?= e($event['time_label'] ?? '') ?></strong><span>Time</span></div>
                 <div class="stat"><strong><?= e($event['mode'] ?? '') ?></strong><span>Mode</span></div>
-                <div class="stat"><strong>Rs.<?= e((string)($event['price'] ?? 0)) ?></strong><span>Fee</span></div>
+                <div class="stat">
+                    <strong>Rs.<?= e((string)($event['price'] ?? 0)) ?> <span style="text-decoration: line-through; font-size: 12px; opacity: 0.5; font-weight: normal; margin-left: 4px;">Rs.1,999</span></strong>
+                    <span>Fee</span>
+                </div>
             </div>
+            
             <div class="trust-strip">
                 <div class="trust-item">E-certificate included</div>
                 <div class="trust-item">International speakers</div>
@@ -28,7 +45,9 @@
                 <div class="trust-item"><?= e($event['organizers'] ?? 'Organized event') ?></div>
             </div>
         </div>
-        <div class="hero-media"><img src="<?= e($event['logo_url'] ?? '/assets/images/media/gutconference-logo.png') ?>" alt="<?= e($event['name']) ?>"></div>
+        <div class="hero-media">
+            <img src="<?= e($event['logo_url'] ?? '/assets/images/media/gutconference-logo.png') ?>" alt="<?= e($event['name']) ?>">
+        </div>
     </div>
 </section>
 
@@ -50,10 +69,14 @@
             <p class="eyebrow"><?= e(ucwords(str_replace('_',' ', $section['type'] ?? 'Section'))) ?></p>
             <h2><?= e($section['title'] ?? '') ?></h2>
             <?php if(!empty($section['subtitle'])): ?><p class="lede"><?= e($section['subtitle']) ?></p><?php endif; ?>
-            <?php if(!empty($section['body'])): ?><p><?= e($section['body']) ?></p><?php endif; ?>
+            <?php if(!empty($section['body'])): ?><p style="margin-bottom: 24px; color: var(--muted);"><?= e($section['body']) ?></p><?php endif; ?>
             <?php if(!empty($section['items']) && is_array($section['items'])): ?>
-                <div class="grid" style="margin-top:18px">
-                    <?php foreach($section['items'] as $item): ?><div class="card"><?= e($item) ?></div><?php endforeach; ?>
+                <div class="grid">
+                    <?php foreach($section['items'] as $item): ?>
+                        <div class="card">
+                            <p style="font-weight: 500; font-size: 15px;"><?= e($item) ?></p>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             <?php endif; ?>
         </div>
@@ -64,14 +87,17 @@
     <div class="container">
         <p class="eyebrow">International Experts</p>
         <h2>Speaker Lineup</h2>
-        <div class="speaker-grid">
+        <div class="speaker-grid" style="margin-top: 30px;">
             <?php foreach($speakers as $speaker): ?>
                 <article class="speaker-card">
                     <div class="country"><?= e($speaker['country'] ?? '') ?></div>
+                    <div style="width: 90px; height: 90px; border-radius: 50%; overflow: hidden; margin: 0 auto 16px; border: 2px solid var(--teal);">
+                        <img src="<?= e($speaker['photo_url'] ?? '/assets/images/media/gutconference-logo.png') ?>" alt="<?= e($speaker['name'] ?? 'Speaker') ?>" style="width:100%; height:100%; object-fit:cover; border-radius:0;">
+                    </div>
                     <h3><?= e($speaker['name'] ?? '') ?></h3>
-                    <p><strong><?= e($speaker['topic'] ?? '') ?></strong></p>
-                    <p><?= e($speaker['session_time'] ?? '') ?></p>
-                    <p><?= e($speaker['profile'] ?? '') ?></p>
+                    <p class="topic"><?= e($speaker['topic'] ?? '') ?></p>
+                    <p class="time-label">⏰ <?= e($speaker['session_time'] ?? '') ?></p>
+                    <p class="profile"><?= e($speaker['profile'] ?? '') ?></p>
                 </article>
             <?php endforeach; ?>
         </div>
@@ -82,11 +108,19 @@
     <div class="container">
         <p class="eyebrow">Agenda</p>
         <h2>Conference Schedule</h2>
-        <div class="timeline">
+        <div class="timeline" style="margin-top: 30px;">
             <?php foreach($sessions as $session): ?>
                 <div class="timeline-row">
                     <div class="time"><?= e($session['time_label'] ?? '') ?></div>
-                    <div><strong><?= e($session['title'] ?? '') ?></strong><?php if(!empty($session['speaker_name'])): ?><br><span><?= e($session['speaker_name']) ?></span><?php endif; ?></div>
+                    <div>
+                        <strong><?= e($session['title'] ?? '') ?></strong>
+                        <?php if(!empty($session['speaker_name'])): ?>
+                            <span>🎙️ <?= e($session['speaker_name']) ?></span>
+                        <?php endif; ?>
+                        <?php if(!empty($session['description'])): ?>
+                            <p style="font-size: 13px; color: var(--muted); margin-top: 6px;"><?= e($session['description']) ?></p>
+                        <?php endif; ?>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
@@ -95,23 +129,40 @@
 
 <section class="section-tight" id="venue">
     <div class="container grid-2">
-        <div class="card">
-            <p class="eyebrow">Venue</p>
-            <h2><?= e($venue['name'] ?? 'Online Conference') ?></h2>
-            <p><?= e($venue['joining_note'] ?? 'Joining details will be shared after registration.') ?></p>
-            <?php if(!empty($venue['map_link'])): ?><a class="btn btn-outline" href="<?= e($venue['map_link']) ?>" target="_blank" rel="noopener">Open Map</a><?php endif; ?>
+        <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+                <p class="eyebrow">Venue</p>
+                <h2><?= e($venue['name'] ?? 'Online Conference') ?></h2>
+                <p style="color: var(--muted); margin-bottom: 20px;"><?= e($venue['joining_note'] ?? 'Joining details will be shared after registration.') ?></p>
+                <?php if(!empty($venue['address'])): ?>
+                    <p style="font-size: 14px; color: var(--muted); margin-bottom: 20px;">📍 <?= e($venue['address']) ?></p>
+                <?php endif; ?>
+            </div>
+            <?php if(!empty($venue['map_link'])): ?>
+                <div>
+                    <a class="btn btn-outline" href="<?= e($venue['map_link']) ?>" target="_blank" rel="noopener">Open Map Location</a>
+                </div>
+            <?php endif; ?>
         </div>
+        
         <div class="card" id="registration">
+            <div class="scarcity-badge">🔥 Only 14 seats left before fee increases</div>
             <p class="eyebrow">Registration</p>
             <h2>Reserve Your Seat</h2>
-            <p>Registration fee: <strong>Rs.<?= e((string)($event['price'] ?? 0)) ?></strong></p>
+            
+            <div class="price-container">
+                <span class="price-slashed">Rs.1,999</span>
+                <span class="price-active">Rs.<?= e((string)($event['price'] ?? 0)) ?></span>
+            </div>
+            
             <?php if(!empty($event['registration_url'])): ?>
                 <a class="btn btn-primary" href="<?= e($event['registration_url']) ?>" target="_blank" rel="noopener"><?= e($event['cta_label'] ?? 'Register Now') ?></a>
             <?php else: ?>
-                <p class="lede">Payment link or internal Razorpay checkout can be configured from admin when live payment details are ready. Contact the team for registration support.</p>
+                <p style="color: var(--muted); font-size: 14px; margin-bottom: 20px;">Secure checkout is available. Standard registration fee covers full session access, live Q&amp;A, and your verified E-certificate.</p>
                 <a class="btn btn-primary" href="/contact?subject=Registration%20for%20<?= e($event['slug']) ?>">Contact to Register</a>
             <?php endif; ?>
-            <p style="margin-top:14px;color:var(--muted)">Questions: <?= e($event['contact_email'] ?? '') ?> · <?= e($event['contact_phone'] ?? '') ?></p>
+            
+            <p style="margin-top: 18px; font-size: 12px; color: var(--muted);">Questions: <?= e($event['contact_email'] ?? '') ?> · <?= e($event['contact_phone'] ?? '') ?></p>
         </div>
     </div>
 </section>
@@ -122,23 +173,82 @@
     <div class="container">
         <p class="eyebrow">FAQ</p>
         <h2><?= e($faqs[0]['title'] ?? 'Frequently Asked Questions') ?></h2>
-        <div class="grid-2">
-            <?php foreach(($faqs[0]['items'] ?? []) as $item): ?><div class="card"><?= e($item) ?></div><?php endforeach; ?>
+        <div class="faq-grid" style="margin-top: 30px;">
+            <?php foreach(($faqs[0]['items'] ?? []) as $item): ?>
+                <?php 
+                $parts = explode('?', $item, 2);
+                $q = trim($parts[0] . '?');
+                $a = trim($parts[1] ?? '');
+                ?>
+                <div class="faq-card">
+                    <strong style="color: #fff; font-size: 15px; display: block;"><?= e($q) ?></strong>
+                    <?php if($a): ?><p><?= e($a) ?></p><?php endif; ?>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>
 
 <div class="sticky-register">
     <div class="container">
-        <div><strong><?= e($event['name'] ?? 'Conference') ?></strong><span><?= e($event['date_label'] ?? '') ?> · <?= e($event['time_label'] ?? '') ?> · Rs.<?= e((string)($event['price'] ?? 0)) ?></span></div>
-        <a class="btn btn-primary" href="#registration"><?= e($event['cta_label'] ?? 'Register') ?></a>
+        <div>
+            <strong><?= e($event['name'] ?? 'Conference') ?></strong>
+            <span><?= e($event['date_label'] ?? '') ?> · <?= e($event['time_label'] ?? '') ?> · Rs.<?= e((string)($event['price'] ?? 0)) ?></span>
+        </div>
+        <a class="btn btn-primary" href="#registration"><?= e($event['cta_label'] ?? 'Register Now') ?></a>
     </div>
 </div>
 <?php endif; ?>
 
 <section class="section cta-band">
     <div class="container grid-2" style="align-items:center">
-        <div><h2>Ready to attend?</h2><p class="lede">A focused clinical conference page with clear registration beats a generic event listing.</p></div>
-        <div style="text-align:right"><a class="btn btn-primary" href="#registration"><?= e($event['cta_label'] ?? 'Register') ?></a></div>
+        <div>
+            <h2>Ready to attend?</h2>
+            <p class="lede">Get practical, evidence-based training and clinical protocols directly from international experts.</p>
+        </div>
+        <div style="text-align:right">
+            <a class="btn btn-primary" href="#registration"><?= e($event['cta_label'] ?? 'Register Now') ?></a>
+        </div>
     </div>
 </section>
+
+<script>
+(function() {
+    var slug = '<?= e($event['slug']) ?>';
+    var targetKey = 'event_timer_target_' + slug;
+    var target = localStorage.getItem(targetKey);
+    if (!target) {
+        // Set to 2 hours from first page view
+        target = Date.now() + 2 * 60 * 60 * 1000;
+        localStorage.setItem(targetKey, target);
+    } else {
+        target = parseInt(target, 10);
+        if (target < Date.now()) {
+            // Reset timer if expired so scarcity stays fresh
+            target = Date.now() + 2 * 60 * 60 * 1000;
+            localStorage.setItem(targetKey, target);
+        }
+    }
+    
+    function updateCountdown() {
+        var diff = target - Date.now();
+        if (diff <= 0) {
+            diff = 0;
+        }
+        var hours = Math.floor(diff / (1000 * 60 * 60));
+        var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        var secs = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        var hrEl = document.getElementById('hours');
+        var minEl = document.getElementById('minutes');
+        var secEl = document.getElementById('seconds');
+        
+        if (hrEl) hrEl.textContent = String(hours).padStart(2, '0');
+        if (minEl) minEl.textContent = String(mins).padStart(2, '0');
+        if (secEl) secEl.textContent = String(secs).padStart(2, '0');
+    }
+    
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+})();
+</script>

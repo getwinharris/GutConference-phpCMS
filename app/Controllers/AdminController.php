@@ -51,19 +51,68 @@ final class AdminController extends BaseController {
     private function list(string $title, ?string $collection = null): void{$this->render('admin/list',['pageTitle' => $title, 'title' => $title, 'collection' => $collection, 'items'=>$collection ? (new ResourceService($collection))->all() : []]);}
     private function resource(string $title,string $collection,array $fields): void{$this->render('admin/resource',['pageTitle' => $title, 'title' => $title, 'collection' => $collection, 'fields' => $fields, 'items'=>(new ResourceService($collection))->all(), 'mediaFiles'=>$this->mediaFor($collection)]);}
     private function save(string $collection): void{
-        $data=$this->cleanPost();
-        if(isset($data['items']))$data['items']=$this->splitList((string)$data['items']);
-        foreach (['enabled','featured'] as $flag) {
-            if (isset($data[$flag])) $data[$flag] = in_array((string)$data[$flag], ['1','true','yes','on'], true);
+        $id = trim((string)($_POST['id'] ?? ''));
+        $existing = [];
+        if ($id !== '') {
+            foreach ((new ResourceService($collection))->all() as $item) {
+                if ((string)($item['id'] ?? '') === $id) {
+                    $existing = $item;
+                    break;
+                }
+            }
         }
-        $uploaded=$this->uploadedMedia($collection);
-        if ($collection === 'events' && $uploaded && empty($data['logo_url'])) $data['logo_url']=$uploaded[0]['path'];
-        if ($collection === 'speakers' && $uploaded && empty($data['photo_url'])) $data['photo_url']=$uploaded[0]['path'];
-        if ($collection === 'venues' && $uploaded && empty($data['image_url'])) $data['image_url']=$uploaded[0]['path'];
-        $record=(new ResourceService($collection))->save($data);
-        (new AuditLogService())->record('save',$collection,(string)($record['id'] ?? ''),['fields'=>array_keys($data),'uploaded_media'=>count($uploaded)]);
+        $schema = (new SchemaService())->collection($collection);
+        $adminFields = $schema['admin_fields'] ?? [];
+        $fieldSpecs = $schema['fields'] ?? [];
+        
+        $data = $existing;
+        if ($id !== '') {
+            $data['id'] = $id;
+        } else {
+            $data['id'] = bin2hex(random_bytes(8));
+        }
+        
+        foreach ($adminFields as $field) {
+            $type = $fieldSpecs[$field]['type'] ?? 'string';
+            if ($type === 'boolean') {
+                $data[$field] = isset($_POST[$field]) && in_array((string)$_POST[$field], ['1','true','yes','on'], true);
+            } else {
+                if (isset($_POST[$field])) {
+                    $val = $_POST[$field];
+                    if (is_string($val)) {
+                        $val = trim($val);
+                    }
+                    if ($field === 'items') {
+                        $data[$field] = $this->splitList((string)$val);
+                    } elseif ($type === 'number') {
+                        $data[$field] = $val !== '' ? (float)$val : null;
+                    } else {
+                        $data[$field] = $val;
+                    }
+                }
+            }
+        }
+        
+        $uploaded = $this->uploadedMedia($collection);
+        if ($collection === 'events' && $uploaded) {
+            if (empty($data['logo_url'])) {
+                $data['logo_url'] = $uploaded[0]['path'];
+            }
+            if (empty($data['hero_image_url']) && isset($uploaded[1])) {
+                $data['hero_image_url'] = $uploaded[1]['path'];
+            }
+        }
+        if ($collection === 'speakers' && $uploaded && empty($data['photo_url'])) {
+            $data['photo_url'] = $uploaded[0]['path'];
+        }
+        if ($collection === 'venues' && $uploaded && empty($data['image_url'])) {
+            $data['image_url'] = $uploaded[0]['path'];
+        }
+        
+        $record = (new ResourceService($collection))->save($data);
+        (new AuditLogService())->record('save', $collection, (string)($record['id'] ?? ''), ['fields' => array_keys($data), 'uploaded_media' => count($uploaded)]);
         $this->flash('Saved.');
-        $this->redirect('/admin/'.$collection);
+        $this->redirect('/admin/' . $collection);
     }
     private function delete(string $collection): void{
         $id=(string)($_POST['id']??'');
@@ -71,17 +120,6 @@ final class AdminController extends BaseController {
         (new AuditLogService())->record('delete',$collection,$id);
         $this->flash('Deleted.');
         $this->redirect('/admin/'.$collection);
-    }
-    private function cleanPost(): array {
-        return array_filter($_POST, fn($v) => $v !== '' && $v !== null);
-    }
-    private function mergeExistingRecord(string $collection, array $data): array {
-        $id=(string)($data['id'] ?? '');
-        if ($id === '') return $data;
-        foreach ((new ResourceService($collection))->all() as $item) {
-            if ((string)($item['id'] ?? '') === $id) return array_merge($item, $data);
-        }
-        return $data;
     }
     private function splitList(string $value): array {
         return array_values(array_filter(array_map('trim', preg_split('/[\r\n,]+/', $value) ?: [])));

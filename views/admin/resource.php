@@ -12,7 +12,7 @@
                         <textarea name="<?= e($field) ?>" id="field-<?= e($field) ?>" rows="3"></textarea>
                     <?php elseif(in_array($field, ['active','enabled','featured'], true)): ?>
                         <label style="flex-direction:row; align-items:center; gap:var(--space-xs); text-transform:none; font-weight:400;">
-                            <input type="checkbox" name="<?= e($field) ?>" id="field-<?= e($field) ?>" value="1" checked> Active
+                            <input type="checkbox" name="<?= e($field) ?>" id="field-<?= e($field) ?>" value="1" checked> <?= e(ucwords(str_replace('_',' ',$field))) ?>
                         </label>
                     <?php elseif(str_contains($field, '_url') && !in_array($field, ['image_url', 'photo_url'], true)): ?>
                         <input type="url" name="<?= e($field) ?>" id="field-<?= e($field) ?>" placeholder="https://...">
