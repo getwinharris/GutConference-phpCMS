@@ -14,10 +14,7 @@
                     <div class="stat"><strong><?= e($event['date_label']) ?></strong><span>Date</span></div>
                     <div class="stat"><strong><?= e($event['time_label']) ?></strong><span>Schedule</span></div>
                     <div class="stat"><strong><?= e($event['mode']) ?></strong><span>Mode</span></div>
-                    <div class="stat">
-                        <strong>Rs.<?= e((string)$event['price']) ?> <span style="text-decoration: line-through; font-size: 11px; opacity: 0.5; font-weight: normal; margin-left: 2px;">Rs.1,999</span></strong>
-                        <span>Registration</span>
-                    </div>
+                    <div class="stat"><strong>Rs.<?= e((string)$event['price']) ?></strong><span>Registration</span></div>
                 </div>
                 <div class="trust-strip">
                     <div class="trust-item">3rd international edition</div>
@@ -29,7 +26,16 @@
             <?php endif; ?>
         </div>
         <div class="hero-media">
-            <img src="<?= e($event['logo_url'] ?? '/assets/images/media/gutconference-logo.png') ?>" alt="GutConference branding">
+            <div class="brand-hero">
+                <img src="/assets/images/media/gutconference-mark.png" alt="GutConference circular mark">
+                <div class="brand-hero-title">
+                    <small>International Conference On</small>
+                    <strong>Microbiome</strong>
+                    <strong>Probiotics</strong>
+                    <strong>Gut Nutrition</strong>
+                    <span>Bridging Science &amp; Clinical Healing</span>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -45,8 +51,8 @@
                 <p style="color: var(--muted); font-size: 14px; margin-top: 8px;">Only the brand admin can create and publish conferences. Each event has its own slug URL.</p>
             </div>
             <div class="card">
-                <h3>Sales-page structure</h3>
-                <p style="color: var(--muted); font-size: 14px; margin-top: 8px;">Repeated CTAs, outcomes, audience, speaker trust, FAQ, and registration blocks inspired by strong workshop funnels.</p>
+                <h3>Conference Page Structure</h3>
+                <p style="color: var(--muted); font-size: 14px; margin-top: 8px;">Clear CTAs, outcomes, audience, speaker trust, FAQ, and registration blocks built for a professional medical conference.</p>
             </div>
             <div class="card">
                 <h3>Clinical tone</h3>

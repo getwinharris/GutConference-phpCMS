@@ -37,13 +37,20 @@ if (!empty($event)) {
 <body>
 <header class="site-header">
     <div class="container nav">
-        <a href="/" class="brand"><img src="/assets/images/media/gutconference-logo.png" alt="GutConference logo"><span>GutConference<br>Online</span></a>
+        <a href="/" class="brand">
+            <img src="/assets/images/media/gutconference-mark.png" alt="GutConference mark">
+            <span class="brand-name">
+                <small>International Conference On</small>
+                <strong>Microbiome</strong>
+                <span>Probiotics & Gut Nutrition</span>
+            </span>
+        </a>
         <nav class="nav-links">
             <a href="/" class="<?= $path === '/' ? 'active' : '' ?>">Home</a>
             <a href="/events" class="<?= str_starts_with($path, '/events') ? 'active' : '' ?>">Events</a>
             <a href="/about" class="<?= $path === '/about' ? 'active' : '' ?>">About</a>
             <a href="/contact" class="<?= $path === '/contact' ? 'active' : '' ?>">Contact</a>
-            <?php if(!empty($_SESSION['user'])): ?><a href="/logout">Logout</a><?php else: ?><a href="/login" class="<?= $path === '/login' ? 'active' : '' ?>">Admin Login</a><?php endif; ?>
+            <?php if(!empty($_SESSION['user'])): ?><a href="/logout">Logout</a><?php endif; ?>
         </nav>
         <a class="btn btn-primary" href="/events/global-gut-summit-2026">Register</a>
     </div>
@@ -53,7 +60,7 @@ if (!empty($event)) {
 <footer class="footer">
     <div class="container footer-grid">
         <div><strong>GutConference Online</strong><p>Admin-managed clinical conference pages for gut health, microbiome, probiotics, and nutrition education.</p></div>
-        <div><strong>Navigate</strong><p><a href="/events">Events</a><br><a href="/contact">Contact</a><br><a href="/admin">Admin</a></p></div>
+        <div><strong>Navigate</strong><p><a href="/events">Events</a><br><a href="/about">About</a><br><a href="/contact">Contact</a></p></div>
         <div><strong>Contact</strong><p>gutconference2026@gmail.com<br>+91 97314 82585</p></div>
     </div>
 </footer>

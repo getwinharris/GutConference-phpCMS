@@ -16,25 +16,13 @@
                 <a class="btn btn-outline" href="#agenda">View Agenda</a>
             </div>
             
-            <div class="countdown-box">
-                <div class="countdown-text">
-                    <span>⚡ Register in next to unlock E-certificate &amp; bonus resources:</span>
-                </div>
-                <div class="countdown-timer">
-                    <div class="timer-segment"><span class="timer-num" id="hours">02</span><span class="timer-label">Hrs</span></div>
-                    <div class="timer-segment"><span class="timer-num" id="minutes">00</span><span class="timer-label">Mins</span></div>
-                    <div class="timer-segment"><span class="timer-num" id="seconds">00</span><span class="timer-label">Secs</span></div>
-                </div>
-            </div>
+            <p class="conference-note">Official online conference access includes live sessions, international speaker learning, and planned E-certificate support.</p>
 
             <div class="stats">
                 <div class="stat"><strong><?= e($event['date_label'] ?? '') ?></strong><span>Date</span></div>
                 <div class="stat"><strong><?= e($event['time_label'] ?? '') ?></strong><span>Time</span></div>
                 <div class="stat"><strong><?= e($event['mode'] ?? '') ?></strong><span>Mode</span></div>
-                <div class="stat">
-                    <strong>Rs.<?= e((string)($event['price'] ?? 0)) ?> <span style="text-decoration: line-through; font-size: 12px; opacity: 0.5; font-weight: normal; margin-left: 4px;">Rs.1,999</span></strong>
-                    <span>Fee</span>
-                </div>
+                <div class="stat"><strong>Rs.<?= e((string)($event['price'] ?? 0)) ?></strong><span>Fee</span></div>
             </div>
             
             <div class="trust-strip">
@@ -46,7 +34,16 @@
             </div>
         </div>
         <div class="hero-media">
-            <img src="<?= e($event['logo_url'] ?? '/assets/images/media/gutconference-logo.png') ?>" alt="<?= e($event['name']) ?>">
+            <div class="brand-hero">
+                <img src="/assets/images/media/gutconference-mark.png" alt="GutConference circular mark">
+                <div class="brand-hero-title">
+                    <small>International Conference On</small>
+                    <strong>Microbiome</strong>
+                    <strong>Probiotics</strong>
+                    <strong>Gut Nutrition</strong>
+                    <span>Bridging Science &amp; Clinical Healing</span>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -146,12 +143,10 @@
         </div>
         
         <div class="card" id="registration">
-            <div class="scarcity-badge">🔥 Only 14 seats left before fee increases</div>
             <p class="eyebrow">Registration</p>
             <h2>Reserve Your Seat</h2>
             
             <div class="price-container">
-                <span class="price-slashed">Rs.1,999</span>
                 <span class="price-active">Rs.<?= e((string)($event['price'] ?? 0)) ?></span>
             </div>
             
@@ -181,7 +176,7 @@
                 $a = trim($parts[1] ?? '');
                 ?>
                 <div class="faq-card">
-                    <strong style="color: #fff; font-size: 15px; display: block;"><?= e($q) ?></strong>
+                    <strong><?= e($q) ?></strong>
                     <?php if($a): ?><p><?= e($a) ?></p><?php endif; ?>
                 </div>
             <?php endforeach; ?>
@@ -211,44 +206,3 @@
         </div>
     </div>
 </section>
-
-<script>
-(function() {
-    var slug = '<?= e($event['slug']) ?>';
-    var targetKey = 'event_timer_target_' + slug;
-    var target = localStorage.getItem(targetKey);
-    if (!target) {
-        // Set to 2 hours from first page view
-        target = Date.now() + 2 * 60 * 60 * 1000;
-        localStorage.setItem(targetKey, target);
-    } else {
-        target = parseInt(target, 10);
-        if (target < Date.now()) {
-            // Reset timer if expired so scarcity stays fresh
-            target = Date.now() + 2 * 60 * 60 * 1000;
-            localStorage.setItem(targetKey, target);
-        }
-    }
-    
-    function updateCountdown() {
-        var diff = target - Date.now();
-        if (diff <= 0) {
-            diff = 0;
-        }
-        var hours = Math.floor(diff / (1000 * 60 * 60));
-        var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        var secs = Math.floor((diff % (1000 * 60)) / 1000);
-        
-        var hrEl = document.getElementById('hours');
-        var minEl = document.getElementById('minutes');
-        var secEl = document.getElementById('seconds');
-        
-        if (hrEl) hrEl.textContent = String(hours).padStart(2, '0');
-        if (minEl) minEl.textContent = String(mins).padStart(2, '0');
-        if (secEl) secEl.textContent = String(secs).padStart(2, '0');
-    }
-    
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-})();
-</script>
