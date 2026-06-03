@@ -57,7 +57,11 @@ if (!empty($event)) {
             <a href="/contact" class="<?= $path === '/contact' ? 'active' : '' ?>">Contact</a>
             <?php if(!empty($_SESSION['user'])): ?><a href="/logout">Logout</a><?php endif; ?>
         </nav>
-        <a class="link-arrow nav-cta" href="<?= e($layoutRegisterPath) ?>">Register <span aria-hidden="true">→</span></a>
+        <?php if(empty($_SESSION['user'])): ?>
+            <a class="link-arrow nav-cta" href="/login">Login <span aria-hidden="true">→</span></a>
+        <?php else: ?>
+            <a class="link-arrow nav-cta" href="<?= e($layoutRegisterPath) ?>">Book <span aria-hidden="true">→</span></a>
+        <?php endif; ?>
     </div>
 </header>
 <?php if(!empty($_SESSION['flash'])): ?><div class="flash"><?= e($_SESSION['flash']); unset($_SESSION['flash']); ?></div><?php endif; ?>
@@ -69,32 +73,5 @@ if (!empty($event)) {
         <div><strong>Contact</strong><p>gutconference2026@gmail.com<br>+91 97314 82585</p></div>
     </div>
 </footer>
-<script>
-(function () {
-    var carousel = document.querySelector('[data-carousel]');
-    if (!carousel) return;
-    var cards = Array.prototype.slice.call(carousel.querySelectorAll('[data-carousel-card]'));
-    var dots = Array.prototype.slice.call(carousel.querySelectorAll('[data-carousel-dot]'));
-    var index = cards.findIndex(function (card) { return card.classList.contains('is-active'); });
-    if (index < 0) index = 0;
-
-    function render(nextIndex) {
-        index = (nextIndex + cards.length) % cards.length;
-        cards.forEach(function (card, cardIndex) {
-            card.classList.toggle('is-active', cardIndex === index);
-            card.setAttribute('aria-pressed', cardIndex === index ? 'true' : 'false');
-        });
-        dots.forEach(function (dot, dotIndex) {
-            dot.classList.toggle('is-active', dotIndex === index);
-        });
-        cards[index]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-    }
-
-    carousel.querySelector('[data-carousel-prev]')?.addEventListener('click', function () { render(index - 1); });
-    carousel.querySelector('[data-carousel-next]')?.addEventListener('click', function () { render(index + 1); });
-    cards.forEach(function (card, cardIndex) { card.addEventListener('click', function () { render(cardIndex); }); });
-    dots.forEach(function (dot, dotIndex) { dot.addEventListener('click', function () { render(dotIndex); }); });
-})();
-</script>
 </body>
 </html>

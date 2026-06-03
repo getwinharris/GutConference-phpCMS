@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers;
-use App\Services\{EnvService,JsonStoreService,PasswordResetService};
+use App\Integrations\GoogleOAuth\GoogleOAuthClient;
+use App\Services\{EnvService,JsonStoreService,PasswordResetService,SecretService,SmtpMailer};
 final class AuthController extends BaseController {
  public function logout(): void {
   $_SESSION = [];
@@ -35,6 +36,57 @@ final class AuthController extends BaseController {
     $this->flash('Invalid credentials.');
     $this->redirect('/login');
  }
+ public function signupPost(): void {
+    $name = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $confirm = $_POST['password_confirm'] ?? '';
+    if ($name === '' || $email === '' || $password === '' || $password !== $confirm) {
+        $this->flash('Enter your name, email, and matching passwords.');
+        $this->redirect('/signup');
+    }
+    $store = new JsonStoreService();
+    $users = $store->read('users');
+    foreach ($users as $user) {
+        if (($user['email'] ?? '') === $email) {
+            $this->flash('An account already exists for this email.');
+            $this->redirect('/login');
+        }
+    }
+    $user = [
+        'id' => uniqid('user_', true),
+        'email' => $email,
+        'name' => $name,
+        'role' => 'customer',
+        'password_hash' => password_hash($password, PASSWORD_DEFAULT),
+        'created_at' => time(),
+    ];
+    $store->upsert('users', $user);
+    $_SESSION['user'] = ['sub'=>$user['id'],'email'=>$user['email'],'name'=>$user['name'],'role'=>'customer'];
+    $this->flash('Account created.');
+    $this->redirect('/');
+ }
+ public function googleRedirect(): void {
+    $client = new GoogleOAuthClient((new SecretService())->all());
+    if (!$client->configured()) {
+        $this->flash('Google OAuth is not configured yet. Add Google credentials in Admin -> Integrations.');
+        $this->redirect('/login');
+    }
+    $state = bin2hex(random_bytes(16));
+    $_SESSION['google_oauth_state'] = $state;
+    header('Location: ' . $client->authUrl($state));
+    exit;
+ }
+ public function googleCallback(): void {
+    $state = (string)($_GET['state'] ?? '');
+    if ($state === '' || $state !== ($_SESSION['google_oauth_state'] ?? '')) {
+        $this->flash('Google sign-in could not be verified.');
+        $this->redirect('/login');
+    }
+    unset($_SESSION['google_oauth_state']);
+    $this->flash('Google OAuth callback reached. Token exchange will activate after live Google credentials are configured.');
+    $this->redirect('/login');
+ }
  public function forgotPassword(): void {
     $this->render('public/forgot-password');
  }
@@ -43,7 +95,19 @@ final class AuthController extends BaseController {
     if ($email !== '') {
         $token = (new PasswordResetService())->createToken($email);
         if ($token) {
-            $_SESSION['last_reset_link'] = '/reset-password?token=' . urlencode($token);
+            $path = '/reset-password?token=' . urlencode($token);
+            $_SESSION['last_reset_link'] = $path;
+            $host = $_SERVER['HTTP_HOST'] ?? 'gutconference.online';
+            $scheme = str_starts_with($host, '127.0.0.1') || str_starts_with($host, 'localhost') ? 'http' : 'https';
+            $link = $scheme . '://' . $host . $path;
+            $mailer = new SmtpMailer((new SecretService())->all());
+            if ($mailer->configured()) {
+                try {
+                    $mailer->send($email, 'Reset your GutConference password', '<p>Use this secure link to reset your password:</p><p><a href="' . e($link) . '">' . e($link) . '</a></p>');
+                } catch (\Throwable $e) {
+                    $_SESSION['smtp_reset_error'] = $e->getMessage();
+                }
+            }
         }
     }
     $this->flash('If this email is registered, a reset link will be sent.');

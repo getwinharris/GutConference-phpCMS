@@ -26,7 +26,7 @@ if (strpos($uri, '/api/') === 0) {
 }
 
 // PHP routes (admin + public pages)
-$phpRoutes = ['/','/events','/conference','/about','/contact','/login','/logout','/forgot-password','/reset-password'];
+$phpRoutes = ['/','/events','/conference','/about','/contact','/login','/signup','/auth','/logout','/forgot-password','/reset-password'];
 $isPhpRoute = false;
 foreach ($phpRoutes as $route) {
     if (strpos($uri, $route . '/') === 0 || $uri === $route) {

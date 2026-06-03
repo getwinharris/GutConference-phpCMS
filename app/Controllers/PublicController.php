@@ -53,22 +53,30 @@ final class PublicController extends BaseController {
         $this->detectApiRequest();
         $success = false;
         $subject = $_GET['subject'] ?? '';
+        $events = new EventService();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $contactService = new ContactService();
             $contactService->save([
                 'name' => $_POST['name'] ?? '',
                 'email' => $_POST['email'] ?? '',
                 'phone' => $_POST['phone'] ?? '',
+                'request_type' => $_POST['request_type'] ?? 'consultation',
+                'event_slug' => $_POST['event_slug'] ?? '',
                 'subject' => $_POST['subject'] ?? '',
                 'message' => $_POST['message'] ?? '',
             ]);
             $success = true;
         }
-        $this->render('public/contact', ['success' => $success, 'subject' => $subject]);
+        $this->render('public/contact', ['success' => $success, 'subject' => $subject, 'events' => $events->published()]);
     }
     
     public function login(): void { 
         $this->detectApiRequest();
         $this->render('public/login'); 
+    }
+
+    public function signup(): void {
+        $this->detectApiRequest();
+        $this->render('public/signup');
     }
 }

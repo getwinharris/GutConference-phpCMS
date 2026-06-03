@@ -11,6 +11,15 @@
             <label>Razorpay Key Secret<input name="razorpay_key_secret" value="<?= e($secrets['razorpay_key_secret']??'') ?>" placeholder="Paste live key secret"></label>
         </div>
         <br>
+        <h2>Google OAuth & Calendar</h2>
+        <p style="color:var(--muted)">Customer signup should use Google OAuth so calendar reminders can be created without asking for a second consent later. Manual legacy users must connect Google before paying for an event or class.</p>
+        <div class="admin-form__row">
+            <label>Google Client ID<input name="google_client_id" value="<?= e($secrets['google_client_id']??'') ?>" placeholder="xxxxx.apps.googleusercontent.com"></label>
+            <label>Google Client Secret<input name="google_client_secret" value="<?= e($secrets['google_client_secret']??'') ?>" placeholder="Paste client secret"></label>
+            <label>Google Redirect URI<input name="google_redirect_uri" value="<?= e($secrets['google_redirect_uri']??'') ?>" placeholder="https://gutconference.online/auth/google/callback"></label>
+            <label>Calendar Reminder Timezone<input name="google_calendar_timezone" value="<?= e($secrets['google_calendar_timezone']??'Asia/Kolkata') ?>"></label>
+        </div>
+        <br>
         <h2>Official Meta WhatsApp Cloud API</h2>
         <p style="color:var(--muted)">Use approved WhatsApp templates for booking, payment, and conference reminders. Template wording is managed in Notification Templates.</p>
         <div class="admin-form__row">

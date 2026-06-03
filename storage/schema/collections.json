@@ -13,6 +13,10 @@
         "email": {"type": "email", "required": true},
         "name": {"type": "string"},
         "role": {"type": "enum", "values": ["customer", "admin"]},
+        "google_sub": {"type": "string"},
+        "google_email_verified": {"type": "boolean"},
+        "google_calendar_enabled": {"type": "boolean"},
+        "newsletter_opt_in": {"type": "boolean"},
         "password_hash": {"type": "secret"}
       }
     },
@@ -131,10 +135,11 @@
       "primary_key": "id",
       "owner_field": "email",
       "admin_managed": true,
-      "agent_context": ["id", "event_slug", "name", "email", "phone", "profession", "payment_status", "created_at"],
+      "agent_context": ["id", "event_slug", "purchase_type", "name", "email", "phone", "profession", "payment_status", "certificate_status", "created_at"],
       "fields": {
         "id": {"type": "string"},
         "event_slug": {"type": "slug"},
+        "purchase_type": {"type": "enum", "values": ["event", "class", "appointment", "course"]},
         "name": {"type": "string"},
         "email": {"type": "email"},
         "phone": {"type": "string"},
@@ -142,6 +147,8 @@
         "payment_status": {"type": "enum", "values": ["pending", "paid", "failed", "manual"]},
         "razorpay_order_id": {"type": "string"},
         "razorpay_payment_id": {"type": "string"},
+        "certificate_status": {"type": "enum", "values": ["not_applicable", "pending", "sent"]},
+        "google_calendar_event_ids": {"type": "array", "items": "string"},
         "created_at": {"type": "datetime"}
       }
     },
@@ -153,7 +160,7 @@
       "fields": {
         "id": {"type": "string"},
         "key": {"type": "slug"},
-        "channel": {"type": "enum", "values": ["email", "whatsapp"]},
+        "channel": {"type": "enum", "values": ["email", "whatsapp", "calendar"]},
         "enabled": {"type": "boolean"},
         "subject": {"type": "string"},
         "template_name": {"type": "string"},
@@ -169,9 +176,10 @@
         "id": {"type": "string"},
         "event_slug": {"type": "slug"},
         "registration_id": {"type": "string"},
-        "channel": {"type": "enum", "values": ["email", "whatsapp"]},
+        "channel": {"type": "enum", "values": ["email", "whatsapp", "calendar"]},
         "to": {"type": "string"},
         "template_key": {"type": "slug"},
+        "payload": {"type": "object"},
         "status": {"type": "enum", "values": ["pending", "sent", "failed"]},
         "available_at": {"type": "datetime"},
         "created_at": {"type": "datetime"}
@@ -186,9 +194,27 @@
         "name": {"type": "string"},
         "email": {"type": "email"},
         "phone": {"type": "string"},
+        "request_type": {"type": "enum", "values": ["consultation", "event_booking", "support"]},
+        "event_slug": {"type": "slug"},
         "subject": {"type": "string"},
         "message": {"type": "text"},
         "status": {"type": "string"}
+      }
+    },
+    "support_tickets": {
+      "file": "storage/data/support_tickets.json",
+      "primary_key": "id",
+      "owner_field": "email",
+      "admin_managed": true,
+      "agent_context": ["id", "name", "email", "subject", "status", "created_at"],
+      "fields": {
+        "id": {"type": "string"},
+        "name": {"type": "string"},
+        "email": {"type": "email"},
+        "subject": {"type": "string"},
+        "message": {"type": "text"},
+        "status": {"type": "string"},
+        "created_at": {"type": "datetime"}
       }
     },
     "settings": {

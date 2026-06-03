@@ -10,10 +10,12 @@
             <p><?= e($event['description'] ?? '') ?></p>
             
             <div class="hero-actions">
-                <?php if(!empty($event['registration_url'])): ?>
-                    <a class="link-arrow link-arrow-primary" href="<?= e($event['registration_url']) ?>" target="_blank" rel="noopener"><?= e($event['cta_label'] ?? 'Register Now') ?> <span aria-hidden="true">→</span></a>
+                <?php if(empty($_SESSION['user'])): ?>
+                    <a class="link-arrow link-arrow-primary" href="/login">Login to Buy Ticket <span aria-hidden="true">→</span></a>
+                <?php elseif(!empty($event['registration_url'])): ?>
+                    <a class="link-arrow link-arrow-primary" href="<?= e($event['registration_url']) ?>" target="_blank" rel="noopener">Pay with Razorpay <span aria-hidden="true">→</span></a>
                 <?php else: ?>
-                    <a class="link-arrow link-arrow-primary" href="#registration"><?= e($event['cta_label'] ?? 'Register Now') ?> <span aria-hidden="true">→</span></a>
+                    <a class="link-arrow link-arrow-primary" href="#registration">Request Payment Link <span aria-hidden="true">→</span></a>
                 <?php endif; ?>
                 <a class="link-arrow" href="#agenda">View Agenda <span aria-hidden="true">→</span></a>
             </div>
@@ -58,7 +60,7 @@
         <a href="#agenda">Agenda</a>
         <a href="#venue">Venue</a>
         <a href="#faq">FAQ</a>
-        <a href="#registration">Register</a>
+        <a href="#registration">Ticket</a>
     </div>
 </nav>
 
@@ -150,11 +152,14 @@
             <p class="eyebrow">Registration</p>
             <h2>Reserve Your Seat</h2>
             
-            <?php if(!empty($event['registration_url'])): ?>
-                <a class="link-arrow link-arrow-primary" href="<?= e($event['registration_url']) ?>" target="_blank" rel="noopener"><?= e($event['cta_label'] ?? 'Register Now') ?> <span aria-hidden="true">→</span></a>
+            <?php if(empty($_SESSION['user'])): ?>
+                <p style="color: var(--muted); font-size: 14px; margin-bottom: 20px;">Login or signup before buying event tickets. After login, the payment button takes the buyer directly to the Razorpay payment flow configured by admin.</p>
+                <a class="link-arrow link-arrow-primary" href="/login">Login to Buy Ticket <span aria-hidden="true">→</span></a>
+            <?php elseif(!empty($event['registration_url'])): ?>
+                <a class="link-arrow link-arrow-primary" href="<?= e($event['registration_url']) ?>" target="_blank" rel="noopener">Pay with Razorpay <span aria-hidden="true">→</span></a>
             <?php else: ?>
                 <p style="color: var(--muted); font-size: 14px; margin-bottom: 20px;">Secure checkout is available. Standard registration fee covers full session access, live Q&amp;A, and your verified E-certificate.</p>
-                <a class="link-arrow link-arrow-primary" href="/contact?subject=Registration%20for%20<?= e($event['slug']) ?>">Contact to Register <span aria-hidden="true">→</span></a>
+                <a class="link-arrow link-arrow-primary" href="/contact?subject=Event%20Booking%20for%20<?= e($event['slug']) ?>">Request Payment Link <span aria-hidden="true">→</span></a>
             <?php endif; ?>
             
             <p style="margin-top: 18px; font-size: 12px; color: var(--muted);">Questions: <?= e($event['contact_email'] ?? '') ?> · <?= e($event['contact_phone'] ?? '') ?></p>
@@ -190,7 +195,7 @@
             <strong><?= e($event['name'] ?? 'Conference') ?></strong>
             <span><?= e($event['date_label'] ?? '') ?> · <?= e($eventTime) ?> · <?= e($slotSummary) ?></span>
         </div>
-        <a class="link-arrow link-arrow-primary" href="#registration"><?= e($event['cta_label'] ?? 'Register Now') ?> <span aria-hidden="true">→</span></a>
+        <a class="link-arrow link-arrow-primary" href="<?= empty($_SESSION['user']) ? '/login' : '#registration' ?>"><?= empty($_SESSION['user']) ? 'Login to Buy' : 'Buy Ticket' ?> <span aria-hidden="true">→</span></a>
     </div>
 </div>
 <?php endif; ?>
@@ -202,7 +207,7 @@
             <p class="lede">Get practical, evidence-based training and clinical protocols directly from international experts.</p>
         </div>
         <div style="text-align:right">
-            <a class="link-arrow link-arrow-invert" href="#registration"><?= e($event['cta_label'] ?? 'Register Now') ?> <span aria-hidden="true">→</span></a>
+            <a class="link-arrow link-arrow-invert" href="<?= empty($_SESSION['user']) ? '/login' : '#registration' ?>"><?= empty($_SESSION['user']) ? 'Login to Buy' : 'Buy Ticket' ?> <span aria-hidden="true">→</span></a>
         </div>
     </div>
 </section>

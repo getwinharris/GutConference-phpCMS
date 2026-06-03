@@ -8,11 +8,15 @@
 - `/contact` → `PublicController@contact` → none
 - `/contact` → `PublicController@contact` → ContactService
 - `/login` → `PublicController@login` → AuthService
+- `/signup` → `PublicController@signup` → AuthService
+- `/signup` → `AuthController@signupPost` → JsonStoreService
 - `/forgot-password` → `AuthController@forgotPassword` → PasswordResetService
 - `/forgot-password` → `AuthController@forgotPasswordPost` → PasswordResetService
 - `/reset-password` → `AuthController@resetPassword` → PasswordResetService
 - `/reset-password` → `AuthController@resetPasswordPost` → PasswordResetService
 - `/login` → `AuthController@loginPost` → JsonStoreService
+- `/auth/google` → `AuthController@googleRedirect` → SecretService
+- `/auth/google/callback` → `AuthController@googleCallback` → SecretService, JsonStoreService
 - `/logout` → `AuthController@logout` → AuthService
 - `/admin` → `AdminController@dashboard` → ResourceService, AuthService
 - `/admin/events` → `AdminController@events` → ResourceService, SchemaService, AuthService
@@ -41,6 +45,7 @@
 - `/admin/integrations` → `AdminController@integrations` → SecretService, AuthService
 - `/admin/integrations/save` → `AdminController@saveIntegrations` → SecretService, AuthService
 - `/admin/contact-submissions` → `AdminController@contactSubmissions` → ContactService, AuthService
+- `/admin/support-tickets` → `AdminController@supportTickets` → ResourceService, AuthService
 - `/admin/media` → `AdminController@media` → MediaService, AuthService
 - `/admin/media/upload` → `AdminController@uploadMedia` → MediaService, AuditLogService, AuthService
 - `/admin/audit-log` → `AdminController@audit` → AuditLogService, AuthService

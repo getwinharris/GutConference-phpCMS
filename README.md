@@ -1,8 +1,10 @@
 # GutConference PHP CMS
 
-GutConference is a PHP/JSON conference CMS for `gutconference.online`. It is built for shared PHP hosting with no Node build step and no SQL requirement.
+GutConference is a PHP/JSON portfolio and booking CMS for `gutconference.online`. The public website is primarily Dr. Praveen Jacob's professional profile platform; events, classes, online consultations, and future course selling are booking options layered on top. It is built for shared PHP hosting with no Node build step and no SQL requirement.
 
-The app is brand-owned: public users cannot post events. Admins create and edit conferences, page sections, speakers, agenda sessions, venues/maps, registrations, payment links, notification templates, media, settings, and integrations.
+The app is brand-owned: public users cannot post events. Admins create and edit conferences, page sections, speakers, agenda sessions, venues/maps, registrations, support tickets, payment links, notification templates, media, settings, and integrations.
+
+Harris / bapxmediahub is the developer, branding, design, and digital marketing agency context. The client-facing website owner/profile is Dr. Praveen Jacob.
 
 ## Stack
 
@@ -11,7 +13,7 @@ The app is brand-owned: public users cannot post events. Admins create and edit 
 - Data: JSON collections in `storage/data/`.
 - Schema contract: `storage/schema/collections.json`.
 - Admin: `/admin`.
-- Integrations: Razorpay keys, SMTP settings, and official Meta WhatsApp Cloud API settings.
+- Integrations: Razorpay keys, SMTP settings, official Meta WhatsApp Cloud API settings, Google OAuth, and Google Calendar.
 - Deployment: Hostinger-style `public_html` PHP hosting with writable `storage/`.
 
 ## Current Seed Event
@@ -35,8 +37,20 @@ Admins can manage:
 - `venues`: online/offline venue, map link, map embed, joining note
 - `registrations`: registration/payment status records
 - `notification_templates`: email and WhatsApp template metadata
-- `notification_queue`: future booking, payment, and reminder messages
+- `notification_queue`: booking, payment, WhatsApp, email, Google Calendar, newsletter, and certificate jobs
 - `media_files`: uploaded event, speaker, venue, and shared assets
+- `support_tickets`: support-agent tickets
+
+## Customer Flow
+
+- Public navigation uses Login, not Register.
+- Customer signup should be Google OAuth-first so calendar access is available before event/class payment.
+- Manual password signup exists only as a legacy/dev fallback; password reset remains SMTP-backed for those users.
+- Manual users must connect Google before payment so event/class reminders can be written to Google Calendar.
+- After successful payment, the PHP backend should queue SMTP email, Meta WhatsApp confirmation, Google Calendar reminders, and certificate delivery jobs.
+- Calendar reminders are planned for previous-day morning, previous-day evening, and event-day morning.
+- Admin newsletter sending should target opted-in Google-authenticated users and use editable notification templates.
+- Do not build course selling yet; keep future course behavior documented and avoid adding course commerce screens until requested.
 
 ## Local Development
 

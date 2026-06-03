@@ -39,6 +39,7 @@ input,textarea,select{width:100%;border:1px solid var(--line);border-radius:8px;
             <a href="/admin/notification_templates" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/notification_templates') ? 'active' : '') ?>">Notification Templates</a>
             <a href="/admin/notification_queue" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/notification_queue') ? 'active' : '') ?>">Notification Queue</a>
             <a href="/admin/contact-submissions" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/contact-submissions') ? 'active' : '') ?>">Contacts</a>
+            <a href="/admin/support-tickets" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/support-tickets') ? 'active' : '') ?>">Support Agent</a>
             <a href="/admin/media" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/media') ? 'active' : '') ?>">Media</a>
             <a href="/admin/integrations" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/integrations') ? 'active' : '') ?>">Integrations</a>
             <a href="/admin/settings" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/settings') ? 'active' : '') ?>">Settings</a>

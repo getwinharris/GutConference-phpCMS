@@ -314,6 +314,12 @@ p { color: inherit; }
 .owner-card strong { display: block; color: var(--navy); font-family: var(--font-title); font-size: 30px; line-height: 1; text-transform: uppercase; }
 .owner-card span { color: var(--blue); font-weight: 900; }
 .owner-card p { color: var(--muted); margin-top: 8px; }
+.owner-specialty {
+    color: var(--blue);
+    font-size: 20px;
+    font-weight: 900;
+    margin: 0 0 18px;
+}
 .reels-section {
     background: linear-gradient(135deg, #073a66, #0f6f8f 55%, #39b9a8);
     color: #fff;
@@ -323,66 +329,86 @@ p { color: inherit; }
 .reels-section .lede { color: rgba(255,255,255,.78); }
 .reels-section .eyebrow { color: #dffaf4; }
 .reels-section .eyebrow::before { background: #dffaf4; }
-.insight-carousel {
-    position: relative;
-    margin: 38px auto 0;
-    max-width: 980px;
-    padding: 20px 66px 58px;
+.reels-heading { margin-bottom: 34px; }
+.reel-marquee {
+    width: 100%;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
-.insight-track {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(220px, 1fr));
+.reel-track {
+    display: flex;
     gap: 18px;
-    align-items: center;
+    width: max-content;
+    padding: 8px 0 12px;
+    animation: reel-marquee 68s linear infinite;
 }
-.insight-card {
-    min-height: 390px;
+.reel-marquee:hover .reel-track { animation-play-state: paused; }
+.reel-card {
+    position: relative;
+    display: grid;
+    align-content: end;
+    width: 232px;
+    height: 410px;
+    flex: 0 0 232px;
     border: 1px solid rgba(255,255,255,.18);
-    border-radius: 26px;
-    padding: 24px;
+    border-radius: 28px;
+    padding: 22px;
+    overflow: hidden;
     background:
-        radial-gradient(circle at 50% 18%, rgba(255,255,255,.20), transparent 28%),
-        rgba(255,255,255,.10);
+        radial-gradient(circle at 30% 18%, rgba(219,255,247,.38), transparent 24%),
+        linear-gradient(180deg, rgba(255,255,255,.14), rgba(0,25,44,.36) 46%, rgba(0,25,44,.72)),
+        linear-gradient(135deg, rgba(57,185,168,.86), rgba(0,139,198,.72));
     color: #fff;
-    text-align: left;
-    cursor: pointer;
-    opacity: .46;
-    transform: scale(.88);
-    filter: blur(1.4px);
-    transition: opacity .32s ease, transform .32s ease, filter .32s ease, box-shadow .32s ease;
+    text-decoration: none;
+    box-shadow: 0 30px 70px rgba(0,0,0,.18);
+    transition: transform .24s ease, box-shadow .24s ease;
 }
-.insight-card.is-active {
-    opacity: 1;
-    transform: scale(1.08);
-    filter: none;
-    box-shadow: 0 30px 70px rgba(0,0,0,.22);
-    background:
-        radial-gradient(circle at 50% 18%, rgba(255,255,255,.30), transparent 28%),
-        rgba(255,255,255,.16);
-    z-index: 2;
+.reel-card:hover { transform: translateY(-8px); box-shadow: 0 38px 90px rgba(0,0,0,.26); }
+.reel-card::before {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,.18);
+    pointer-events: none;
 }
-.insight-tag {
+.reel-phone-top {
+    position: absolute;
+    top: 24px;
+    left: 50%;
+    width: 74px;
+    height: 6px;
+    border-radius: 99px;
+    background: rgba(255,255,255,.45);
+    transform: translateX(-50%);
+}
+.reel-brand {
+    position: absolute;
+    top: 42px;
+    left: 22px;
+    right: 22px;
     display: inline-flex;
-    padding: 6px 10px;
     border-radius: 999px;
+    width: fit-content;
+    padding: 7px 11px;
     background: rgba(255,255,255,.16);
     font-size: 12px;
     font-weight: 900;
-    margin-bottom: 110px;
 }
-.insight-card strong {
+.reel-card strong {
     display: block;
     font-family: var(--font-title);
-    font-size: 34px;
+    font-size: 32px;
     line-height: .95;
     text-transform: uppercase;
-    margin-bottom: 12px;
+    margin: 0 0 8px;
 }
-.insight-card p { color: rgba(255,255,255,.78); font-weight: 700; }
-.play-dot {
+.reel-card small { color: rgba(255,255,255,.76); font-weight: 800; }
+.reel-play {
     position: absolute;
     left: 50%;
-    top: 42%;
+    top: 46%;
     transform: translate(-50%, -50%);
     display: grid;
     place-items: center;
@@ -393,40 +419,60 @@ p { color: inherit; }
     color: var(--navy);
     box-shadow: 0 20px 42px rgba(0,0,0,.22);
 }
-.insight-nav {
-    position: absolute;
-    top: 44%;
-    transform: translateY(-50%);
-    width: 50px;
-    height: 50px;
-    border: 0;
+@keyframes reel-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-50% - 9px)); }
+}
+
+.press-section {
+    background: linear-gradient(180deg, rgba(255,255,255,.84), rgba(238,249,246,.8));
+    border-bottom: 1px solid var(--line);
+}
+.press-grid {
+    display: grid;
+    grid-template-columns: minmax(280px, 390px) 1fr;
+    gap: 22px;
+    margin-top: 30px;
+}
+.press-feature, .press-card {
+    background: rgba(255,255,255,.9);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    padding: 28px;
+}
+.press-feature {
+    background:
+        radial-gradient(circle at top right, rgba(57,185,168,.2), transparent 32%),
+        #fff;
+}
+.press-feature span {
+    display: inline-grid;
+    place-items: center;
+    width: 108px;
+    height: 108px;
     border-radius: 50%;
-    background: rgba(255,255,255,.94);
-    color: var(--navy);
-    font-size: 34px;
-    cursor: pointer;
-    z-index: 4;
-    box-shadow: 0 16px 34px rgba(0,0,0,.18);
+    background: var(--brand-gradient);
+    color: #fff;
+    font-family: var(--font-title);
+    font-size: 24px;
+    font-weight: 800;
+    line-height: .95;
+    text-align: center;
+    margin-bottom: 22px;
 }
-.insight-prev { left: 0; }
-.insight-next { right: 0; }
-.insight-dots {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 12px;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
+.press-card span {
+    display: block;
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
 }
-.insight-dots button {
-    width: 8px;
-    height: 8px;
-    border: 0;
-    border-radius: 50%;
-    background: rgba(255,255,255,.28);
-}
-.insight-dots button.is-active { width: 24px; border-radius: 99px; background: #dffaf4; }
+.press-feature h3, .press-card h3 { margin-top: 0; }
+.press-feature p, .press-card p { color: var(--muted); }
+.press-list { display: grid; gap: 16px; }
 
 .events-heading {
     display: grid;
@@ -613,13 +659,11 @@ label { display: grid; gap: 7px; color: var(--navy); font-size: 13px; font-weigh
 @media (max-width: 920px) {
     .nav { flex-wrap: wrap; }
     .nav-links { order: 3; width: 100%; justify-content: flex-start; overflow-x: auto; padding-bottom: 2px; }
-    .hero-grid, .grid-2, .footer-grid, .auth-page, .events-heading { grid-template-columns: 1fr; }
+    .hero-grid, .grid-2, .footer-grid, .auth-page, .events-heading, .press-grid { grid-template-columns: 1fr; }
     .grid, .impact-grid { grid-template-columns: 1fr 1fr; }
     .stats, .trust-strip, .faq-grid { grid-template-columns: 1fr 1fr; }
     .owner-grid { grid-template-columns: 1fr; }
-    .insight-carousel { padding-left: 54px; padding-right: 54px; }
-    .insight-track { display: flex; overflow: hidden; }
-    .insight-card { flex: 0 0 min(280px, 72vw); }
+    .reel-card { width: 210px; height: 372px; flex-basis: 210px; }
 }
 
 @media (max-width: 640px) {
@@ -643,9 +687,10 @@ label { display: grid; gap: 7px; color: var(--navy); font-size: 13px; font-weigh
     .event-card__body { padding: 18px; }
     .event-card__facts { grid-template-columns: 1fr; }
     .owner-card { grid-template-columns: 1fr; text-align: center; justify-items: center; }
-    .insight-carousel { padding: 12px 44px 52px; }
-    .insight-nav { width: 42px; height: 42px; font-size: 28px; }
-    .insight-card { min-height: 350px; }
+    .reel-marquee { -webkit-mask-image: none; mask-image: none; }
+    .reel-card { width: 184px; height: 326px; flex-basis: 184px; border-radius: 22px; }
+    .reel-card strong { font-size: 26px; }
+    .reel-play { width: 54px; height: 54px; }
     .section-nav { top: 0; }
     .sticky-register .container { align-items: stretch; flex-direction: column; gap: 10px; }
     .sticky-register .btn { width: 100%; }

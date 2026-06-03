@@ -3,7 +3,18 @@
 $ownerName = $settings['product_owner_name'] ?? 'Dr. Praveen Jacob';
 $ownerTitle = $settings['product_owner_title'] ?? 'Integrating Traditional Medicine with Modern Research.';
 $ownerHandle = $settings['product_owner_handle'] ?? '@the.gut.expert';
-$ownerInstagram = $settings['product_owner_instagram'] ?? 'https://www.instagram.com/the.gut.expert';
+$ownerInstagram = $settings['product_owner_instagram'] ?? 'https://www.instagram.com/the.gut.expert/?hl=en';
+$ownerLinkedin = $settings['product_owner_linkedin'] ?? 'https://www.linkedin.com/in/dr-praveen-jacob-61b350341/';
+$ownerYoutube = $settings['product_owner_youtube'] ?? 'https://www.youtube.com/channel/UC0UAYYxQETPP6KJcCTHgP7w';
+$ownerFacebook = $settings['product_owner_facebook'] ?? 'https://www.facebook.com/people/Dr-Praveen-Jacob/100063556307522/';
+$ownerProfileUrl = $settings['product_owner_profile_url'] ?? 'https://nisargahospital.in/doctors/dr-praveen-jacob/';
+$socialLinks = [
+    ['label' => 'Instagram', 'url' => $ownerInstagram],
+    ['label' => 'LinkedIn', 'url' => $ownerLinkedin],
+    ['label' => 'YouTube', 'url' => $ownerYoutube],
+    ['label' => 'Facebook', 'url' => $ownerFacebook],
+    ['label' => 'Clinical Profile', 'url' => $ownerProfileUrl],
+];
 $reels = [
     'https://www.instagram.com/reel/DM-IqIwy8by/',
     'https://www.instagram.com/reel/DI3hTnFy3ne/',
@@ -25,56 +36,54 @@ $reels = [
 ];
 $pressLinks = [
     [
-        'source' => 'Indian Businessline',
+        'source' => 'First India',
         'date' => 'July 31, 2024',
-        'title' => 'International Gut Health Expert Brings 25 Plus years of expertise to the community life at nature',
-        'url' => 'https://indianbusinessline.com/index.php/2024/07/31/international-gut-health-expert-brings-25-plus-years-of-expertise-to-the-community-life-at-nature/',
+        'title' => 'International Gut Health Expert Brings 25+ Years of Expertise to the Community Life at Nature',
+        'url' => 'https://firstindia.co.in/news/press-releases/international-gut-health-expert-brings-25-years-of-expertise-to-the-community-life-at-nature',
         'summary' => 'Profile coverage on gut health, prebiotics, herbal remedies, and holistic clinical practice.',
     ],
     [
-        'source' => 'Life at Nature',
-        'date' => 'Reference',
-        'title' => 'Natural medicine and community health reference',
-        'url' => 'https://www.lifeatnature.com',
-        'summary' => 'External reference mentioned by the press article for natural medicine community context.',
+        'source' => 'Nisarga Hospital',
+        'date' => 'Professional profile',
+        'title' => 'Dr. Praveen Jacob professional profile',
+        'url' => $ownerProfileUrl,
+        'summary' => 'Clinic profile reference for appointments, professional positioning, and patient-facing context.',
     ],
 ];
 ?>
 <section class="hero">
     <div class="container hero-grid">
         <div>
-            <p class="eyebrow">GutConference</p>
-            <h1><?= e($event['headline'] ?? 'Microbiome, Probiotics & Gut Nutrition') ?></h1>
-            <p class="lede"><?= e($event['description'] ?? 'Professional online conferences for clinical gut-health education.') ?></p>
+            <p class="eyebrow">Dr. Praveen Jacob</p>
+            <h1>Integrative gut-health education, consultation, and clinical events.</h1>
+            <p class="lede"><?= e($ownerTitle) ?> Specialized in Gut, Skin &amp; Autoimmune Disorders.</p>
             <div class="hero-actions">
-                <a class="link-arrow link-arrow-primary" href="<?= $event ? '/events/' . e($event['slug']) : '/events' ?>"><?= e($event['cta_label'] ?? 'View Current Conference') ?> <span aria-hidden="true">→</span></a>
-                <a class="link-arrow" href="/contact">Talk to the Team <span aria-hidden="true">→</span></a>
+                <a class="link-arrow link-arrow-primary" href="/contact?subject=Online%20Consultation">Book Online Consultation <span aria-hidden="true">→</span></a>
+                <a class="link-arrow" href="<?= $event ? '/events/' . e($event['slug']) : '/events' ?>">View Events &amp; Classes <span aria-hidden="true">→</span></a>
             </div>
             <?php if($event): ?>
                 <div class="stats">
-                    <div class="stat"><strong><?= e($event['date_label']) ?></strong><span>Date</span></div>
-                    <div class="stat"><strong><?= e($eventService->timeRange($event)) ?></strong><span>Schedule</span></div>
-                    <div class="stat"><strong><?= e($event['mode']) ?></strong><span>Mode</span></div>
-                    <div class="stat"><strong><?= e($eventService->shortSlotSummary($event)) ?></strong><span>Slots</span></div>
+                    <div class="stat"><strong>25+ years</strong><span>Practice & research</span></div>
+                    <div class="stat"><strong>Gut, Skin</strong><span>Autoimmune focus</span></div>
+                    <div class="stat"><strong><?= e($event['date_label']) ?></strong><span>Next event</span></div>
+                    <div class="stat"><strong><?= e($eventService->shortSlotSummary($event)) ?></strong><span>Event slots</span></div>
                 </div>
                 <div class="trust-strip">
-                    <div class="trust-item">3rd international edition</div>
-                    <div class="trust-item">E-certificate</div>
-                    <div class="trust-item">8 expert sessions</div>
-                    <div class="trust-item">Online access</div>
-                    <div class="trust-item"><?= e($event['organizers'] ?? 'Conference Team') ?></div>
+                    <div class="trust-item">Traditional medicine</div>
+                    <div class="trust-item">Modern research</div>
+                    <div class="trust-item">Online consultation</div>
+                    <div class="trust-item">Clinical events</div>
+                    <div class="trust-item">E-certificate support</div>
                 </div>
             <?php endif; ?>
         </div>
         <div class="hero-media">
-            <div class="brand-hero">
+            <div class="brand-hero profile-hero-card">
                 <img src="/assets/images/media/gutconference-mark.png" alt="GutConference circular mark">
                 <div class="brand-hero-title">
-                    <small>International Conference On</small>
-                    <strong>Microbiome</strong>
-                    <strong>Probiotics</strong>
-                    <strong>Gut Nutrition</strong>
-                    <span>Bridging Science &amp; Clinical Healing</span>
+                    <small>Portfolio Platform</small>
+                    <strong><?= e($ownerName) ?></strong>
+                    <span>Consultations, events, classes, and microbiome-focused education under one verified profile.</span>
                 </div>
             </div>
         </div>
@@ -84,23 +93,23 @@ $pressLinks = [
 <section class="section impact-section">
     <div class="container">
         <p class="eyebrow">How This Helps</p>
-        <h2>Not just a schedule. A clinical learning path.</h2>
-        <p class="lede">Every section explains what attendees gain: clinical clarity, speaker context, real agenda timing, and a clear next step for registration or support.</p>
+        <h2>A profile-first platform with booking paths.</h2>
+        <p class="lede">The website should behave like a premium professional portfolio first, then guide visitors into consultation, event booking, and future class purchases only when they are ready.</p>
         <div class="impact-grid">
             <article class="impact-card">
                 <span class="impact-icon">01</span>
-                <h3>Research to practice</h3>
-                <p>Connect microbiome research with practical patient conversations, protocol choices, and diet/lifestyle decisions.</p>
+                <h3>Clinical authority</h3>
+                <p>Lead with the doctor profile, focus areas, verified press, and hospital/profile references before asking users to buy.</p>
             </article>
             <article class="impact-card">
                 <span class="impact-icon">02</span>
-                <h3>Speaker-led clarity</h3>
-                <p>Each session is mapped by time, speaker, country, and topic so visitors understand why the program matters.</p>
+                <h3>Guided decisions</h3>
+                <p>Use quiet luxury cards, clear hierarchy, and one primary action per section so consultation and event paths do not compete.</p>
             </article>
             <article class="impact-card">
                 <span class="impact-icon">03</span>
-                <h3>Admin-owned events</h3>
-                <p>New events, venues, speakers, agenda slots, payment links, and notifications stay editable from the CMS.</p>
+                <h3>Admin-owned growth</h3>
+                <p>Events, venues, slots, Razorpay links, WhatsApp templates, and certificates stay admin-managed as the business evolves.</p>
             </article>
         </div>
     </div>
@@ -113,7 +122,11 @@ $pressLinks = [
             <h2><?= e($ownerName) ?></h2>
             <p class="lede"><?= e($ownerTitle) ?></p>
             <p class="owner-specialty">Specialized in Gut, Skin &amp; Autoimmune Disorders.</p>
-            <a class="link-arrow" href="<?= e($ownerInstagram) ?>" target="_blank" rel="noopener">View Instagram <span aria-hidden="true">→</span></a>
+            <div class="social-row">
+                <?php foreach($socialLinks as $social): ?>
+                    <a href="<?= e($social['url']) ?>" target="_blank" rel="noopener"><?= e($social['label']) ?></a>
+                <?php endforeach; ?>
+            </div>
             <a class="link-arrow" href="/contact">Book Online Consultation <span aria-hidden="true">→</span></a>
         </div>
         <div class="owner-card">
@@ -154,7 +167,7 @@ $pressLinks = [
     <div class="container">
         <p class="eyebrow">Press &amp; References</p>
         <h2>Public coverage and clinical positioning.</h2>
-        <p class="lede">The public profile content from the screenshots is converted into a cleaner website section with outbound links instead of duplicating long press-release text.</p>
+        <p class="lede">Verified profile and press links are used as trust signals without sending visitors to unrelated pages.</p>
         <div class="press-grid">
             <article class="press-feature">
                 <span>25+ years</span>

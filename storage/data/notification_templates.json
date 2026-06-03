@@ -1,22 +1,62 @@
 [
   {
-    "id": "tpl-registration-confirmed-email",
-    "key": "registration-confirmed",
+    "id": "tpl-payment-success-email",
+    "key": "payment-success",
     "channel": "email",
     "enabled": true,
-    "subject": "Your Global Gut Summit registration",
+    "subject": "Payment successful - your booking is confirmed",
     "template_name": "",
     "language": "en",
-    "body": "Thank you for registering. Your conference details will be shared before the event."
+    "body": "Hi {{name}}, your payment for {{event_name}} is successful. Event access and certificate details will be shared by email."
   },
   {
-    "id": "tpl-payment-confirmed-whatsapp",
-    "key": "payment-confirmed",
+    "id": "tpl-payment-success-whatsapp",
+    "key": "payment-success-whatsapp",
     "channel": "whatsapp",
     "enabled": false,
     "subject": "",
-    "template_name": "payment_confirmed",
+    "template_name": "payment_success",
     "language": "en",
-    "body": "Official Meta WhatsApp template name to be configured after approval."
+    "body": "Official Meta WhatsApp approved template for payment confirmation."
+  },
+  {
+    "id": "tpl-calendar-reminder",
+    "key": "google-calendar-reminder",
+    "channel": "calendar",
+    "enabled": true,
+    "subject": "Calendar reminder for {{event_name}}",
+    "template_name": "",
+    "language": "en",
+    "body": "Create Google Calendar reminder for previous-day morning, previous-day evening, and event-day morning."
+  },
+  {
+    "id": "tpl-certificate-ready",
+    "key": "certificate-ready",
+    "channel": "email",
+    "enabled": true,
+    "subject": "Your certificate is ready",
+    "template_name": "",
+    "language": "en",
+    "body": "Hi {{name}}, your certificate for {{event_name}} is ready. Please download it from your account or use the attached certificate."
+  },
+  {
+    "id": "tpl-password-reset-email",
+    "key": "password-reset",
+    "channel": "email",
+    "enabled": true,
+    "subject": "Reset your GutConference password",
+    "template_name": "",
+    "language": "en",
+    "body": "Use this secure link to reset your password: {{reset_link}}"
+  },
+  {
+    "id": "tpl-newsletter-email",
+    "key": "newsletter",
+    "channel": "email",
+    "enabled": true,
+    "subject": "Gut health update from Dr. Praveen Jacob",
+    "template_name": "",
+    "language": "en",
+    "body": "Admin can enhance this newsletter copy before sending to Google-authenticated subscribers."
   }
 ]

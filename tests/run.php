@@ -17,7 +17,7 @@ function assertTrue(bool $condition, string $message): void {
 $store = new JsonStoreService();
 $schema = json_decode(file_get_contents(app_path('storage/schema/collections.json')) ?: '{}', true);
 $collections = $schema['collections'] ?? [];
-$required = ['users','events','event_sections','speakers','sessions','venues','registrations','notification_templates','notification_queue','settings','audit_events','contact_submissions','media_files'];
+$required = ['users','events','event_sections','speakers','sessions','venues','registrations','notification_templates','notification_queue','settings','audit_events','contact_submissions','support_tickets','media_files'];
 
 foreach ($required as $collection) {
     assertTrue(isset($collections[$collection]), "schema contains {$collection}");
@@ -42,6 +42,7 @@ assertTrue(count($events->speakers('global-gut-summit-2026')) >= 8, 'seed includ
 assertTrue(count($events->sessions('global-gut-summit-2026')) >= 8, 'seed includes agenda sessions');
 assertTrue($events->venue('global-gut-summit-2026') !== null, 'seed includes venue or online room');
 assertTrue(($settings['product_owner_handle'] ?? '') === '@the.gut.expert', 'settings include product owner social handle');
+assertTrue(!empty($settings['product_owner_linkedin']) && !empty($settings['product_owner_profile_url']), 'settings include professional and social profile links');
 
 $map = ProjectMapService::registry();
 $validation = ProjectMapService::validate($map);
@@ -50,21 +51,40 @@ assertTrue($validation['missing_services'] === [], 'project map services are reg
 assertTrue($validation['missing_collections'] === [], 'project map collections are registered');
 
 $routePaths = array_column($map['routes'], 'path');
-foreach (['/','/events','/events/{slug}','/admin/events','/admin/event_sections','/admin/speakers','/admin/sessions','/admin/venues','/admin/registrations','/admin/notification_templates'] as $path) {
+foreach (['/','/signup','/auth/google','/auth/google/callback','/events','/events/{slug}','/admin/events','/admin/event_sections','/admin/speakers','/admin/sessions','/admin/venues','/admin/registrations','/admin/notification_templates','/admin/support-tickets'] as $path) {
     assertTrue(in_array($path, $routePaths, true), "route exists: {$path}");
 }
 
 $home = file_get_contents(app_path('views/public/home.php')) ?: '';
 $event = file_get_contents(app_path('views/public/event.php')) ?: '';
 $admin = file_get_contents(app_path('views/layouts/admin.php')) ?: '';
+$index = file_get_contents(app_path('index.php')) ?: '';
 assertTrue(str_contains($home, 'GutConference'), 'home is rebranded');
-assertTrue(str_contains($home, 'data-carousel') && str_contains($home, 'Product Owner'), 'home includes owner and insights carousel sections');
+assertTrue(str_contains($home, 'Product Owner') && str_contains($home, 'Dr. Praveen Jacob'), 'home includes owner section');
+assertTrue(str_contains($home, 'reel-marquee') && substr_count($home, 'instagram.com/reel/') >= 17, 'home includes supplied Instagram reel loop');
+assertTrue(str_contains($home, 'Press &amp; References') && str_contains($home, 'First India') && !str_contains($home, 'lifeatnature.com'), 'home includes clean press/blog references');
+assertTrue(str_contains($home, 'LinkedIn') && str_contains($home, 'YouTube') && str_contains($home, 'Clinical Profile'), 'home includes owner social links');
+assertTrue(str_contains(file_get_contents(app_path('views/public/signup.php')) ?: '', 'Google OAuth is the required customer signup path'), 'signup documents mandatory Google OAuth customer flow');
+assertTrue(str_contains(file_get_contents(app_path('views/public/login.php')) ?: '', '/auth/google'), 'login exposes Google OAuth endpoint');
+assertTrue(str_contains($index, "'/signup'") && str_contains($index, "'/auth'"), 'front controller allows signup and auth routes');
 assertTrue(str_contains($event, 'Speaker Lineup') && str_contains($event, 'Reserve Your Seat'), 'event page includes conversion sections');
+assertTrue(str_contains($event, 'Login to Buy Ticket') && str_contains($event, 'Pay with Razorpay'), 'event ticket flow gates payment behind login and direct Razorpay');
 assertTrue(str_contains($event, 'sticky-register') && str_contains($event, 'section-nav'), 'event page includes sticky registration and section navigation');
 assertTrue(str_contains($event, 'event-thumbnail') && str_contains($event, 'slot-chip'), 'event page includes thumbnail and agenda slot display');
 assertTrue(str_contains($event, 'E-certificate included') && str_contains($featured['organizers'] ?? '', 'Alpha Naturals'), 'event page uses official brief content');
 assertTrue(str_contains($admin, '/admin/events') && str_contains($admin, '/admin/venues'), 'admin nav exposes conference resources');
+assertTrue(str_contains($admin, '/admin/support-tickets'), 'admin nav exposes support agent tickets');
 assertTrue(!str_contains($admin, 'legacy-marketplace') && !str_contains($home, 'legacy-source-brand'), 'active UI does not expose old domain labels');
+
+$templates = file_get_contents(app_path('storage/data/notification_templates.json')) ?: '';
+assertTrue(str_contains($templates, 'payment-success') && str_contains($templates, 'google-calendar-reminder') && str_contains($templates, 'certificate-ready') && str_contains($templates, 'newsletter'), 'notification templates cover payment, calendar, certificate, and newsletter');
+assertTrue(is_file(app_path('integrations/google-oauth/GoogleOAuthClient.php')), 'Google OAuth client integration exists');
+
+$planner = new \App\Services\PurchaseNotificationService(new JsonStoreService());
+$jobs = $planner->queuePurchaseSuccess(['id'=>'test-reg','email'=>'buyer@example.com','phone'=>'+919999999999','event_slug'=>'global-gut-summit-2026','certificate_status'=>'pending'], $featured, ['email'=>'buyer@example.com','google_sub'=>'google-user','google_calendar_enabled'=>true]);
+assertTrue(count($jobs) >= 6, 'purchase notification planner creates email, WhatsApp, calendar, and certificate jobs');
+$queue = $store->read('notification_queue');
+$store->write('notification_queue', array_values(array_filter($queue, fn($item) => ($item['registration_id'] ?? '') !== 'test-reg')));
 
 $media = file_get_contents(app_path('views/admin/media.php')) ?: '';
 assertTrue(str_contains($media, 'value="events"') && str_contains($media, 'value="speakers"') && str_contains($media, 'value="venues"'), 'media contexts match conference CMS');

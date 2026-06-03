@@ -80,6 +80,26 @@
         },
         {
             "method": "GET",
+            "path": "/signup",
+            "name": "signup",
+            "page": "public/signup",
+            "controller": "PublicController@signup",
+            "services": [
+                "AuthService"
+            ]
+        },
+        {
+            "method": "POST",
+            "path": "/signup",
+            "name": "signup.post",
+            "page": "public/signup",
+            "controller": "AuthController@signupPost",
+            "services": [
+                "JsonStoreService"
+            ]
+        },
+        {
+            "method": "GET",
             "path": "/forgot-password",
             "name": "forgot-password",
             "page": "public/forgot-password",
@@ -125,6 +145,27 @@
             "page": "public/login",
             "controller": "AuthController@loginPost",
             "services": [
+                "JsonStoreService"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/auth/google",
+            "name": "google.oauth",
+            "page": "public/login",
+            "controller": "AuthController@googleRedirect",
+            "services": [
+                "SecretService"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/auth/google/callback",
+            "name": "google.oauth.callback",
+            "page": "public/login",
+            "controller": "AuthController@googleCallback",
+            "services": [
+                "SecretService",
                 "JsonStoreService"
             ]
         },
@@ -455,6 +496,17 @@
         },
         {
             "method": "GET",
+            "path": "/admin/support-tickets",
+            "name": "admin.support-tickets",
+            "page": "admin/list",
+            "controller": "AdminController@supportTickets",
+            "services": [
+                "ResourceService",
+                "AuthService"
+            ]
+        },
+        {
+            "method": "GET",
             "path": "/admin/media",
             "name": "admin.media",
             "page": "admin/media",
@@ -558,12 +610,14 @@
         "EnvService",
         "ContactService",
         "PasswordResetService",
+        "PurchaseNotificationService",
         "MediaService",
         "StoragePermissionService",
         "SchemaService"
     ],
     "integrations": [
-        "RazorpayClient"
+        "RazorpayClient",
+        "GoogleOAuthClient"
     ],
     "collections": [
         "users",
@@ -578,6 +632,7 @@
         "settings",
         "audit_events",
         "contact_submissions",
+        "support_tickets",
         "media_files"
     ]
 }

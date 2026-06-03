@@ -12,11 +12,15 @@ final class ProjectMapService {
             ['method'=>'GET','path'=>'/contact','name'=>'contact','page'=>'public/contact','controller'=>'PublicController@contact','services'=>[]],
             ['method'=>'POST','path'=>'/contact','name'=>'contact.post','page'=>'public/contact','controller'=>'PublicController@contact','services'=>['ContactService']],
             ['method'=>'GET','path'=>'/login','name'=>'login','page'=>'public/login','controller'=>'PublicController@login','services'=>['AuthService']],
+            ['method'=>'GET','path'=>'/signup','name'=>'signup','page'=>'public/signup','controller'=>'PublicController@signup','services'=>['AuthService']],
+            ['method'=>'POST','path'=>'/signup','name'=>'signup.post','page'=>'public/signup','controller'=>'AuthController@signupPost','services'=>['JsonStoreService']],
             ['method'=>'GET','path'=>'/forgot-password','name'=>'forgot-password','page'=>'public/forgot-password','controller'=>'AuthController@forgotPassword','services'=>['PasswordResetService']],
             ['method'=>'POST','path'=>'/forgot-password','name'=>'forgot-password.post','page'=>'public/forgot-password','controller'=>'AuthController@forgotPasswordPost','services'=>['PasswordResetService']],
             ['method'=>'GET','path'=>'/reset-password','name'=>'reset-password','page'=>'public/reset-password','controller'=>'AuthController@resetPassword','services'=>['PasswordResetService']],
             ['method'=>'POST','path'=>'/reset-password','name'=>'reset-password.post','page'=>'public/reset-password','controller'=>'AuthController@resetPasswordPost','services'=>['PasswordResetService']],
             ['method'=>'POST','path'=>'/login','name'=>'login.post','page'=>'public/login','controller'=>'AuthController@loginPost','services'=>['JsonStoreService']],
+            ['method'=>'GET','path'=>'/auth/google','name'=>'google.oauth','page'=>'public/login','controller'=>'AuthController@googleRedirect','services'=>['SecretService']],
+            ['method'=>'GET','path'=>'/auth/google/callback','name'=>'google.oauth.callback','page'=>'public/login','controller'=>'AuthController@googleCallback','services'=>['SecretService','JsonStoreService']],
             ['method'=>'GET','path'=>'/logout','name'=>'logout','page'=>'public/login','controller'=>'AuthController@logout','services'=>['AuthService']],
             ['method'=>'GET','path'=>'/admin','name'=>'admin.dashboard','page'=>'admin/dashboard','controller'=>'AdminController@dashboard','services'=>['ResourceService']],
             ['method'=>'GET','path'=>'/admin/events','name'=>'admin.events','page'=>'admin/resource','controller'=>'AdminController@events','services'=>['ResourceService','SchemaService']],
@@ -45,6 +49,7 @@ final class ProjectMapService {
             ['method'=>'GET','path'=>'/admin/integrations','name'=>'admin.integrations','page'=>'admin/integrations','controller'=>'AdminController@integrations','services'=>['SecretService']],
             ['method'=>'POST','path'=>'/admin/integrations/save','name'=>'admin.integrations.save','page'=>'admin/integrations','controller'=>'AdminController@saveIntegrations','services'=>['SecretService']],
             ['method'=>'GET','path'=>'/admin/contact-submissions','name'=>'admin.contact-submissions','page'=>'admin/resource','controller'=>'AdminController@contactSubmissions','services'=>['ContactService']],
+            ['method'=>'GET','path'=>'/admin/support-tickets','name'=>'admin.support-tickets','page'=>'admin/list','controller'=>'AdminController@supportTickets','services'=>['ResourceService']],
             ['method'=>'GET','path'=>'/admin/media','name'=>'admin.media','page'=>'admin/media','controller'=>'AdminController@media','services'=>['MediaService']],
             ['method'=>'POST','path'=>'/admin/media/upload','name'=>'admin.media.upload','page'=>'admin/media','controller'=>'AdminController@uploadMedia','services'=>['MediaService','AuditLogService']],
             ['method'=>'GET','path'=>'/admin/audit-log','name'=>'admin.audit','page'=>'admin/list','controller'=>'AdminController@audit','services'=>['AuditLogService']],
@@ -62,16 +67,16 @@ final class ProjectMapService {
         unset($route);
         return [
             'routes'=>$routes,
-            'services'=>['AuthService','EventService','SettingsService','ProjectMapService','JsonStoreService','AuditLogService','ResourceService','SecretService','EnvService','ContactService','PasswordResetService','MediaService','StoragePermissionService','SchemaService'],
-            'integrations'=>['RazorpayClient'],
-            'collections'=>['users','events','event_sections','speakers','sessions','venues','registrations','notification_templates','notification_queue','settings','audit_events','contact_submissions','media_files'],
+            'services'=>['AuthService','EventService','SettingsService','ProjectMapService','JsonStoreService','AuditLogService','ResourceService','SecretService','EnvService','ContactService','PasswordResetService','PurchaseNotificationService','MediaService','StoragePermissionService','SchemaService'],
+            'integrations'=>['RazorpayClient','GoogleOAuthClient'],
+            'collections'=>['users','events','event_sections','speakers','sessions','venues','registrations','notification_templates','notification_queue','settings','audit_events','contact_submissions','support_tickets','media_files'],
         ];
     }
 
     public static function validate(array $map): array {
         $missingRouteMappings = array_values(array_filter($map['routes'], fn($r) => empty($r['controller']) || empty($r['page'])));
         $used = array_unique(array_merge(...array_map(fn($r) => $r['services'], $map['routes'])));
-        $requiredCollections = ['users','events','event_sections','speakers','sessions','venues','registrations','notification_templates','notification_queue','settings','audit_events','contact_submissions','media_files'];
+        $requiredCollections = ['users','events','event_sections','speakers','sessions','venues','registrations','notification_templates','notification_queue','settings','audit_events','contact_submissions','support_tickets','media_files'];
         return [
             'missing_route_mappings'=>$missingRouteMappings,
             'missing_services'=>array_values(array_diff($used, $map['services'])),
