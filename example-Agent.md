@@ -5,11 +5,12 @@ Use this file as the operating note for coding agents working on the GutConferen
 ## Product Shape
 
 - The app runs from ordinary PHP shared hosting.
-- The frontend is PHP-rendered templates in `views/`.
+- The frontend is modern HTML/CSS in `views/`, fed by JSON/schema data through PHP controllers and services.
 - The backend is PHP controllers and services in `app/`.
 - The data store is JSON under `storage/data/`.
 - The schema contract is `storage/schema/collections.json`.
 - Built-in skills live under `.codex/skills/`, `.claude/skills/`, and `.agents/skills/`.
+- Admin work uses the `gutconference-admin` skill.
 - There is no SPA fallback. Unknown routes return the PHP 404 page.
 
 ## Required Workflow
@@ -17,13 +18,14 @@ Use this file as the operating note for coding agents working on the GutConferen
 1. Read `AGENTS.md`, `README.md`, `docs/PROJECT_MAP.md`, and `storage/schema/collections.json`.
 2. Use the project map before editing routes, controllers, services, or pages.
 3. Update schema before changing JSON collections or admin fields.
-4. Run locally when browser testing is needed:
+4. For UI changes, make the surface modern HTML/CSS with JSON-backed data and schema-driven forms. PHP should run the shared-hosted app, route requests, and bind data; do not use PHP as the visual design model. Do not add React, CDN React, or a SPA shell.
+5. Run locally when browser testing is needed:
 
 ```bash
 php -S 127.0.0.1:6040 index.php
 ```
 
-5. Validate before finishing:
+6. Validate before finishing:
 
 ```bash
 php tests/run.php
@@ -31,7 +33,7 @@ php tools/validate-project-map.php
 php tools/smoke-local.php
 ```
 
-6. Regenerate project map docs after route changes:
+7. Regenerate project map docs after route changes:
 
 ```bash
 php tools/generate-project-map.php
@@ -47,6 +49,14 @@ php tools/generate-project-map.php
 - Integrations: `SecretService`, Razorpay, SMTP, Meta WhatsApp Cloud API settings.
 - Audit: `AuditLogService`.
 - Skills: update the matching `.codex/skills/`, `.claude/skills/`, and `.agents/skills/` files when the product workflow evolves, especially for default ports, schema rules, admin surfaces, deployment, and browser/UI review expectations.
+
+## Admin Automation Principles
+
+- Keep admin navigation compact by grouping related owner workflows instead of adding a separate menu item for every helper action.
+- Use event date, start/end time, timezone, capacity, and paid registrations as the source for automatic countdowns, labels, availability, and notification timings.
+- Store timezone once in event or settings context, then derive display labels and timers from that value.
+- Only expose fields in admin when manual editing is genuinely needed. Generate derived labels, remaining ticket counts, queue timings, and reminders through PHP services or scripts.
+- When working on a PR, inspect previous PR comments, keep fixes on the same remote branch when appropriate, and send requested follow-up through the configured remote email or project channel.
 
 ## Deployment
 

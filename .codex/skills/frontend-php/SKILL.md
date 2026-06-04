@@ -3,11 +3,14 @@ name: frontend-php
 description: Use when editing public conference, event landing, admin, contact, auth, or CMS templates.
 ---
 
-# PHP Frontend
+# HTML CSS Frontend
 
 - Primary website goal: premium portfolio for Dr. Praveen Jacob. Events/classes/appointments are booking options, not the whole brand.
 - Harris / bapxmediahub is the developer, branding, design, and digital marketing agency context. Do not present Harris as the client or website owner.
 - Keep the UI fully rebranded for GutConference and Dr. Praveen Jacob using the supplied logo/theme.
+- Build UI as modern HTML/CSS fed by JSON/schema data. PHP may route, load data, and include templates for shared hosting, but the UI should be designed and reasoned about as HTML/CSS, not PHP UI.
+- Use small progressive JavaScript only for browser behavior that cannot be handled by HTML/CSS and server-provided JSON data.
+- Do not add React, CDN React, SPA shells, or a second frontend.
 - Compare event pages against provided competitor/reference URLs, but keep the result corporate, clinical, luxury, credible, and profile-first.
 - Use quiet luxury cards: clear hierarchy, soft light backgrounds, restrained shadows, one primary action per card, and no nested card clutter.
 - Use the supplied logo assets from `assets/images/media/` unless the user provides replacements.

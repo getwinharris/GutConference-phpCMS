@@ -17,7 +17,7 @@ if (!empty($event)) {
     $desc = e($event['subheadline'] ?? $event['description'] ?? 'Professional online conferences for microbiome, probiotics, and gut nutrition education.');
 } else {
     $title = !empty($pageTitle) ? e($pageTitle) . ' - GutConference' : 'GutConference - Microbiome, Probiotics & Gut Nutrition';
-    $desc = 'GutConference hosts admin-managed gut health, microbiome, probiotics, and nutrition conferences for clinical and integrative practitioners.';
+    $desc = 'GutConference presents Dr. Praveen Jacob, gut-health education, clinical consultation, and microbiome-focused events.';
 }
 ?>
 <!doctype html>
@@ -68,7 +68,7 @@ if (!empty($event)) {
 <main><?php require $viewFile; ?></main>
 <footer class="footer">
     <div class="container footer-grid">
-        <div><strong>GutConference</strong><p>Admin-managed clinical conference pages for gut health, microbiome, probiotics, and nutrition education.</p></div>
+        <div><strong>GutConference</strong><p>Dr. Praveen Jacob's clinical profile, gut-health education, consultation pathways, and microbiome-focused events.</p></div>
         <div><strong>Navigate</strong><p><a href="/events">Events</a><br><a href="/about">About</a><br><a href="/contact">Contact</a></p></div>
         <div><strong>Contact</strong><p>gutconference2026@gmail.com<br>+91 97314 82585</p></div>
     </div>

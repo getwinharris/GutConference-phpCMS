@@ -59,23 +59,8 @@ $pressLinks = [
             <p class="lede"><?= e($ownerTitle) ?> Specialized in Gut, Skin &amp; Autoimmune Disorders.</p>
             <div class="hero-actions">
                 <a class="link-arrow link-arrow-primary" href="/contact?subject=Online%20Consultation">Book Online Consultation <span aria-hidden="true">→</span></a>
-                <a class="link-arrow" href="<?= $event ? '/events/' . e($event['slug']) : '/events' ?>">View Events &amp; Classes <span aria-hidden="true">→</span></a>
+                <a class="link-arrow" href="/events">View Events &amp; Classes <span aria-hidden="true">→</span></a>
             </div>
-            <?php if($event): ?>
-                <div class="stats">
-                    <div class="stat"><strong>25+ years</strong><span>Practice & research</span></div>
-                    <div class="stat"><strong>Gut, Skin</strong><span>Autoimmune focus</span></div>
-                    <div class="stat"><strong><?= e($event['date_label']) ?></strong><span>Next event</span></div>
-                    <div class="stat"><strong><?= e($eventService->shortSlotSummary($event)) ?></strong><span>Event slots</span></div>
-                </div>
-                <div class="trust-strip">
-                    <div class="trust-item">Traditional medicine</div>
-                    <div class="trust-item">Modern research</div>
-                    <div class="trust-item">Online consultation</div>
-                    <div class="trust-item">Clinical events</div>
-                    <div class="trust-item">E-certificate support</div>
-                </div>
-            <?php endif; ?>
         </div>
         <div class="hero-media">
             <div class="brand-hero profile-hero-card">
@@ -90,35 +75,10 @@ $pressLinks = [
     </div>
 </section>
 
-<section class="section impact-section">
-    <div class="container">
-        <p class="eyebrow">How This Helps</p>
-        <h2>A profile-first platform with booking paths.</h2>
-        <p class="lede">The website should behave like a premium professional portfolio first, then guide visitors into consultation, event booking, and future class purchases only when they are ready.</p>
-        <div class="impact-grid">
-            <article class="impact-card">
-                <span class="impact-icon">01</span>
-                <h3>Clinical authority</h3>
-                <p>Lead with the doctor profile, focus areas, verified press, and hospital/profile references before asking users to buy.</p>
-            </article>
-            <article class="impact-card">
-                <span class="impact-icon">02</span>
-                <h3>Guided decisions</h3>
-                <p>Use quiet luxury cards, clear hierarchy, and one primary action per section so consultation and event paths do not compete.</p>
-            </article>
-            <article class="impact-card">
-                <span class="impact-icon">03</span>
-                <h3>Admin-owned growth</h3>
-                <p>Events, venues, slots, Razorpay links, WhatsApp templates, and certificates stay admin-managed as the business evolves.</p>
-            </article>
-        </div>
-    </div>
-</section>
-
 <section class="section owner-section">
     <div class="container owner-grid">
         <div>
-            <p class="eyebrow">Product Owner</p>
+            <p class="eyebrow">Clinical Profile</p>
             <h2><?= e($ownerName) ?></h2>
             <p class="lede"><?= e($ownerTitle) ?></p>
             <p class="owner-specialty">Specialized in Gut, Skin &amp; Autoimmune Disorders.</p>
@@ -143,7 +103,7 @@ $pressLinks = [
 <section class="section reels-section">
     <div class="container reels-heading">
         <p class="eyebrow">Gut Expert Insights</p>
-        <h2>Shorts from <?= e($ownerHandle) ?></h2>
+        <h2>Shorts from <span class="social-handle"><?= e(strtolower($ownerHandle)) ?></span></h2>
         <p class="lede">A continuous right-to-left reel loop using only the Instagram videos supplied for this project.</p>
     </div>
     <div class="reel-marquee" aria-label="Instagram reels from The Gut Expert">
@@ -185,19 +145,6 @@ $pressLinks = [
                     </article>
                 <?php endforeach; ?>
             </div>
-        </div>
-    </div>
-</section>
-
-<section class="section cta-band">
-    <div class="container grid-2" style="align-items:center">
-        <div>
-            <p class="eyebrow" style="color:var(--teal)">Featured Conference</p>
-            <h2 style="margin: 0; color: #fff; background: none; -webkit-text-fill-color: initial; font-size: 28px;"><?= e($event['name'] ?? 'The Global Gut Summit 2026') ?></h2>
-            <p class="lede" style="margin: 10px 0 0; font-size: 16px;"><?= e($event['subheadline'] ?? 'Bridging Science & Clinical Healing') ?></p>
-        </div>
-        <div style="text-align:right">
-            <a class="link-arrow link-arrow-invert" href="<?= $event ? '/events/' . e($event['slug']) : '/events' ?>"><?= e($event['cta_label'] ?? 'Register') ?> <span aria-hidden="true">→</span></a>
         </div>
     </div>
 </section>

@@ -8,7 +8,7 @@ Harris / bapxmediahub is the developer, branding, design, and digital marketing 
 
 ## Stack
 
-- Frontend: PHP-rendered templates in `views/`.
+- Frontend: modern HTML/CSS templates in `views/`, fed by JSON/schema data through PHP controllers and services.
 - Backend: PHP controllers and services in `app/`.
 - Data: JSON collections in `storage/data/`.
 - Schema contract: `storage/schema/collections.json`.
@@ -40,6 +40,8 @@ Admins can manage:
 - `notification_queue`: booking, payment, WhatsApp, email, Google Calendar, newsletter, and certificate jobs
 - `media_files`: uploaded event, speaker, venue, and shared assets
 - `support_tickets`: support-agent tickets
+
+Admin should stay compact and automation-first: event date/time, timezone, capacity, and paid registrations should drive countdowns, time labels, ticket availability, reminders, and notification queue timing so owners edit only the fields that require judgment.
 
 ## Customer Flow
 
@@ -83,4 +85,4 @@ php tools/generate-project-map.php
 
 ## Agent Workflow
 
-Follow `AGENTS.md`, `example-Agent.md`, and the repo skill folders before changing backend, schema, admin, frontend, docs, or deployment behavior. Keep JSON storage first and update `storage/schema/collections.json` before changing collection shapes.
+Follow `AGENTS.md`, `example-Agent.md`, and the repo skill folders before changing backend, schema, admin, frontend, docs, or deployment behavior. Keep JSON storage first, update `storage/schema/collections.json` before changing collection shapes, and use `gutconference-admin` for admin workflow changes.

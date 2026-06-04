@@ -11,7 +11,7 @@
             
             <div class="hero-actions">
                 <?php if(empty($_SESSION['user'])): ?>
-                    <a class="link-arrow link-arrow-primary" href="/login">Login to Buy Ticket <span aria-hidden="true">→</span></a>
+                    <a class="link-arrow link-arrow-primary" href="/login">Join Now <span aria-hidden="true">→</span></a>
                 <?php elseif(!empty($event['registration_url'])): ?>
                     <a class="link-arrow link-arrow-primary" href="<?= e($event['registration_url']) ?>" target="_blank" rel="noopener">Pay with Razorpay <span aria-hidden="true">→</span></a>
                 <?php else: ?>
@@ -20,21 +20,16 @@
                 <a class="link-arrow" href="#agenda">View Agenda <span aria-hidden="true">→</span></a>
             </div>
             
-            <p class="conference-note">Official online conference access includes live sessions, international speaker learning, and planned E-certificate support.</p>
-
             <div class="stats">
                 <div class="stat"><strong><?= e($event['date_label'] ?? '') ?></strong><span>Date</span></div>
                 <div class="stat"><strong><?= e($eventTime) ?></strong><span>Time</span></div>
                 <div class="stat"><strong><?= e($event['mode'] ?? '') ?></strong><span>Mode</span></div>
-                <div class="stat"><strong><?= e($slotSummary) ?></strong><span>Slots</span></div>
             </div>
             
             <div class="trust-strip">
                 <div class="trust-item">E-certificate included</div>
                 <div class="trust-item">International speakers</div>
                 <div class="trust-item">Clinical application focus</div>
-                <div class="trust-item"><?= count($sessions) ?> agenda slots</div>
-                <div class="trust-item"><?= e($event['organizers'] ?? 'Organized event') ?></div>
             </div>
         </div>
         <div class="hero-media">
@@ -153,8 +148,15 @@
             <h2>Reserve Your Seat</h2>
             
             <?php if(empty($_SESSION['user'])): ?>
-                <p style="color: var(--muted); font-size: 14px; margin-bottom: 20px;">Login or signup before buying event tickets. After login, the payment button takes the buyer directly to the Razorpay payment flow configured by admin.</p>
-                <a class="link-arrow link-arrow-primary" href="/login">Login to Buy Ticket <span aria-hidden="true">→</span></a>
+                <div class="pricing-panel single-price">
+                    <div>
+                        <span>Conference Pass</span>
+                        <strong><?= e($event['currency'] ?? 'INR') ?> <?= e((string)($event['price'] ?? 999)) ?></strong>
+                        <small>Live online access</small>
+                    </div>
+                </div>
+                <p style="color: var(--muted); font-size: 14px; margin-bottom: 20px;">Login with Google before joining the conference room. Checkout opens the Razorpay payment flow for this event.</p>
+                <a class="link-arrow link-arrow-primary" href="/login">Join In this Conference Room <span aria-hidden="true">→</span></a>
             <?php elseif(!empty($event['registration_url'])): ?>
                 <a class="link-arrow link-arrow-primary" href="<?= e($event['registration_url']) ?>" target="_blank" rel="noopener">Pay with Razorpay <span aria-hidden="true">→</span></a>
             <?php else: ?>
@@ -195,7 +197,7 @@
             <strong><?= e($event['name'] ?? 'Conference') ?></strong>
             <span><?= e($event['date_label'] ?? '') ?> · <?= e($eventTime) ?> · <?= e($slotSummary) ?></span>
         </div>
-        <a class="link-arrow link-arrow-primary" href="<?= empty($_SESSION['user']) ? '/login' : '#registration' ?>"><?= empty($_SESSION['user']) ? 'Login to Buy' : 'Buy Ticket' ?> <span aria-hidden="true">→</span></a>
+        <a class="link-arrow link-arrow-primary" href="<?= empty($_SESSION['user']) ? '/login' : '#registration' ?>"><?= empty($_SESSION['user']) ? 'Rs 999/- Join Now' : 'Buy Ticket' ?> <span aria-hidden="true">→</span></a>
     </div>
 </div>
 <?php endif; ?>
@@ -207,7 +209,10 @@
             <p class="lede">Get practical, evidence-based training and clinical protocols directly from international experts.</p>
         </div>
         <div style="text-align:right">
-            <a class="link-arrow link-arrow-invert" href="<?= empty($_SESSION['user']) ? '/login' : '#registration' ?>"><?= empty($_SESSION['user']) ? 'Login to Buy' : 'Buy Ticket' ?> <span aria-hidden="true">→</span></a>
+            <a class="google-login-button" href="<?= empty($_SESSION['user']) ? '/auth/google?intent=event&redirect=' . rawurlencode('/events/' . ($event['slug'] ?? 'global-gut-summit-2026')) : '#registration' ?>">
+                <span class="google-mark" aria-hidden="true">G</span>
+                <span><?= empty($_SESSION['user']) ? 'Login with Google' : 'Buy Ticket' ?></span>
+            </a>
         </div>
     </div>
 </section>
