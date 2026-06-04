@@ -1,1 +1,29 @@
-[]
+[
+    {
+        "id": "10c2bf290d4130c6",
+        "event": "permissions.fix",
+        "action": "fix",
+        "resource": "permissions",
+        "resource_id": "storage",
+        "status": "recorded",
+        "actor_email": "admin@gutconference.online",
+        "actor_name": "admin",
+        "details": [],
+        "created_at": "2026-06-04T16:43:18+05:30"
+    },
+    {
+        "id": "00ac15a14f2a3a82",
+        "event": "media.upload",
+        "action": "upload",
+        "resource": "media",
+        "resource_id": "",
+        "status": "recorded",
+        "actor_email": "admin@gutconference.online",
+        "actor_name": "admin",
+        "details": {
+            "count": 1,
+            "context": "shared"
+        },
+        "created_at": "2026-06-04T16:46:51+05:30"
+    }
+]

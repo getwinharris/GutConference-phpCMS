@@ -1,6 +1,6 @@
 # Project Map
 
-- `/` → `PublicController@home` → EventService
+- `/` → `PublicController@home` → EventService, ResourceService
 - `/about` → `PublicController@about` → none
 - `/events` → `PublicController@events` → EventService
 - `/events/{slug}` → `PublicController@event` → EventService, SecretService
@@ -34,6 +34,9 @@
 - `/admin/venues` → `AdminController@venues` → ResourceService, SchemaService, AuthService
 - `/admin/venues/save` → `AdminController@saveVenue` → ResourceService, AuditLogService, AuthService
 - `/admin/venues/delete` → `AdminController@deleteVenue` → ResourceService, AuditLogService, AuthService
+- `/admin/publishers` → `AdminController@publishers` → ResourceService, SchemaService, AuthService
+- `/admin/publishers/save` → `AdminController@savePublisher` → ResourceService, AuditLogService, AuthService
+- `/admin/publishers/delete` → `AdminController@deletePublisher` → ResourceService, AuditLogService, AuthService
 - `/admin/registrations` → `AdminController@registrations` → ResourceService, AuthService
 - `/admin/notification_templates` → `AdminController@notificationTemplates` → ResourceService, SchemaService, AuthService
 - `/admin/notification_templates/save` → `AdminController@saveNotificationTemplate` → ResourceService, AuditLogService, AuthService

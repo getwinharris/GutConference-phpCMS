@@ -34,7 +34,7 @@
                 </label>
             <?php endforeach; ?>
         </div>
-        <?php if(in_array($collection, ['events','speakers','venues'], true)): ?>
+        <?php if(in_array($collection, ['events','speakers','venues','publishers'], true)): ?>
             <div class="admin-upload-panel">
                 <label>Upload Media Files
                     <input type="file" name="media_files[]" id="field-media-files" accept="image/png,image/jpeg,image/webp,image/gif" multiple>
@@ -53,7 +53,7 @@
                             <div class="admin-media-tile">
                                 <img src="<?= e($media['path']) ?>" alt="<?= e($media['original_name'] ?? $media['filename'] ?? 'Media') ?>">
                                 <small><?= e(substr((string)($media['created_at'] ?? ''), 0, 10)) ?></small>
-                                <button type="button" class="btn btn-sm btn-ghost use-media" data-field="<?= $collection === 'speakers' ? 'photo_url' : ($collection === 'events' ? 'logo_url' : 'image_url') ?>" data-path="<?= e($media['path']) ?>">Use</button>
+                                <button type="button" class="btn btn-sm btn-ghost use-media" data-field="<?= $collection === 'speakers' ? 'photo_url' : (in_array($collection, ['events','publishers'], true) ? 'logo_url' : 'image_url') ?>" data-path="<?= e($media['path']) ?>">Use</button>
                             </div>
                         <?php endforeach; ?>
                     </div>

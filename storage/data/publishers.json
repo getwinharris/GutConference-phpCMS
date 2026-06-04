@@ -1,0 +1,24 @@
+[
+    {
+        "id": "first-india-gut-health-profile",
+        "enabled": true,
+        "sort_order": 10,
+        "source": "First India",
+        "date_label": "July 31, 2024",
+        "title": "International Gut Health Expert Brings 25+ Years of Expertise to the Community Life at Nature",
+        "summary": "Profile coverage on gut health, prebiotics, herbal remedies, and holistic clinical practice.",
+        "url": "https://firstindia.co.in/news/press-releases/international-gut-health-expert-brings-25-years-of-expertise-to-the-community-life-at-nature",
+        "logo_url": "https://www.google.com/s2/favicons?domain_url=https://firstindia.co.in&sz=64"
+    },
+    {
+        "id": "nisarga-hospital-professional-profile",
+        "enabled": true,
+        "sort_order": 20,
+        "source": "Nisarga Hospital",
+        "date_label": "Professional profile",
+        "title": "Dr. Praveen Jacob professional profile",
+        "summary": "Clinic profile reference for appointments, professional positioning, and patient-facing context.",
+        "url": "https://nisargahospital.in/doctors/dr-praveen-jacob/",
+        "logo_url": "https://www.google.com/s2/favicons?domain_url=https://nisargahospital.in&sz=64"
+    }
+]

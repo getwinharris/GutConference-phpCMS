@@ -1,6 +1,6 @@
 <?php
 namespace App\Controllers;
-use App\Services\{ContactService,EventService,SecretService,SettingsService};
+use App\Services\{ContactService,EventService,ResourceService,SecretService,SettingsService};
 final class PublicController extends BaseController {
     
     protected function detectApiRequest(): void {
@@ -15,6 +15,7 @@ final class PublicController extends BaseController {
             'events' => $events->published(),
             'eventService' => $events,
             'settings' => (new SettingsService())->public(),
+            'publishers' => (new ResourceService('publishers'))->all(),
         ]);
     }
     

@@ -130,6 +130,25 @@
         "image_url": {"type": "local_or_remote_path"}
       }
     },
+    "publishers": {
+      "file": "storage/data/publishers.json",
+      "primary_key": "id",
+      "admin_managed": true,
+      "media_fields": ["logo_url"],
+      "admin_fields": ["enabled", "sort_order", "source", "date_label", "title", "summary", "url", "logo_url"],
+      "agent_context": ["source", "date_label", "title", "url"],
+      "fields": {
+        "id": {"type": "string"},
+        "enabled": {"type": "boolean"},
+        "sort_order": {"type": "number"},
+        "source": {"type": "string", "required": true},
+        "date_label": {"type": "string"},
+        "title": {"type": "string", "required": true},
+        "summary": {"type": "text"},
+        "url": {"type": "url", "required": true},
+        "logo_url": {"type": "local_or_remote_path"}
+      }
+    },
     "registrations": {
       "file": "storage/data/registrations.json",
       "primary_key": "id",

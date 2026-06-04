@@ -45,9 +45,8 @@ if (!empty($event)) {
         <a href="/" class="brand">
             <img src="/assets/images/media/gutconference-mark.png" alt="GutConference mark">
             <span class="brand-name">
-                <small>International Conference On</small>
-                <strong>Microbiome</strong>
-                <span>Probiotics & Gut Nutrition</span>
+                <strong>GutConference</strong>
+                <span>Expert Gut &amp; Health Advice</span>
             </span>
         </a>
         <nav class="nav-links">

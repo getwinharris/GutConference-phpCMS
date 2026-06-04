@@ -4,7 +4,7 @@
         <h1>Consultation and event enquiries.</h1>
         <p class="lede">Choose the path that matches the visitor intent. Consultation requests go to the doctor profile workflow; event enquiries include the selected conference or class from the admin-created event list.</p>
         <?php if(!empty($success)): ?>
-            <div class="flash" style="margin: 0 0 24px;">Message received. The team will follow up.</div>
+            <div class="flash flash-inline">Message received. The team will follow up.</div>
         <?php endif; ?>
     </div>
 </section>
@@ -15,7 +15,7 @@
             <input type="hidden" name="request_type" value="consultation">
             <p class="eyebrow">Online Consultation</p>
             <h2>Book a clinical appointment.</h2>
-            <p style="color:var(--muted); margin-bottom: 18px;">For gut, skin, autoimmune, integrative medicine, and follow-up consultation enquiries.</p>
+            <p class="form-helper">For gut, skin, autoimmune, integrative medicine, and follow-up consultation enquiries.</p>
             <label>Name
                 <input name="name" required placeholder="Patient name">
             </label>
@@ -38,7 +38,7 @@
             <input type="hidden" name="request_type" value="event_booking">
             <p class="eyebrow">Events &amp; Classes</p>
             <h2>Ask about an event booking.</h2>
-            <p style="color:var(--muted); margin-bottom: 18px;">Use this for conference tickets, class access, payment help, certificate questions, or group bookings.</p>
+            <p class="form-helper">Use this for conference tickets, class access, payment help, certificate questions, or group bookings.</p>
             <label>Name
                 <input name="name" required placeholder="Attendee name">
             </label>

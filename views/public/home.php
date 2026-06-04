@@ -8,6 +8,7 @@ $ownerLinkedin = $settings['product_owner_linkedin'] ?? 'https://www.linkedin.co
 $ownerYoutube = $settings['product_owner_youtube'] ?? 'https://www.youtube.com/channel/UC0UAYYxQETPP6KJcCTHgP7w';
 $ownerFacebook = $settings['product_owner_facebook'] ?? 'https://www.facebook.com/people/Dr-Praveen-Jacob/100063556307522/';
 $ownerProfileUrl = $settings['product_owner_profile_url'] ?? 'https://nisargahospital.in/doctors/dr-praveen-jacob/';
+$ownerPortrait = '/assets/images/media/dr-praveen-jacob-portrait.jpg';
 $socialLinks = [
     ['label' => 'Instagram', 'url' => $ownerInstagram],
     ['label' => 'LinkedIn', 'url' => $ownerLinkedin],
@@ -34,43 +35,40 @@ $reels = [
     'https://www.instagram.com/reel/DDcCnonowwb/',
     'https://www.instagram.com/reel/DJQjxnUyjOC/',
 ];
-$pressLinks = [
-    [
-        'source' => 'First India',
-        'date' => 'July 31, 2024',
-        'title' => 'International Gut Health Expert Brings 25+ Years of Expertise to the Community Life at Nature',
-        'url' => 'https://firstindia.co.in/news/press-releases/international-gut-health-expert-brings-25-years-of-expertise-to-the-community-life-at-nature',
-        'summary' => 'Profile coverage on gut health, prebiotics, herbal remedies, and holistic clinical practice.',
-    ],
-    [
-        'source' => 'Nisarga Hospital',
-        'date' => 'Professional profile',
-        'title' => 'Dr. Praveen Jacob professional profile',
-        'url' => $ownerProfileUrl,
-        'summary' => 'Clinic profile reference for appointments, professional positioning, and patient-facing context.',
-    ],
-];
+$publisherLinks = array_values(array_filter($publishers ?? [], fn($publisher) => (bool)($publisher['enabled'] ?? true)));
+usort($publisherLinks, fn($a, $b) => (float)($a['sort_order'] ?? 0) <=> (float)($b['sort_order'] ?? 0));
+$sourceHost = static function (string $url): string {
+    $host = parse_url($url, PHP_URL_HOST) ?: $url;
+    return preg_replace('/^www\./', '', $host) ?: $url;
+};
+$sourceLogo = static function (array $publisher) use ($sourceHost): string {
+    if (!empty($publisher['logo_url'])) {
+        return (string)$publisher['logo_url'];
+    }
+    $url = (string)($publisher['url'] ?? '');
+    return 'https://www.google.com/s2/favicons?domain_url=' . rawurlencode($url ?: $sourceHost((string)($publisher['source'] ?? ''))) . '&sz=64';
+};
 ?>
 <section class="hero">
-    <div class="container hero-grid">
+    <div class="container hero-grid hero-grid-profile">
+        <div class="hero-media profile-portrait-panel">
+            <?php if(is_file(app_path('assets/images/media/dr-praveen-jacob-portrait.jpg'))): ?>
+                <img class="profile-portrait" src="<?= e($ownerPortrait) ?>" alt="Dr. Praveen Jacob professional portrait">
+            <?php else: ?>
+                <div class="portrait-pending" aria-label="Dr. Praveen Jacob portrait pending">
+                    <strong>Dr. Praveen Jacob</strong>
+                    <span>Professional portrait</span>
+                </div>
+            <?php endif; ?>
+        </div>
         <div>
             <p class="eyebrow">Dr. Praveen Jacob</p>
             <h1>Integrative gut-health education, consultation, and clinical events.</h1>
             <p class="lede"><?= e($ownerTitle) ?> Specialized in Gut, Skin &amp; Autoimmune Disorders.</p>
-            <div class="hero-actions">
-                <a class="link-arrow link-arrow-primary" href="/contact?subject=Online%20Consultation">Book Online Consultation <span aria-hidden="true">→</span></a>
-                <a class="link-arrow" href="/events">View Events &amp; Classes <span aria-hidden="true">→</span></a>
-            </div>
         </div>
-        <div class="hero-media">
-            <div class="brand-hero profile-hero-card">
-                <img src="/assets/images/media/gutconference-mark.png" alt="GutConference circular mark">
-                <div class="brand-hero-title">
-                    <small>Portfolio Platform</small>
-                    <strong><?= e($ownerName) ?></strong>
-                    <span>Consultations, events, classes, and microbiome-focused education under one verified profile.</span>
-                </div>
-            </div>
+        <div class="hero-actions hero-actions-center">
+            <a class="link-arrow link-arrow-primary" href="/contact?subject=Online%20Consultation">Book Online Consultation <span aria-hidden="true">→</span></a>
+            <a class="link-arrow" href="/events">View Events &amp; Classes <span aria-hidden="true">→</span></a>
         </div>
     </div>
 </section>
@@ -104,47 +102,158 @@ $pressLinks = [
     <div class="container reels-heading">
         <p class="eyebrow">Gut Expert Insights</p>
         <h2>Shorts from <span class="social-handle"><?= e(strtolower($ownerHandle)) ?></span></h2>
-        <p class="lede">A continuous right-to-left reel loop using only the Instagram videos supplied for this project.</p>
+        <p class="lede">Swipe through selected clinical reels, open one in the center, and watch it without leaving the page.</p>
     </div>
-    <div class="reel-marquee" aria-label="Instagram reels from The Gut Expert">
-        <div class="reel-track">
-            <?php for($loop = 0; $loop < 2; $loop++): ?>
-                <?php foreach($reels as $index => $reelUrl): ?>
-                    <a class="reel-card" href="<?= e($reelUrl) ?>" target="_blank" rel="noopener" aria-label="Open Instagram reel <?= e((string)($index + 1)) ?>">
-                        <span class="reel-phone-top"></span>
-                        <span class="reel-brand"><?= e($ownerHandle) ?></span>
-                        <strong>Clinical Reel <?= e(str_pad((string)($index + 1), 2, '0', STR_PAD_LEFT)) ?></strong>
-                        <span class="reel-play" aria-hidden="true">▶</span>
-                        <small>Open on Instagram</small>
-                    </a>
-                <?php endforeach; ?>
-            <?php endfor; ?>
+    <div class="reel-showcase" data-reel-carousel>
+        <button class="reel-nav reel-nav-prev" type="button" data-reel-prev aria-label="Previous reel">‹</button>
+        <div class="reel-stage" aria-label="Instagram reels from The Gut Expert">
+            <?php foreach($reels as $index => $reelUrl): ?>
+                <?php
+                    $reelPath = trim((string)(parse_url($reelUrl, PHP_URL_PATH) ?? ''), '/');
+                    $reelParts = array_values(array_filter(explode('/', $reelPath)));
+                    $reelCode = $reelParts[1] ?? $reelParts[0] ?? '';
+                    $embedUrl = $reelCode !== '' ? 'https://www.instagram.com/reel/' . $reelCode . '/embed' : $reelUrl;
+                    $localThumbnail = $reelCode !== '' ? '/assets/images/reels/' . $reelCode . '.jpg' : '';
+                    $thumbnailUrl = $localThumbnail !== '' && is_file(app_path(ltrim($localThumbnail, '/')))
+                        ? $localThumbnail
+                        : ($reelCode !== '' ? 'https://www.instagram.com/p/' . $reelCode . '/media/?size=l' : '');
+                ?>
+                <button
+                    class="reel-card"
+                    type="button"
+                    data-reel-card
+                    data-reel-index="<?= e((string)$index) ?>"
+                    data-reel-url="<?= e($reelUrl) ?>"
+                    data-reel-embed="<?= e($embedUrl) ?>"
+                    aria-label="Play Instagram reel <?= e((string)($index + 1)) ?>"
+                >
+                    <?php if($thumbnailUrl !== ''): ?>
+                        <img class="reel-thumb" src="<?= e($thumbnailUrl) ?>" alt="" loading="lazy">
+                    <?php endif; ?>
+                    <span class="reel-phone-top"></span>
+                    <span class="reel-play" aria-hidden="true">▶</span>
+                </button>
+            <?php endforeach; ?>
+        </div>
+        <button class="reel-nav reel-nav-next" type="button" data-reel-next aria-label="Next reel">›</button>
+        <div class="reel-dots" aria-label="Choose reel">
+            <?php foreach($reels as $index => $reelUrl): ?>
+                <button type="button" data-reel-dot="<?= e((string)$index) ?>" aria-label="Show reel <?= e((string)($index + 1)) ?>"></button>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>
 
+<div class="reel-modal" data-reel-modal aria-hidden="true">
+    <button class="reel-modal__backdrop" type="button" data-reel-close aria-label="Close reel player"></button>
+    <div class="reel-modal__panel" role="dialog" aria-modal="true" aria-label="Instagram reel player">
+        <button class="reel-modal__close" type="button" data-reel-close aria-label="Close reel player">×</button>
+        <div class="reel-modal__frame" data-reel-frame></div>
+        <a class="reel-modal__source" href="#" target="_blank" rel="noopener" data-reel-source aria-hidden="true" tabindex="-1">Open reel on Instagram <span aria-hidden="true">→</span></a>
+    </div>
+</div>
+
+<script>
+(() => {
+    const carousel = document.querySelector('[data-reel-carousel]');
+    if (!carousel) return;
+
+    const cards = [...carousel.querySelectorAll('[data-reel-card]')];
+    const dots = [...carousel.querySelectorAll('[data-reel-dot]')];
+    const modal = document.querySelector('[data-reel-modal]');
+    const frame = modal?.querySelector('[data-reel-frame]');
+    const source = modal?.querySelector('[data-reel-source]');
+    let current = 0;
+    let timer = null;
+
+    const normalize = index => (index + cards.length) % cards.length;
+    const render = () => {
+        cards.forEach((card, index) => {
+            const offset = ((index - current + cards.length + Math.floor(cards.length / 2)) % cards.length) - Math.floor(cards.length / 2);
+            card.dataset.reelOffset = Math.max(-4, Math.min(4, offset)).toString();
+            card.classList.toggle('is-active', index === current);
+            card.setAttribute('aria-hidden', Math.abs(offset) > 3 ? 'true' : 'false');
+        });
+        dots.forEach((dot, index) => dot.classList.toggle('is-active', index === current));
+    };
+
+    const go = index => {
+        current = normalize(index);
+        render();
+    };
+    const stopLoop = () => {
+        if (timer) window.clearInterval(timer);
+        timer = null;
+    };
+    const startLoop = () => {
+        stopLoop();
+        timer = window.setInterval(() => go(current + 1), 3200);
+    };
+
+    carousel.querySelector('[data-reel-prev]')?.addEventListener('click', () => { go(current - 1); startLoop(); });
+    carousel.querySelector('[data-reel-next]')?.addEventListener('click', () => { go(current + 1); startLoop(); });
+    dots.forEach((dot, index) => dot.addEventListener('click', () => { go(index); startLoop(); }));
+
+    cards.forEach((card, index) => {
+        card.addEventListener('click', () => {
+            if (!modal || !frame || !source) return;
+            go(index);
+            stopLoop();
+            const embedUrl = card.dataset.reelEmbed || card.dataset.reelUrl || '';
+            const reelUrl = card.dataset.reelUrl || embedUrl;
+            frame.innerHTML = `<iframe src="${embedUrl}" title="Instagram reel" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>`;
+            source.href = reelUrl;
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('reel-modal-open');
+        });
+    });
+
+    const close = () => {
+        if (!modal || !frame) return;
+        modal.setAttribute('aria-hidden', 'true');
+        frame.innerHTML = '';
+        document.body.classList.remove('reel-modal-open');
+        startLoop();
+    };
+    modal?.querySelectorAll('[data-reel-close]').forEach(button => button.addEventListener('click', close));
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') close();
+        if (event.key === 'ArrowLeft') go(current - 1);
+        if (event.key === 'ArrowRight') go(current + 1);
+    });
+
+    render();
+    startLoop();
+})();
+</script>
+
 <section class="section press-section">
     <div class="container">
-        <p class="eyebrow">Press &amp; References</p>
-        <h2>Public coverage and clinical positioning.</h2>
-        <p class="lede">Verified profile and press links are used as trust signals without sending visitors to unrelated pages.</p>
-        <div class="press-grid">
-            <article class="press-feature">
-                <span>25+ years</span>
-                <h3>Integrative gut-health expertise</h3>
-                <p>Coverage describes Dr. Praveen Jacob as a naturopathy doctor focused on gut health, prebiotics, herbal remedies, and non-invasive care.</p>
-                <a class="link-arrow" href="<?= e($pressLinks[0]['url']) ?>" target="_blank" rel="noopener">Read source article <span aria-hidden="true">→</span></a>
-            </article>
-            <div class="press-list">
-                <?php foreach($pressLinks as $press): ?>
-                    <article class="press-card">
-                        <span><?= e($press['source']) ?> · <?= e($press['date']) ?></span>
-                        <h3><?= e($press['title']) ?></h3>
-                        <p><?= e($press['summary']) ?></p>
-                        <a class="link-arrow" href="<?= e($press['url']) ?>" target="_blank" rel="noopener">Open link <span aria-hidden="true">→</span></a>
+        <p class="eyebrow">Publishers</p>
+        <h2>Published references and clinical profile sources.</h2>
+        <p class="lede">Selected references and public profile links help visitors verify Dr. Praveen Jacob's clinical positioning and published coverage.</p>
+        <?php if(!empty($publisherLinks)): ?>
+            <div class="press-list publisher-list">
+                <?php foreach($publisherLinks as $publisher): ?>
+                    <?php
+                        $publisherUrl = (string)($publisher['url'] ?? '');
+                        $publisherHost = $sourceHost($publisherUrl);
+                    ?>
+                    <article class="press-card publisher-card">
+                        <div class="publisher-card__source">
+                            <img src="<?= e($sourceLogo($publisher)) ?>" alt="<?= e($publisher['source'] ?? 'Publisher') ?> logo" loading="lazy">
+                            <span><?= e($publisher['source'] ?? 'Publisher') ?><?= !empty($publisher['date_label']) ? ' · ' . e($publisher['date_label']) : '' ?></span>
+                        </div>
+                        <h3><?= e($publisher['title'] ?? '') ?></h3>
+                        <?php if(!empty($publisher['summary'])): ?><p><?= e($publisher['summary']) ?></p><?php endif; ?>
+                        <a class="link-arrow publisher-link" href="<?= e($publisherUrl) ?>" target="_blank" rel="noopener">
+                            <span>Open link</span>
+                            <small><?= e($publisherHost) ?></small>
+                            <span aria-hidden="true">→</span>
+                        </a>
                     </article>
                 <?php endforeach; ?>
             </div>
-        </div>
+        <?php endif; ?>
     </div>
 </section>

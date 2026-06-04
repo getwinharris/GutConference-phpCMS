@@ -28,6 +28,9 @@ final class AdminController extends BaseController {
     public function venues(): void{$this->resource('Venues & Maps','venues',$this->schemaFields('venues',[]));}
     public function saveVenue(): void{$this->save('venues');}
     public function deleteVenue(): void{$this->delete('venues');}
+    public function publishers(): void{$this->resource('Publishers','publishers',$this->schemaFields('publishers',[]));}
+    public function savePublisher(): void{$this->save('publishers');}
+    public function deletePublisher(): void{$this->delete('publishers');}
     public function registrations(): void{$this->list('Registrations','registrations');}
     public function notificationTemplates(): void{$this->resource('Notification Templates','notification_templates',$this->schemaFields('notification_templates',[]));}
     public function saveNotificationTemplate(): void{$this->save('notification_templates');}
@@ -108,6 +111,9 @@ final class AdminController extends BaseController {
         if ($collection === 'venues' && $uploaded && empty($data['image_url'])) {
             $data['image_url'] = $uploaded[0]['path'];
         }
+        if ($collection === 'publishers' && $uploaded && empty($data['logo_url'])) {
+            $data['logo_url'] = $uploaded[0]['path'];
+        }
         
         $record = (new ResourceService($collection))->save($data);
         (new AuditLogService())->record('save', $collection, (string)($record['id'] ?? ''), ['fields' => array_keys($data), 'uploaded_media' => count($uploaded)]);
@@ -125,7 +131,7 @@ final class AdminController extends BaseController {
         return array_values(array_filter(array_map('trim', preg_split('/[\r\n,]+/', $value) ?: [])));
     }
     private function uploadedMedia(string $collection): array { return (new MediaService())->upload($_FILES['media_files'] ?? [], $this->mediaContext($collection)); }
-    private function mediaFor(string $collection): array { return in_array($collection, ['events','speakers','venues'], true) ? (new MediaService())->all($this->mediaContext($collection)) : []; }
-    private function mediaContext(string $collection): string { return match($collection){'events'=>'events','speakers'=>'speakers','venues'=>'venues',default=>'shared'}; }
+    private function mediaFor(string $collection): array { return in_array($collection, ['events','speakers','venues','publishers'], true) ? (new MediaService())->all($this->mediaContext($collection)) : []; }
+    private function mediaContext(string $collection): string { return match($collection){'events'=>'events','speakers'=>'speakers','venues'=>'venues','publishers'=>'publishers',default=>'shared'}; }
     private function schemaFields(string $collection, array $fallback): array { return (new SchemaService())->adminFields($collection, $fallback); }
 }

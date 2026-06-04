@@ -7,7 +7,8 @@
             "page": "public/home",
             "controller": "PublicController@home",
             "services": [
-                "EventService"
+                "EventService",
+                "ResourceService"
             ]
         },
         {
@@ -372,6 +373,42 @@
         },
         {
             "method": "GET",
+            "path": "/admin/publishers",
+            "name": "admin.publishers",
+            "page": "admin/resource",
+            "controller": "AdminController@publishers",
+            "services": [
+                "ResourceService",
+                "SchemaService",
+                "AuthService"
+            ]
+        },
+        {
+            "method": "POST",
+            "path": "/admin/publishers/save",
+            "name": "admin.publishers.save",
+            "page": "admin/resource",
+            "controller": "AdminController@savePublisher",
+            "services": [
+                "ResourceService",
+                "AuditLogService",
+                "AuthService"
+            ]
+        },
+        {
+            "method": "POST",
+            "path": "/admin/publishers/delete",
+            "name": "admin.publishers.delete",
+            "page": "admin/resource",
+            "controller": "AdminController@deletePublisher",
+            "services": [
+                "ResourceService",
+                "AuditLogService",
+                "AuthService"
+            ]
+        },
+        {
+            "method": "GET",
             "path": "/admin/registrations",
             "name": "admin.registrations",
             "page": "admin/list",
@@ -626,6 +663,7 @@
         "speakers",
         "sessions",
         "venues",
+        "publishers",
         "registrations",
         "notification_templates",
         "notification_queue",

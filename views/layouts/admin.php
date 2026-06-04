@@ -34,6 +34,7 @@ input,textarea,select{width:100%;border:1px solid var(--line);border-radius:8px;
             <a href="/admin/speakers" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/speakers') ? 'active' : '') ?>">Speakers</a>
             <a href="/admin/sessions" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/sessions') ? 'active' : '') ?>">Agenda</a>
             <a href="/admin/venues" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/venues') ? 'active' : '') ?>">Venues & Maps</a>
+            <a href="/admin/publishers" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/publishers') ? 'active' : '') ?>">Publishers</a>
             <a href="/admin/registrations" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/registrations') ? 'active' : '') ?>">Registrations</a>
             <strong>Operations</strong>
             <a href="/admin/notification_templates" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/notification_templates') ? 'active' : '') ?>">Notification Templates</a>

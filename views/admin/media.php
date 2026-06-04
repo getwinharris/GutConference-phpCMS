@@ -8,6 +8,7 @@
                     <option value="events">Events</option>
                     <option value="speakers">Speakers</option>
                     <option value="venues">Venues</option>
+                    <option value="publishers">Publishers</option>
                 </select>
             </label>
             <label>Files

@@ -4,7 +4,7 @@ namespace App\Services;
 final class ProjectMapService {
     public static function registry(): array {
         $routes = [
-            ['method'=>'GET','path'=>'/','name'=>'home','page'=>'public/home','controller'=>'PublicController@home','services'=>['EventService']],
+            ['method'=>'GET','path'=>'/','name'=>'home','page'=>'public/home','controller'=>'PublicController@home','services'=>['EventService','ResourceService']],
             ['method'=>'GET','path'=>'/about','name'=>'about','page'=>'public/about','controller'=>'PublicController@about','services'=>[]],
             ['method'=>'GET','path'=>'/events','name'=>'events','page'=>'public/events','controller'=>'PublicController@events','services'=>['EventService']],
             ['method'=>'GET','path'=>'/events/{slug}','name'=>'events.show','page'=>'public/event','controller'=>'PublicController@event','services'=>['EventService','SecretService']],
@@ -38,6 +38,9 @@ final class ProjectMapService {
             ['method'=>'GET','path'=>'/admin/venues','name'=>'admin.venues','page'=>'admin/resource','controller'=>'AdminController@venues','services'=>['ResourceService','SchemaService']],
             ['method'=>'POST','path'=>'/admin/venues/save','name'=>'admin.venues.save','page'=>'admin/resource','controller'=>'AdminController@saveVenue','services'=>['ResourceService','AuditLogService']],
             ['method'=>'POST','path'=>'/admin/venues/delete','name'=>'admin.venues.delete','page'=>'admin/resource','controller'=>'AdminController@deleteVenue','services'=>['ResourceService','AuditLogService']],
+            ['method'=>'GET','path'=>'/admin/publishers','name'=>'admin.publishers','page'=>'admin/resource','controller'=>'AdminController@publishers','services'=>['ResourceService','SchemaService']],
+            ['method'=>'POST','path'=>'/admin/publishers/save','name'=>'admin.publishers.save','page'=>'admin/resource','controller'=>'AdminController@savePublisher','services'=>['ResourceService','AuditLogService']],
+            ['method'=>'POST','path'=>'/admin/publishers/delete','name'=>'admin.publishers.delete','page'=>'admin/resource','controller'=>'AdminController@deletePublisher','services'=>['ResourceService','AuditLogService']],
             ['method'=>'GET','path'=>'/admin/registrations','name'=>'admin.registrations','page'=>'admin/list','controller'=>'AdminController@registrations','services'=>['ResourceService']],
             ['method'=>'GET','path'=>'/admin/notification_templates','name'=>'admin.notification-templates','page'=>'admin/resource','controller'=>'AdminController@notificationTemplates','services'=>['ResourceService','SchemaService']],
             ['method'=>'POST','path'=>'/admin/notification_templates/save','name'=>'admin.notification-templates.save','page'=>'admin/resource','controller'=>'AdminController@saveNotificationTemplate','services'=>['ResourceService','AuditLogService']],
@@ -69,14 +72,14 @@ final class ProjectMapService {
             'routes'=>$routes,
             'services'=>['AuthService','EventService','SettingsService','ProjectMapService','JsonStoreService','AuditLogService','ResourceService','SecretService','EnvService','ContactService','PasswordResetService','PurchaseNotificationService','MediaService','StoragePermissionService','SchemaService'],
             'integrations'=>['RazorpayClient','GoogleOAuthClient'],
-            'collections'=>['users','events','event_sections','speakers','sessions','venues','registrations','notification_templates','notification_queue','settings','audit_events','contact_submissions','support_tickets','media_files'],
+            'collections'=>['users','events','event_sections','speakers','sessions','venues','publishers','registrations','notification_templates','notification_queue','settings','audit_events','contact_submissions','support_tickets','media_files'],
         ];
     }
 
     public static function validate(array $map): array {
         $missingRouteMappings = array_values(array_filter($map['routes'], fn($r) => empty($r['controller']) || empty($r['page'])));
         $used = array_unique(array_merge(...array_map(fn($r) => $r['services'], $map['routes'])));
-        $requiredCollections = ['users','events','event_sections','speakers','sessions','venues','registrations','notification_templates','notification_queue','settings','audit_events','contact_submissions','support_tickets','media_files'];
+        $requiredCollections = ['users','events','event_sections','speakers','sessions','venues','publishers','registrations','notification_templates','notification_queue','settings','audit_events','contact_submissions','support_tickets','media_files'];
         return [
             'missing_route_mappings'=>$missingRouteMappings,
             'missing_services'=>array_values(array_diff($used, $map['services'])),
