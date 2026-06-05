@@ -14,8 +14,9 @@ description: Use when editing public conference, event landing, admin, contact, 
 - Compare event pages against provided competitor/reference URLs, but keep the result corporate, clinical, luxury, credible, and profile-first.
 - Use quiet luxury cards: clear hierarchy, soft light backgrounds, restrained shadows, one primary action per card, and no nested card clutter.
 - Use the supplied logo assets from `assets/images/media/` unless the user provides replacements.
-- Public top-nav CTA is Login. Ticket/course payments must require login first, then direct Razorpay payment.
+- Public top-nav CTA is Login. Ticket/course payments must require login first, then use the event/class payment mode: external Razorpay payment page or internal Razorpay integration.
 - Signup/customer identity should be Google OAuth-first. Manual signup is only a legacy/dev fallback and must connect Google before payment.
+- Speaker cards should render data-driven photos and credentials, with a polished initials fallback when a photo is not yet uploaded.
 - Validate with the in-app browser for local pages when UI changes are significant.
 - Default local server command: `php -S 127.0.0.1:6040 index.php`.
 - Update this skill when frontend workflow or product rules change.

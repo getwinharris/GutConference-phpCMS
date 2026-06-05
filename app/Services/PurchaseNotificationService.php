@@ -37,7 +37,7 @@ final class PurchaseNotificationService {
         }
 
         if (!empty($registration['certificate_status']) && $registration['certificate_status'] === 'pending') {
-            $jobs[] = $this->job($eventSlug, $registrationId, 'email', $email, 'certificate-ready', $now, [
+            $jobs[] = $this->job($eventSlug, $registrationId, 'email', $email, 'certificate-ready', max($now, $this->eventCompletionTime($event)), [
                 'event_name' => $event['name'] ?? '',
             ]);
         }
@@ -56,7 +56,7 @@ final class PurchaseNotificationService {
 
     private function calendarReminderTimes(array $event): array {
         $dateLabel = trim((string)($event['date_label'] ?? ''));
-        $timezone = new \DateTimeZone((string)($event['timezone'] ?? 'Asia/Kolkata'));
+        $timezone = new \DateTimeZone($this->timezoneName((string)($event['timezone'] ?? 'Asia/Kolkata')));
         $eventDate = \DateTimeImmutable::createFromFormat('j F Y H:i', $dateLabel . ' 09:00', $timezone)
             ?: \DateTimeImmutable::createFromFormat('d F Y H:i', $dateLabel . ' 09:00', $timezone)
             ?: new \DateTimeImmutable('tomorrow 09:00', $timezone);
@@ -65,6 +65,19 @@ final class PurchaseNotificationService {
             'previous_day_evening' => $eventDate->modify('-1 day')->setTime(18, 0)->getTimestamp(),
             'event_day_morning' => $eventDate->setTime(8, 0)->getTimestamp(),
         ];
+    }
+
+    private function eventCompletionTime(array $event): int {
+        $dateLabel = trim((string)($event['date_label'] ?? ''));
+        $endTime = trim((string)($event['end_time'] ?? '23:59'));
+        $timezone = new \DateTimeZone($this->timezoneName((string)($event['timezone'] ?? 'Asia/Kolkata')));
+        $eventEnd = \DateTimeImmutable::createFromFormat('j F Y H:i', $dateLabel . ' ' . $endTime, $timezone)
+            ?: \DateTimeImmutable::createFromFormat('d F Y H:i', $dateLabel . ' ' . $endTime, $timezone);
+        return $eventEnd ? $eventEnd->getTimestamp() : time();
+    }
+
+    private function timezoneName(string $timezone): string {
+        return strtoupper($timezone) === 'IST' ? 'Asia/Kolkata' : ($timezone !== '' ? $timezone : 'Asia/Kolkata');
     }
 
     private function job(string $eventSlug, string $registrationId, string $channel, string $to, string $templateKey, int $availableAt, array $payload): array {
@@ -77,8 +90,11 @@ final class PurchaseNotificationService {
             'template_key' => $templateKey,
             'payload' => $payload,
             'status' => 'pending',
+            'error' => '',
+            'attempts' => 0,
             'available_at' => $availableAt,
             'created_at' => time(),
         ];
     }
 }
+

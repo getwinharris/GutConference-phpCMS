@@ -10,7 +10,7 @@ description: Use when editing PHP controllers, services, JSON persistence, auth,
 - Backend behavior must stay PHP-runnable on the PHP server. Frontend must be modern HTML/CSS fed by JSON-backed data; PHP handles routing, services, validation, persistence, and shared-hosting data binding.
 - Customer signup is Google OAuth-first so Google Calendar reminders can be created for buyers without a second OAuth step.
 - Manual password users are legacy/dev fallback users. Keep SMTP forgot-password reset support for them, but require Google connection before payment.
-- Payment success should queue SMTP email, Meta WhatsApp, Google Calendar reminder, and certificate jobs through JSON-backed services.
+- Event/class records choose `payment_page` for an external Razorpay page or `razorpay_integration` for internal order creation. Verified internal payment success should queue SMTP email, Meta WhatsApp, Google Calendar reminder, and certificate jobs through JSON-backed services.
 - Calendar reminders for event/class purchases: previous day morning, previous day evening, and event day morning.
 - Admin newsletter should target opted-in Google-authenticated users and use template content that can be enhanced before sending.
 - Derive event display labels, countdown/timer values, remaining ticket counts, and notification timings from event/settings data instead of storing duplicate manual values where possible.

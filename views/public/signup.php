@@ -11,6 +11,9 @@
             <label>Name
                 <input name="name" required placeholder="Your name">
             </label>
+            <label>Name for Certificate
+                <input name="certificate_name" required placeholder="Full legal name for certificates">
+            </label>
             <label>Email Address
                 <input type="email" name="email" required placeholder="you@example.com">
             </label>

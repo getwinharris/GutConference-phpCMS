@@ -13,19 +13,23 @@
         },
         {
             "method": "GET",
-            "path": "/about",
-            "name": "about",
-            "page": "public/about",
-            "controller": "PublicController@about",
-            "services": []
-        },
-        {
-            "method": "GET",
             "path": "/events",
             "name": "events",
             "page": "public/events",
             "controller": "PublicController@events",
             "services": [
+                "EventService"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/dashboard",
+            "name": "dashboard",
+            "page": "public/dashboard",
+            "controller": "PublicController@dashboard",
+            "services": [
+                "AuthService",
+                "JsonStoreService",
                 "EventService"
             ]
         },
@@ -38,6 +42,34 @@
             "services": [
                 "EventService",
                 "SecretService"
+            ]
+        },
+        {
+            "method": "POST",
+            "path": "/events/{slug}/checkout",
+            "name": "events.checkout",
+            "page": "public/checkout",
+            "controller": "PaymentController@checkout",
+            "services": [
+                "AuthService",
+                "EventService",
+                "SecretService",
+                "JsonStoreService"
+            ]
+        },
+        {
+            "method": "POST",
+            "path": "/events/{slug}/payment/verify",
+            "name": "events.payment.verify",
+            "page": "public/checkout",
+            "controller": "PaymentController@verify",
+            "services": [
+                "AuthService",
+                "EventService",
+                "SecretService",
+                "JsonStoreService",
+                "PaymentService",
+                "PurchaseNotificationService"
             ]
         },
         {
@@ -67,6 +99,33 @@
             "controller": "PublicController@contact",
             "services": [
                 "ContactService"
+            ]
+        },
+        {
+            "method": "POST",
+            "path": "/support/chat",
+            "name": "support.chat",
+            "page": "public/support-widget",
+            "controller": "SupportController@chat",
+            "services": [
+                "AuthService",
+                "SupportAgentService",
+                "AgentContextService",
+                "JsonStoreService",
+                "SecretService"
+            ]
+        },
+        {
+            "method": "POST",
+            "path": "/support/admin/apply",
+            "name": "support.admin.apply",
+            "page": "public/support-widget",
+            "controller": "SupportController@adminApply",
+            "services": [
+                "AuthService",
+                "ResourceService",
+                "SchemaService",
+                "AuditLogService"
             ]
         },
         {
@@ -466,6 +525,17 @@
             ]
         },
         {
+            "method": "POST",
+            "path": "/admin/notification_queue/process",
+            "name": "admin.notification-queue.process",
+            "page": "admin/list",
+            "controller": "AdminController@processNotificationQueue",
+            "services": [
+                "NotificationQueueService",
+                "AuthService"
+            ]
+        },
+        {
             "method": "GET",
             "path": "/admin/settings",
             "name": "admin.settings",
@@ -539,6 +609,18 @@
             "controller": "AdminController@supportTickets",
             "services": [
                 "ResourceService",
+                "AuthService"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/admin/branding",
+            "name": "admin.branding",
+            "page": "admin/branding",
+            "controller": "AdminController@branding",
+            "services": [
+                "SettingsService",
+                "SecretService",
                 "AuthService"
             ]
         },
@@ -648,9 +730,16 @@
         "ContactService",
         "PasswordResetService",
         "PurchaseNotificationService",
+        "NotificationQueueService",
+        "EmailTemplateService",
+        "PaymentService",
         "MediaService",
         "StoragePermissionService",
-        "SchemaService"
+        "SchemaService",
+        "SupportAgentService",
+        "AgentContextService",
+        "GeminiModelRouter",
+        "UserContextService"
     ],
     "integrations": [
         "RazorpayClient",

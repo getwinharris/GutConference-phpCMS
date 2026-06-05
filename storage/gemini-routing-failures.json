@@ -1,0 +1,9 @@
+{
+    "vision_language:gemini-3.5-flash": {
+        "category": "vision_language",
+        "model": "gemini-3.5-flash",
+        "failure_count": 0,
+        "last_error": "",
+        "last_tried_at": "2026-06-05T09:29:22+05:30"
+    }
+}

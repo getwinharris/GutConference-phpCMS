@@ -15,7 +15,7 @@ This repo is a GutConference Online PHP/JSON full-stack CMS for shared hosting. 
 - Database: JSON collections in `storage/data/`.
 - Schema: `storage/schema/collections.json`.
 - Admin: owner tools for events, sections, speakers, agenda, venues/maps, registrations, notifications, media, integrations, environment, settings, audit logs, and project map.
-- Agent workflow: `AGENTS.md`, `CLAUDE.md`, `example-Agent.md`, `.codex/skills/`, `.claude/skills/`, and `.agents/skills/`.
+- Agent workflow: `AGENTS.md`, `example-Agent.md`, and `.agents/skills/`.
 
 ## Mandatory Read Order
 
@@ -23,7 +23,7 @@ This repo is a GutConference Online PHP/JSON full-stack CMS for shared hosting. 
 2. `storage/schema/collections.json`
 3. `docs/PROJECT_MAP.md`
 4. `example-Agent.md`
-5. The narrow skill under `.codex/skills/<skill-name>/SKILL.md`, `.claude/skills/<skill-name>/SKILL.md`, or `.agents/skills/<skill-name>/SKILL.md` that matches the task. For admin work use the `gutconference-admin` skill.
+5. The narrow skill under `.agents/skills/<skill-name>/SKILL.md` that matches the task. For admin work use the `gutconference-admin` skill.
 
 ## Rules
 
@@ -43,7 +43,7 @@ This repo is a GutConference Online PHP/JSON full-stack CMS for shared hosting. 
 - Admin editors should only expose fields that need human judgment; generated labels, counters, queue timings, and derived availability should be computed by services or scripts.
 - Compare public event UX against provided competitor/reference URLs, but keep the tone clinical and conference-focused.
 - Use `php -S 127.0.0.1:6040 index.php` as the default local server command unless the port is already occupied.
-- When the product evolves, update the matching skill files under `.codex/skills/`, `.claude/skills/`, and `.agents/skills/` so future agents inherit new workflow rules.
+- When the product evolves, update the matching skill files under `.agents/skills/` so future agents inherit new workflow rules.
 - When working from a pull request, review previous PR comments, push fixes to the same remote branch when appropriate, and communicate PR follow-up clearly to the remote collaborator by email or the configured project communication channel when requested.
 
 ## Validation
@@ -58,3 +58,24 @@ php tools/smoke-local.php
 ```
 
 For UI changes, use a browser workflow and check home, event detail, admin login, and the changed admin resource.
+
+## Deployment / Push to Production
+
+Pushing to `origin/main` auto-deploys to **gutconference.online** via Hostinger Git auto-deploy. Treat every push as a production release.
+
+### Before pushing to `origin/main`, the agent MUST:
+
+1. **Write a PR-style change summary** that includes:
+   - A short title describing the release.
+   - A bullet list of all changed areas (controllers, services, views, schema, data, assets, config, docs).
+   - Any new files or deleted files called out explicitly.
+   - Known risks, breaking changes, or migration notes.
+   - Verification steps already completed (lint, tests, smoke, browser checks).
+2. **Present the summary to the user** and explicitly ask: _"This will update the live site at gutconference.online. Approve push to origin/main?"_
+3. **Wait for the user's explicit approval** before running `git push`.
+4. **Do not push** if the user declines or asks for changes — address the feedback first, amend the commit if needed, and re-present the summary.
+
+### After pushing:
+
+- Confirm the push succeeded and report the commit hash.
+- Remind the user to verify the live site at `https://gutconference.online`.

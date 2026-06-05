@@ -22,7 +22,7 @@ Harris / bapxmediahub is the developer, branding, design, and digital marketing 
 - Slug: `/events/global-gut-summit-2026`
 - Edition copy: The Global Gut Summit 2026
 - Date/time: 28 June 2026, 9:30 AM - 4:30 PM IST
-- Slots: 500 live online access slots seeded from the event record
+- Slots: 1500 live online access slots seeded from the event record
 - Fee: Rs.299
 - Organizers: Alpha Naturals & Salus Nutri
 
@@ -30,9 +30,9 @@ Harris / bapxmediahub is the developer, branding, design, and digital marketing 
 
 Admins can manage:
 
-- `events`: event identity, slug URL, CTA, price, organizer/contact, logo, hero image, thumbnail, start/end time, timezone, and slots
+- `events`: event/class identity, slug URL, CTA, price, payment mode, payment page link, organizer/contact, logo, hero image, thumbnail, start/end time, timezone, and slots
 - `event_sections`: editable landing-page sections such as outcomes, audience, trust, FAQ, policy, and custom blocks
-- `speakers`: speaker cards and session topics
+- `speakers`: speaker cards, credentials, photos, and session topics
 - `sessions`: agenda timeline
 - `venues`: online/offline venue, map link, map embed, joining note
 - `registrations`: registration/payment status records
@@ -49,7 +49,7 @@ Admin should stay compact and automation-first: event date/time, timezone, capac
 - Customer signup should be Google OAuth-first so calendar access is available before event/class payment.
 - Manual password signup exists only as a legacy/dev fallback; password reset remains SMTP-backed for those users.
 - Manual users must connect Google before payment so event/class reminders can be written to Google Calendar.
-- After successful payment, the PHP backend should queue SMTP email, Meta WhatsApp confirmation, Google Calendar reminders, and certificate delivery jobs.
+- Each event/class can use either an external Razorpay payment page or the internal Razorpay integration. After a verified internal payment, the PHP backend should queue SMTP email, Meta WhatsApp confirmation, Google Calendar reminders, and certificate delivery jobs.
 - Calendar reminders are planned for previous-day morning, previous-day evening, and event-day morning.
 - Admin newsletter sending should target opted-in Google-authenticated users and use editable notification templates.
 - Do not build course selling yet; keep future course behavior documented and avoid adding course commerce screens until requested.

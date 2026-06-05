@@ -9,7 +9,7 @@ Use this file as the operating note for coding agents working on the GutConferen
 - The backend is PHP controllers and services in `app/`.
 - The data store is JSON under `storage/data/`.
 - The schema contract is `storage/schema/collections.json`.
-- Built-in skills live under `.codex/skills/`, `.claude/skills/`, and `.agents/skills/`.
+- Built-in skills live under `.agents/skills/`.
 - Admin work uses the `gutconference-admin` skill.
 - There is no SPA fallback. Unknown routes return the PHP 404 page.
 
@@ -48,7 +48,7 @@ php tools/generate-project-map.php
 - Media: `MediaService`, `/admin/media`, `assets/images/media`.
 - Integrations: `SecretService`, Razorpay, SMTP, Meta WhatsApp Cloud API settings.
 - Audit: `AuditLogService`.
-- Skills: update the matching `.codex/skills/`, `.claude/skills/`, and `.agents/skills/` files when the product workflow evolves, especially for default ports, schema rules, admin surfaces, deployment, and browser/UI review expectations.
+- Skills: update the matching `.agents/skills/` files when the product workflow evolves, especially for default ports, schema rules, admin surfaces, deployment, and browser/UI review expectations.
 
 ## Admin Automation Principles
 
