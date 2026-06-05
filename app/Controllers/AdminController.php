@@ -1,6 +1,6 @@
 <?php
 namespace App\Controllers;
-use App\Services\{AuditLogService,AuthService,EnvService,MediaService,ResourceService,SchemaService,SecretService,SettingsService,StoragePermissionService};
+use App\Services\{AuditLogService,AuthService,EnvService,GeminiModelRouter,MediaService,NotificationQueueService,ResourceService,SchemaService,SecretService,SettingsService,StoragePermissionService};
 final class AdminController extends BaseController {
     protected string $layout = 'admin';
     public function __construct() {
@@ -13,7 +13,7 @@ final class AdminController extends BaseController {
         $speakerCount = count((new ResourceService('speakers'))->all());
         $this->render('admin/dashboard', ['pageTitle' => 'Dashboard', 'eventCount' => $eventCount, 'registrationCount' => $registrationCount, 'speakerCount' => $speakerCount]);
     }
-    public function events(): void{$this->resource('Events','events',$this->schemaFields('events',[]));}
+    public function events(): void{$this->resource('Events & Classes','events',$this->schemaFields('events',[]));}
     public function saveEvent(): void{$this->save('events');}
     public function deleteEvent(): void{$this->delete('events');}
     public function eventSections(): void{$this->resource('Event Sections','event_sections',$this->schemaFields('event_sections',[]));}
@@ -35,7 +35,9 @@ final class AdminController extends BaseController {
     public function notificationTemplates(): void{$this->resource('Notification Templates','notification_templates',$this->schemaFields('notification_templates',[]));}
     public function saveNotificationTemplate(): void{$this->save('notification_templates');}
     public function deleteNotificationTemplate(): void{$this->delete('notification_templates');}
-    public function notificationQueue(): void{$this->list('Notification Queue','notification_queue');}
+    public function notificationQueue(): void{$this->render('admin/list',['pageTitle'=>'Notification Queue','title'=>'Notification Queue','collection'=>'notification_queue','items'=>(new ResourceService('notification_queue'))->all(),'processAction'=>'/admin/notification_queue/process']);}
+    public function processNotificationQueue(): void{$result=(new NotificationQueueService())->processDue(); $this->flash('Notification queue processed. Sent: '.$result['sent'].'. Failed: '.$result['failed'].'.'); $this->redirect('/admin/notification_queue');}
+    public function branding(): void{$this->render('admin/branding',['pageTitle' => 'Branding', 'settings'=>(new SettingsService())->public(), 'secrets'=>(new SecretService())->all()]);}
     public function settings(): void{$this->render('admin/settings',['pageTitle' => 'Settings', 'title' => 'Site Settings', 'settings'=>(new SettingsService())->public(), 'adminCredentials'=>(new EnvService())->adminCredentials()]);}
     public function saveSettings(): void{(new SettingsService())->savePublic(['currency'=>$_POST['currency'] ?? 'INR','timezone'=>$_POST['timezone'] ?? 'Asia/Kolkata','featured_event_slug'=>$_POST['featured_event_slug'] ?? 'global-gut-summit-2026','product_owner_name'=>$_POST['product_owner_name'] ?? 'Dr. Praveen Jacob','product_owner_title'=>$_POST['product_owner_title'] ?? 'Integrating Traditional Medicine with Modern Research.','product_owner_handle'=>$_POST['product_owner_handle'] ?? '@the.gut.expert','product_owner_instagram'=>$_POST['product_owner_instagram'] ?? 'https://www.instagram.com/the.gut.expert/?hl=en','product_owner_linkedin'=>$_POST['product_owner_linkedin'] ?? 'https://www.linkedin.com/in/dr-praveen-jacob-61b350341/','product_owner_youtube'=>$_POST['product_owner_youtube'] ?? 'https://www.youtube.com/channel/UC0UAYYxQETPP6KJcCTHgP7w','product_owner_facebook'=>$_POST['product_owner_facebook'] ?? 'https://www.facebook.com/people/Dr-Praveen-Jacob/100063556307522/','product_owner_profile_url'=>$_POST['product_owner_profile_url'] ?? 'https://nisargahospital.in/doctors/dr-praveen-jacob/']); $this->flash('Settings saved.'); $this->redirect('/admin/settings');}
     public function saveAdminCredentials(): void{(new EnvService())->saveAdminCredentials($_POST); $this->flash('Admin credentials saved to .env.'); $this->redirect('/admin/settings');}
@@ -47,7 +49,7 @@ final class AdminController extends BaseController {
     public function supportTickets(): void{$this->list('Support Tickets','support_tickets');}
     public function media(): void{$this->render('admin/media',['pageTitle'=>'Media Library','items'=>(new MediaService())->all()]);}
     public function uploadMedia(): void{$uploaded=(new MediaService())->upload($_FILES['media_files'] ?? [], $_POST['context'] ?? 'shared'); (new AuditLogService())->record('upload','media','',['count'=>count($uploaded),'context'=>$_POST['context'] ?? 'shared']); $this->flash(count($uploaded).' media file'.(count($uploaded) === 1 ? '' : 's').' uploaded.'); $this->redirect('/admin/media');}
-    public function environment(): void{$this->render('admin/environment',['pageTitle'=>'Environment','envRaw'=>(new EnvService())->raw(),'permissions'=>(new StoragePermissionService())->status()]);}
+    public function environment(): void{$this->render('admin/environment',['pageTitle'=>'Environment','envRaw'=>(new EnvService())->raw(),'permissions'=>(new StoragePermissionService())->status(),'geminiDiagnostics'=>(new GeminiModelRouter())->diagnostics()]);}
     public function saveEnvironment(): void{(new EnvService())->saveRaw((string)($_POST['env_raw'] ?? '')); (new AuditLogService())->record('save','environment','.env',['keys'=>array_keys(EnvService::readFile(app_path('.env')))]); $this->flash('Environment saved.'); $this->redirect('/admin/environment');}
     public function fixPermissions(): void{(new StoragePermissionService())->fix(); (new AuditLogService())->record('fix','permissions','storage'); $this->flash('Storage permissions checked and updated where PHP is allowed.'); $this->redirect('/admin/environment');}
     public function projectMap(): void{$this->render('admin/project-map',['pageTitle' => 'Project Map', 'map'=>\App\Services\ProjectMapService::registry(),'validation'=>\App\Services\ProjectMapService::validate(\App\Services\ProjectMapService::registry())]);}
@@ -115,7 +117,14 @@ final class AdminController extends BaseController {
             $data['logo_url'] = $uploaded[0]['path'];
         }
         
+        $wasPublished = ($collection === 'events') && (($existing['status'] ?? '') === 'published');
         $record = (new ResourceService($collection))->save($data);
+        if ($collection === 'events' && !$wasPublished && (($record['status'] ?? '') === 'published')) {
+            $queued = (new NotificationQueueService())->queueNewEvent($record);
+            if ($queued > 0) {
+                (new AuditLogService())->record('queue','new-event-notification',(string)($record['id'] ?? ''),['subscribers'=>$queued]);
+            }
+        }
         (new AuditLogService())->record('save', $collection, (string)($record['id'] ?? ''), ['fields' => array_keys($data), 'uploaded_media' => count($uploaded)]);
         $this->flash('Saved.');
         $this->redirect('/admin/' . $collection);

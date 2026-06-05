@@ -1,6 +1,11 @@
 <div class="admin-card">
     <h2 style="font-size:1.1rem; margin:0 0 var(--space-md);"><?= e($title) ?></h2>
     <p style="color:var(--color-text-muted); margin:0 0 var(--space-lg);">View <?= e(strtolower($title)) ?> records from JSON storage.</p>
+    <?php if(!empty($processAction)): ?>
+        <form method="post" action="<?= e($processAction) ?>" style="margin:0 0 16px;">
+            <button class="btn btn-primary" type="submit">Process Due Email Jobs</button>
+        </form>
+    <?php endif; ?>
     <div class="table-wrap">
         <table>
             <thead><tr><th>ID</th><th>Status</th><th>Details</th><th>Created</th></tr></thead>
@@ -19,6 +24,9 @@
                             <?php elseif(($collection ?? '') === 'support_tickets'): ?>
                                 <strong><?= e($item['customer_email'] ?? 'Guest') ?></strong>
                                 <span style="color:var(--color-text-muted);"> · <?= e($item['message'] ?? 'Support request') ?></span>
+                            <?php elseif(($collection ?? '') === 'notification_queue'): ?>
+                                <strong><?= e($item['template_key'] ?? 'Notification') ?></strong>
+                                <span style="color:var(--color-text-muted);"> · <?= e($item['to'] ?? '') ?><?= !empty($item['error']) ? ' · Error: ' . e($item['error']) : '' ?></span>
                             <?php else: ?>
                                 <?= e($item['name'] ?? $item['email'] ?? $item['message'] ?? $item['event'] ?? 'Record') ?>
                             <?php endif; ?>

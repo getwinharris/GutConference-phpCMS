@@ -1,29 +1,110 @@
 [
     {
-        "id": "media-gutconference-logo-png",
-        "filename": "gutconference-logo.png",
-        "original_name": "logo gut final.png",
-        "path": "/assets/images/media/gutconference-logo.png",
-        "context": "events",
+        "id":  "media-gutconference-logo-png",
+        "filename":  "gutconference-logo.png",
+        "original_name":  "logo gut final.png",
+        "path":  "/assets/images/media/gutconference-logo.png",
+        "context":  "events",
+        "mime":  "image/png",
+        "created_at":  "2026-06-02T00:00:00+05:30"
+    },
+    {
+        "id":  "media-gutconference-logo-jpg",
+        "filename":  "gutconference-logo.jpg",
+        "original_name":  "LOGO GUT final.jpg",
+        "path":  "/assets/images/media/gutconference-logo.jpg",
+        "context":  "events",
+        "mime":  "image/jpeg",
+        "created_at":  "2026-06-02T00:00:00+05:30"
+    },
+    {
+        "id":  "6b9ffdf854957212",
+        "filename":  "whatsapp-image-2026-06-03-at-15-31-12-66893b4a.jpeg",
+        "original_name":  "WhatsApp Image 2026-06-03 at 15.31.12.jpeg",
+        "path":  "/assets/images/media/2026/06/whatsapp-image-2026-06-03-at-15-31-12-66893b4a.jpeg",
+        "context":  "shared",
+        "mime":  "image/jpeg",
+        "created_at":  "2026-06-04T16:46:51+05:30"
+    },
+    {
+        "id": "media-speaker-siba-dolai",
+        "filename": "speaker-siba-dolai.png",
+        "original_name": "Siba-Head Shot - Siba Dolai.PNG",
+        "path": "/assets/images/media/speakers/speaker-siba-dolai.png",
+        "context": "speakers",
         "mime": "image/png",
-        "created_at": "2026-06-02T00:00:00+05:30"
+        "created_at": "2026-06-04T20:15:00+05:30"
     },
     {
-        "id": "media-gutconference-logo-jpg",
-        "filename": "gutconference-logo.jpg",
-        "original_name": "LOGO GUT final.jpg",
-        "path": "/assets/images/media/gutconference-logo.jpg",
-        "context": "events",
+        "id": "media-speaker-vijay-murthy",
+        "filename": "speaker-vijay-murthy.jpeg",
+        "original_name": "speaker-Dr-Vijay-Murthy.jpeg",
+        "path": "/assets/images/media/speakers/speaker-vijay-murthy.jpeg",
+        "context": "speakers",
         "mime": "image/jpeg",
-        "created_at": "2026-06-02T00:00:00+05:30"
+        "created_at": "2026-06-04T20:15:00+05:30"
     },
     {
-        "id": "6b9ffdf854957212",
-        "filename": "whatsapp-image-2026-06-03-at-15-31-12-66893b4a.jpeg",
-        "original_name": "WhatsApp Image 2026-06-03 at 15.31.12.jpeg",
-        "path": "/assets/images/media/2026/06/whatsapp-image-2026-06-03-at-15-31-12-66893b4a.jpeg",
-        "context": "shared",
+        "id": "media-speaker-sanjay-sachdeva",
+        "filename": "speaker-sanjay-sachdeva.jpeg",
+        "original_name": "speaker-Sanjay-sachdeva.jpeg",
+        "path": "/assets/images/media/speakers/speaker-sanjay-sachdeva.jpeg",
+        "context": "speakers",
         "mime": "image/jpeg",
-        "created_at": "2026-06-04T16:46:51+05:30"
+        "created_at": "2026-06-04T20:15:00+05:30"
+    },
+    {
+        "id": "media-speaker-praveen-jacob",
+        "filename": "owner-dr-praveen-jacob-also-speaker.jpeg",
+        "original_name": "owner-dr-praveen-jacob-also-speaker.jpeg",
+        "path": "/assets/images/media/speakers/owner-dr-praveen-jacob-also-speaker.jpeg",
+        "context": "speakers",
+        "mime": "image/jpeg",
+        "created_at": "2026-06-04T20:15:00+05:30"
+    },
+    {
+        "id": "media-speaker-somashekar-huddar",
+        "filename": "speaker-somashekar-huddar.jpeg",
+        "original_name": "speaker-Somashekar-huddar.jpeg",
+        "path": "/assets/images/media/speakers/speaker-somashekar-huddar.jpeg",
+        "context": "speakers",
+        "mime": "image/jpeg",
+        "created_at": "2026-06-04T20:15:00+05:30"
+    },
+    {
+        "id": "media-speaker-mili-shah",
+        "filename": "speaker-mili-shah.jpeg",
+        "original_name": "speaker-mili-shah.jpeg",
+        "path": "/assets/images/media/speakers/speaker-mili-shah.jpeg",
+        "context": "speakers",
+        "mime": "image/jpeg",
+        "created_at": "2026-06-04T20:15:00+05:30"
+    },
+    {
+        "id": "media-speaker-alejandro-diaz",
+        "filename": "speaker-alejandro-diaz.jpeg",
+        "original_name": "speaker-Alejandro-Diaz.jpeg",
+        "path": "/assets/images/media/speakers/speaker-alejandro-diaz.jpeg",
+        "context": "speakers",
+        "mime": "image/jpeg",
+        "created_at": "2026-06-04T20:15:00+05:30"
+    },
+    {
+        "id": "media-speaker-daryl-turner",
+        "filename": "speaker-daryl-turner.jpeg",
+        "original_name": "speaker-Daryl-Turner.jpeg",
+        "path": "/assets/images/media/speakers/speaker-daryl-turner.jpeg",
+        "context": "speakers",
+        "mime": "image/jpeg",
+        "created_at": "2026-06-04T20:15:00+05:30"
+    },
+    {
+        "id": "media-speaker-tom-obryan",
+        "filename": "speaker-tom-obryan.jpeg",
+        "original_name": "speaker-tom-O'Bryan.jpeg",
+        "path": "/assets/images/media/speakers/speaker-tom-obryan.jpeg",
+        "context": "speakers",
+        "mime": "image/jpeg",
+        "created_at": "2026-06-04T20:15:00+05:30"
     }
 ]

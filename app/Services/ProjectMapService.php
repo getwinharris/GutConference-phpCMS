@@ -5,12 +5,16 @@ final class ProjectMapService {
     public static function registry(): array {
         $routes = [
             ['method'=>'GET','path'=>'/','name'=>'home','page'=>'public/home','controller'=>'PublicController@home','services'=>['EventService','ResourceService']],
-            ['method'=>'GET','path'=>'/about','name'=>'about','page'=>'public/about','controller'=>'PublicController@about','services'=>[]],
             ['method'=>'GET','path'=>'/events','name'=>'events','page'=>'public/events','controller'=>'PublicController@events','services'=>['EventService']],
+            ['method'=>'GET','path'=>'/dashboard','name'=>'dashboard','page'=>'public/dashboard','controller'=>'PublicController@dashboard','services'=>['AuthService','JsonStoreService','EventService']],
             ['method'=>'GET','path'=>'/events/{slug}','name'=>'events.show','page'=>'public/event','controller'=>'PublicController@event','services'=>['EventService','SecretService']],
+            ['method'=>'POST','path'=>'/events/{slug}/checkout','name'=>'events.checkout','page'=>'public/checkout','controller'=>'PaymentController@checkout','services'=>['AuthService','EventService','SecretService','JsonStoreService']],
+            ['method'=>'POST','path'=>'/events/{slug}/payment/verify','name'=>'events.payment.verify','page'=>'public/checkout','controller'=>'PaymentController@verify','services'=>['AuthService','EventService','SecretService','JsonStoreService','PaymentService','PurchaseNotificationService']],
             ['method'=>'GET','path'=>'/conference/{slug}','name'=>'conference.show','page'=>'public/event','controller'=>'PublicController@event','services'=>['EventService','SecretService']],
             ['method'=>'GET','path'=>'/contact','name'=>'contact','page'=>'public/contact','controller'=>'PublicController@contact','services'=>[]],
             ['method'=>'POST','path'=>'/contact','name'=>'contact.post','page'=>'public/contact','controller'=>'PublicController@contact','services'=>['ContactService']],
+            ['method'=>'POST','path'=>'/support/chat','name'=>'support.chat','page'=>'public/support-widget','controller'=>'SupportController@chat','services'=>['AuthService','SupportAgentService','AgentContextService','JsonStoreService','SecretService']],
+            ['method'=>'POST','path'=>'/support/admin/apply','name'=>'support.admin.apply','page'=>'public/support-widget','controller'=>'SupportController@adminApply','services'=>['AuthService','ResourceService','SchemaService','AuditLogService']],
             ['method'=>'GET','path'=>'/login','name'=>'login','page'=>'public/login','controller'=>'PublicController@login','services'=>['AuthService']],
             ['method'=>'GET','path'=>'/signup','name'=>'signup','page'=>'public/signup','controller'=>'PublicController@signup','services'=>['AuthService']],
             ['method'=>'POST','path'=>'/signup','name'=>'signup.post','page'=>'public/signup','controller'=>'AuthController@signupPost','services'=>['JsonStoreService']],
@@ -46,6 +50,7 @@ final class ProjectMapService {
             ['method'=>'POST','path'=>'/admin/notification_templates/save','name'=>'admin.notification-templates.save','page'=>'admin/resource','controller'=>'AdminController@saveNotificationTemplate','services'=>['ResourceService','AuditLogService']],
             ['method'=>'POST','path'=>'/admin/notification_templates/delete','name'=>'admin.notification-templates.delete','page'=>'admin/resource','controller'=>'AdminController@deleteNotificationTemplate','services'=>['ResourceService','AuditLogService']],
             ['method'=>'GET','path'=>'/admin/notification_queue','name'=>'admin.notification-queue','page'=>'admin/list','controller'=>'AdminController@notificationQueue','services'=>['ResourceService']],
+            ['method'=>'POST','path'=>'/admin/notification_queue/process','name'=>'admin.notification-queue.process','page'=>'admin/list','controller'=>'AdminController@processNotificationQueue','services'=>['NotificationQueueService']],
             ['method'=>'GET','path'=>'/admin/settings','name'=>'admin.settings','page'=>'admin/settings','controller'=>'AdminController@settings','services'=>['SettingsService']],
             ['method'=>'POST','path'=>'/admin/settings/save','name'=>'admin.settings.save','page'=>'admin/settings','controller'=>'AdminController@saveSettings','services'=>['SettingsService']],
             ['method'=>'POST','path'=>'/admin/settings/admin-credentials','name'=>'admin.settings.admin-credentials','page'=>'admin/settings','controller'=>'AdminController@saveAdminCredentials','services'=>['EnvService']],
@@ -53,6 +58,7 @@ final class ProjectMapService {
             ['method'=>'POST','path'=>'/admin/integrations/save','name'=>'admin.integrations.save','page'=>'admin/integrations','controller'=>'AdminController@saveIntegrations','services'=>['SecretService']],
             ['method'=>'GET','path'=>'/admin/contact-submissions','name'=>'admin.contact-submissions','page'=>'admin/resource','controller'=>'AdminController@contactSubmissions','services'=>['ContactService']],
             ['method'=>'GET','path'=>'/admin/support-tickets','name'=>'admin.support-tickets','page'=>'admin/list','controller'=>'AdminController@supportTickets','services'=>['ResourceService']],
+            ['method'=>'GET','path'=>'/admin/branding','name'=>'admin.branding','page'=>'admin/branding','controller'=>'AdminController@branding','services'=>['SettingsService','SecretService']],
             ['method'=>'GET','path'=>'/admin/media','name'=>'admin.media','page'=>'admin/media','controller'=>'AdminController@media','services'=>['MediaService']],
             ['method'=>'POST','path'=>'/admin/media/upload','name'=>'admin.media.upload','page'=>'admin/media','controller'=>'AdminController@uploadMedia','services'=>['MediaService','AuditLogService']],
             ['method'=>'GET','path'=>'/admin/audit-log','name'=>'admin.audit','page'=>'admin/list','controller'=>'AdminController@audit','services'=>['AuditLogService']],
@@ -70,7 +76,7 @@ final class ProjectMapService {
         unset($route);
         return [
             'routes'=>$routes,
-            'services'=>['AuthService','EventService','SettingsService','ProjectMapService','JsonStoreService','AuditLogService','ResourceService','SecretService','EnvService','ContactService','PasswordResetService','PurchaseNotificationService','MediaService','StoragePermissionService','SchemaService'],
+            'services'=>['AuthService','EventService','SettingsService','ProjectMapService','JsonStoreService','AuditLogService','ResourceService','SecretService','EnvService','ContactService','PasswordResetService','PurchaseNotificationService','NotificationQueueService','EmailTemplateService','PaymentService','MediaService','StoragePermissionService','SchemaService','SupportAgentService','AgentContextService','GeminiModelRouter','UserContextService'],
             'integrations'=>['RazorpayClient','GoogleOAuthClient'],
             'collections'=>['users','events','event_sections','speakers','sessions','venues','publishers','registrations','notification_templates','notification_queue','settings','audit_events','contact_submissions','support_tickets','media_files'],
         ];

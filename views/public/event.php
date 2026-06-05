@@ -1,9 +1,12 @@
-<section class="hero">
-    <div class="container hero-grid">
-        <div>
+<section class="hero event-hero">
+    <div class="container hero-grid event-hero-grid">
+        <div class="event-hero-copy">
             <?php $eventTime = $eventService->timeRange($event); ?>
             <?php $slotSummary = $eventService->slotSummary($event, $sessions); ?>
+            <?php $availability = $eventService->availability($event); ?>
+            <?php $countdownDeadline = $eventService->countdownDeadline($event); ?>
             <?php $eventPrice = trim((string)($event['currency'] ?? 'INR') . ' ' . (string)($event['price'] ?? '')); ?>
+            <?php $paymentAction = '/events/' . rawurlencode((string)($event['slug'] ?? '')) . '/checkout'; ?>
             <p class="eyebrow"><?= e($event['eyebrow'] ?? 'Microbiome Conference') ?></p>
             <h1><?= e($event['headline'] ?? $event['name']) ?></h1>
             <p class="lede"><?= e($event['subheadline'] ?? '') ?></p>
@@ -13,10 +16,10 @@
             <div class="hero-actions">
                 <?php if(empty($_SESSION['user'])): ?>
                     <a class="link-arrow link-arrow-primary" href="/login">Join Now <span aria-hidden="true">→</span></a>
-                <?php elseif(!empty($event['registration_url'])): ?>
-                    <a class="link-arrow link-arrow-primary" href="<?= e($event['registration_url']) ?>" target="_blank" rel="noopener">Pay with Razorpay <span aria-hidden="true">→</span></a>
                 <?php else: ?>
-                    <a class="link-arrow link-arrow-primary" href="#registration">Request Payment Link <span aria-hidden="true">→</span></a>
+                    <form class="inline-payment-form" method="post" action="<?= e($paymentAction) ?>">
+                        <button class="link-arrow link-arrow-primary" type="submit">Pay with Razorpay <span aria-hidden="true">→</span></button>
+                    </form>
                 <?php endif; ?>
                 <a class="link-arrow" href="#agenda">View Agenda <span aria-hidden="true">→</span></a>
             </div>
@@ -24,30 +27,58 @@
             <div class="stats event-stat-grid">
                 <div class="stat"><strong><?= e($event['date_label'] ?? '') ?></strong><span>Date</span></div>
                 <div class="stat"><strong><?= e($eventTime) ?></strong><span>Time</span></div>
-                <div class="stat"><strong><?= e($event['mode'] ?? '') ?></strong><span>Mode</span></div>
             </div>
             
-            <div class="trust-strip">
-                <div class="trust-item">E-certificate included</div>
-                <div class="trust-item">International speakers</div>
-                <div class="trust-item">Clinical application focus</div>
-            </div>
-        </div>
-        <div class="hero-media">
-            <img class="event-thumbnail" src="<?= e($event['thumbnail_url'] ?? $event['hero_image_url'] ?? '/assets/images/media/gutconference-logo.jpg') ?>" alt="<?= e($event['name'] ?? 'Conference thumbnail') ?>">
-            <div class="brand-hero">
-                <img src="/assets/images/media/gutconference-mark.png" alt="GutConference circular mark">
-                <div class="brand-hero-title">
-                    <small>International Conference On</small>
-                    <strong>Microbiome</strong>
-                    <strong>Probiotics</strong>
-                    <strong>Gut Nutrition</strong>
-                    <span>Bridging Science &amp; Clinical Healing</span>
+            <div class="event-urgency" data-countdown-deadline="<?= e($countdownDeadline ?? '') ?>">
+                <div class="event-urgency__copy">
+                    <span>Hurry, time is ticking</span>
+                    <strong data-countdown-label><?= $countdownDeadline ? 'Registration closes at 12:00 AM on ' . e($event['date_label'] ?? 'event day') : 'Registration is time-sensitive' ?></strong>
+                </div>
+                <div class="event-countdown" aria-label="Countdown to registration deadline">
+                    <div><strong data-countdown-days>--</strong><span>Days</span></div>
+                    <div><strong data-countdown-hours>--</strong><span>Hours</span></div>
+                    <div><strong data-countdown-minutes>--</strong><span>Minutes</span></div>
+                </div>
+                <div class="event-slots" aria-label="Event seat availability">
+                    <span><?= e((string)$availability['filled']) ?> filled</span>
+                    <strong><?= e((string)$availability['available']) ?><small>/<?= e((string)$availability['total']) ?></small></strong>
+                    <em>available <?= e(strtolower((string)$availability['label'])) ?></em>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+(() => {
+    const panel = document.querySelector('[data-countdown-deadline]');
+    if (!panel) return;
+    const deadlineValue = panel.dataset.countdownDeadline || '';
+    const deadline = deadlineValue ? new Date(deadlineValue) : null;
+    const days = panel.querySelector('[data-countdown-days]');
+    const hours = panel.querySelector('[data-countdown-hours]');
+    const minutes = panel.querySelector('[data-countdown-minutes]');
+    const label = panel.querySelector('[data-countdown-label]');
+    const pad = value => String(Math.max(0, value)).padStart(2, '0');
+    const tick = () => {
+        if (!deadline || Number.isNaN(deadline.getTime())) return;
+        const distance = deadline.getTime() - Date.now();
+        if (distance <= 0) {
+            days.textContent = '00';
+            hours.textContent = '00';
+            minutes.textContent = '00';
+            label.textContent = 'Registration deadline has started for event day';
+            return;
+        }
+        const totalMinutes = Math.floor(distance / 60000);
+        days.textContent = pad(Math.floor(totalMinutes / 1440));
+        hours.textContent = pad(Math.floor((totalMinutes % 1440) / 60));
+        minutes.textContent = pad(totalMinutes % 60);
+    };
+    tick();
+    window.setInterval(tick, 60000);
+})();
+</script>
 
 <nav class="section-nav" aria-label="Event sections">
     <div class="container">
@@ -62,6 +93,7 @@
 
 <?php foreach($sections as $section): ?>
     <?php if(($section['type'] ?? '') === 'faq') continue; ?>
+    <?php if(($section['type'] ?? '') === 'trust') continue; ?>
     <section class="section-tight" <?= ($section['type'] ?? '') === 'outcomes' ? 'id="learn"' : '' ?>>
         <div class="container">
             <p class="eyebrow"><?= e(ucwords(str_replace('_',' ', $section['type'] ?? 'Section'))) ?></p>
@@ -85,14 +117,54 @@
     <div class="container">
         <p class="eyebrow">International Experts</p>
         <h2>Speaker Lineup</h2>
-        <div class="speaker-grid section-grid-offset">
+        <?php
+        $countryFlag = static function (string $country): string {
+            $key = strtolower(trim($country));
+            return match ($key) {
+                'india' => '🇮🇳',
+                'usa', 'united states', 'united states of america' => '🇺🇸',
+                'united kingdom', 'uk' => '🇬🇧',
+                'australia' => '🇦🇺',
+                'italy' => '🇮🇹',
+                default => '🌐',
+            };
+        };
+        ?>
+        <div class="speaker-carousel section-grid-offset" data-speaker-carousel aria-label="Scrollable speaker lineup">
             <?php foreach($speakers as $speaker): ?>
-                <article class="speaker-card">
-                    <div class="country"><?= e($speaker['country'] ?? '') ?></div>
+                <?php
+                $speakerName = (string)($speaker['name'] ?? 'Speaker');
+                $speakerCountry = (string)($speaker['country'] ?? '');
+                $speakerPhoto = (string)($speaker['photo_url'] ?? '');
+                $initials = implode('', array_slice(array_map(fn($part) => strtoupper(substr($part, 0, 1)), array_filter(preg_split('/\s+/', preg_replace('/[^A-Za-z ]/', '', $speakerName)) ?: [])), 0, 2));
+                $initials = $initials !== '' ? $initials : 'GC';
+                ?>
+                <article
+                    class="speaker-card"
+                    data-speaker-card
+                    data-name="<?= e($speakerName) ?>"
+                    data-country="<?= e($speakerCountry) ?>"
+                    data-flag="<?= e($countryFlag($speakerCountry)) ?>"
+                    data-photo="<?= e($speakerPhoto) ?>"
+                    data-initials="<?= e($initials) ?>"
+                    data-credentials="<?= e($speaker['credentials'] ?? '') ?>"
+                    data-topic="<?= e($speaker['topic'] ?? '') ?>"
+                    data-time="<?= e($speaker['session_time'] ?? '') ?>"
+                    data-profile="<?= e($speaker['profile'] ?? '') ?>"
+                    tabindex="0"
+                    role="button"
+                    aria-label="View <?= e($speakerName) ?> speaker details"
+                >
+                    <div class="country"><span class="country-flag" aria-hidden="true"><?= e($countryFlag($speakerCountry)) ?></span><span><?= e($speakerCountry) ?></span></div>
                     <div class="speaker-avatar">
-                        <img src="<?= e($speaker['photo_url'] ?? '/assets/images/media/gutconference-logo.png') ?>" alt="<?= e($speaker['name'] ?? 'Speaker') ?>">
+                        <?php if($speakerPhoto !== ''): ?>
+                            <img src="<?= e($speakerPhoto) ?>" alt="<?= e($speakerName) ?>">
+                        <?php else: ?>
+                            <div class="speaker-initials" aria-label="<?= e($speakerName) ?> photo pending"><?= e($initials) ?></div>
+                        <?php endif; ?>
                     </div>
-                    <h3><?= e($speaker['name'] ?? '') ?></h3>
+                    <h3><?= e($speakerName) ?></h3>
+                    <?php if(!empty($speaker['credentials'])): ?><p class="credentials"><?= e($speaker['credentials']) ?></p><?php endif; ?>
                     <p class="topic"><?= e($speaker['topic'] ?? '') ?></p>
                     <p class="time-label">⏰ <?= e($speaker['session_time'] ?? '') ?></p>
                     <p class="profile"><?= e($speaker['profile'] ?? '') ?></p>
@@ -101,6 +173,85 @@
         </div>
     </div>
 </section>
+
+<div class="speaker-modal" data-speaker-modal aria-hidden="true">
+    <button class="speaker-modal__backdrop" type="button" data-speaker-close aria-label="Close speaker details"></button>
+    <div class="speaker-modal__panel" role="dialog" aria-modal="true" aria-label="Speaker details">
+        <button class="speaker-modal__close" type="button" data-speaker-close aria-label="Close speaker details">×</button>
+        <div class="speaker-modal__media" data-speaker-modal-media></div>
+        <div class="speaker-modal__body">
+            <div class="country" data-speaker-modal-country></div>
+            <h2 data-speaker-modal-name></h2>
+            <p class="credentials" data-speaker-modal-credentials></p>
+            <p class="topic" data-speaker-modal-topic></p>
+            <p class="time-label" data-speaker-modal-time></p>
+            <p class="profile" data-speaker-modal-profile></p>
+        </div>
+    </div>
+</div>
+
+<script>
+(() => {
+    const modal = document.querySelector('[data-speaker-modal]');
+    if (!modal) return;
+    const media = modal.querySelector('[data-speaker-modal-media]');
+    const country = modal.querySelector('[data-speaker-modal-country]');
+    const fields = {
+        name: modal.querySelector('[data-speaker-modal-name]'),
+        credentials: modal.querySelector('[data-speaker-modal-credentials]'),
+        topic: modal.querySelector('[data-speaker-modal-topic]'),
+        time: modal.querySelector('[data-speaker-modal-time]'),
+        profile: modal.querySelector('[data-speaker-modal-profile]'),
+    };
+    const open = card => {
+        const photo = card.dataset.photo || '';
+        media.replaceChildren();
+        if (photo) {
+            const image = document.createElement('img');
+            image.src = photo;
+            image.alt = card.dataset.name || '';
+            media.appendChild(image);
+        } else {
+            const initials = document.createElement('div');
+            initials.className = 'speaker-initials';
+            initials.textContent = card.dataset.initials || 'GC';
+            media.appendChild(initials);
+        }
+        country.replaceChildren();
+        const flag = document.createElement('span');
+        flag.className = 'country-flag';
+        flag.setAttribute('aria-hidden', 'true');
+        flag.textContent = card.dataset.flag || '🌐';
+        const countryText = document.createElement('span');
+        countryText.textContent = card.dataset.country || '';
+        country.append(flag, countryText);
+        fields.name.textContent = card.dataset.name || '';
+        fields.credentials.textContent = card.dataset.credentials || '';
+        fields.topic.textContent = card.dataset.topic || '';
+        fields.time.textContent = card.dataset.time ? `⏰ ${card.dataset.time}` : '';
+        fields.profile.textContent = card.dataset.profile || '';
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('speaker-modal-open');
+    };
+    const close = () => {
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('speaker-modal-open');
+    };
+    document.querySelectorAll('[data-speaker-card]').forEach(card => {
+        card.addEventListener('click', () => open(card));
+        card.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                open(card);
+            }
+        });
+    });
+    modal.querySelectorAll('[data-speaker-close]').forEach(button => button.addEventListener('click', close));
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') close();
+    });
+})();
+</script>
 
 <section class="section" id="agenda">
     <div class="container">
@@ -158,11 +309,11 @@
                 </div>
                 <p class="form-helper">Login with Google before joining the conference room. Checkout opens the Razorpay payment flow for this event.</p>
                 <a class="link-arrow link-arrow-primary" href="/login">Join In this Conference Room <span aria-hidden="true">→</span></a>
-            <?php elseif(!empty($event['registration_url'])): ?>
-                <a class="link-arrow link-arrow-primary" href="<?= e($event['registration_url']) ?>" target="_blank" rel="noopener">Pay with Razorpay <span aria-hidden="true">→</span></a>
             <?php else: ?>
                 <p class="form-helper">Secure checkout is available. Standard registration fee covers full session access, live Q&amp;A, and your verified E-certificate.</p>
-                <a class="link-arrow link-arrow-primary" href="/contact?subject=Event%20Booking%20for%20<?= e($event['slug']) ?>">Request Payment Link <span aria-hidden="true">→</span></a>
+                <form class="inline-payment-form" method="post" action="<?= e($paymentAction) ?>">
+                    <button class="link-arrow link-arrow-primary" type="submit">Pay with Razorpay <span aria-hidden="true">→</span></button>
+                </form>
             <?php endif; ?>
             
             <p class="form-helper registration-contact">Questions: <?= e($event['contact_email'] ?? '') ?> · <?= e($event['contact_phone'] ?? '') ?></p>

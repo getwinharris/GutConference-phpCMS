@@ -1,6 +1,6 @@
 <?php
 namespace App\Controllers;
-use App\Services\{ContactService,EventService,ResourceService,SecretService,SettingsService};
+use App\Services\{AuthService,ContactService,EventService,JsonStoreService,ResourceService,SecretService,SettingsService};
 final class PublicController extends BaseController {
     
     protected function detectApiRequest(): void {
@@ -19,15 +19,35 @@ final class PublicController extends BaseController {
         ]);
     }
     
-    public function about(): void { 
-        $this->detectApiRequest();
-        $this->render('public/about'); 
-    }
-    
     public function events(): void {
         $this->detectApiRequest();
         $events = new EventService();
         $this->render('public/events', ['events' => $events->published(), 'eventService' => $events]);
+    }
+
+    public function dashboard(): void {
+        $this->detectApiRequest();
+        (new AuthService())->requireUser();
+        $user = (new AuthService())->user() ?? [];
+        $email = (string)($user['email'] ?? '');
+        $store = new JsonStoreService();
+        $eventService = new EventService();
+        $eventsBySlug = [];
+        foreach ($eventService->all() as $event) {
+            $eventsBySlug[(string)($event['slug'] ?? '')] = $event;
+        }
+        $registrations = array_values(array_filter($store->read('registrations'), fn($registration) => ($registration['email'] ?? '') === $email));
+        foreach ($registrations as &$registration) {
+            $event = $eventsBySlug[(string)($registration['event_slug'] ?? '')] ?? [];
+            $registration['event'] = $event;
+            $registration['certificate_available'] = $this->certificateAvailable($registration, $event);
+        }
+        unset($registration);
+        $this->render('public/dashboard', [
+            'pageTitle' => 'Dashboard',
+            'user' => $user,
+            'registrations' => $registrations,
+        ]);
     }
 
     public function event(string $slug): void {
@@ -79,5 +99,17 @@ final class PublicController extends BaseController {
     public function signup(): void {
         $this->detectApiRequest();
         $this->render('public/signup');
+    }
+
+    private function certificateAvailable(array $registration, array $event): bool {
+        $paid = in_array(($registration['payment_status'] ?? ''), ['paid', 'manual'], true);
+        if (!$paid || empty($event)) return false;
+        $dateLabel = trim((string)($event['date_label'] ?? ''));
+        $endTime = trim((string)($event['end_time'] ?? '23:59'));
+        $timezone = strtoupper((string)($event['timezone'] ?? '')) === 'IST' ? 'Asia/Kolkata' : ((string)($event['timezone'] ?? 'Asia/Kolkata'));
+        $zone = new \DateTimeZone($timezone !== '' ? $timezone : 'Asia/Kolkata');
+        $eventEnd = \DateTimeImmutable::createFromFormat('j F Y H:i', $dateLabel . ' ' . $endTime, $zone)
+            ?: \DateTimeImmutable::createFromFormat('d F Y H:i', $dateLabel . ' ' . $endTime, $zone);
+        return $eventEnd ? time() >= $eventEnd->getTimestamp() : false;
     }
 }

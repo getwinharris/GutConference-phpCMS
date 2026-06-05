@@ -2,7 +2,7 @@
     <div class="container">
         <p class="eyebrow">Book With Dr. Praveen Jacob</p>
         <h1>Consultation and event enquiries.</h1>
-        <p class="lede">Choose the path that matches the visitor intent. Consultation requests go to the doctor profile workflow; event enquiries include the selected conference or class from the admin-created event list.</p>
+        <p class="lede">Use one enquiry form for clinical appointments, event bookings, class access, payment help, certificates, and group bookings.</p>
         <?php if(!empty($success)): ?>
             <div class="flash flash-inline">Message received. The team will follow up.</div>
         <?php endif; ?>
@@ -10,75 +10,57 @@
 </section>
 
 <section class="section-tight">
-    <div class="container contact-choice-grid">
-        <form class="contact-card" method="post" action="/contact">
-            <input type="hidden" name="request_type" value="consultation">
-            <p class="eyebrow">Online Consultation</p>
-            <h2>Book a clinical appointment.</h2>
-            <p class="form-helper">For gut, skin, autoimmune, integrative medicine, and follow-up consultation enquiries.</p>
+    <div class="container contact-form-wrap">
+        <form class="contact-card contact-form-card" method="post" action="/contact">
+            <p class="eyebrow">Enquiry Form</p>
+            <h2>Send your request.</h2>
+            <p class="form-helper">Choose Clinical Appointment for patient enquiries, or Events &amp; Classes for tickets, access, payment, certificates, or group bookings.</p>
+            <label>Enquiry Type
+                <select name="request_type" required>
+                    <option value="consultation">Clinical Appointment</option>
+                    <option value="event_booking">Event or Class Listed</option>
+                </select>
+            </label>
             <label>Name
-                <input name="name" required placeholder="Patient name">
+                <input name="name" required placeholder="Your name">
             </label>
             <label>Email
-                <input type="email" name="email" required placeholder="patient@example.com">
+                <input type="email" name="email" required placeholder="name@example.com">
             </label>
             <label>Phone
                 <input name="phone" placeholder="+91 98765 43210">
             </label>
-            <label>Subject
-                <input name="subject" value="<?= e($subject ?: 'Online Consultation with Dr. Praveen Jacob') ?>">
-            </label>
-            <label>Message
-                <textarea name="message" required placeholder="Share the condition, preferred timing, and whether this is a first consultation or follow-up."></textarea>
-            </label>
-            <button class="link-arrow link-arrow-primary" type="submit">Request Appointment <span aria-hidden="true">→</span></button>
-        </form>
-
-        <form class="contact-card" method="post" action="/contact">
-            <input type="hidden" name="request_type" value="event_booking">
-            <p class="eyebrow">Events &amp; Classes</p>
-            <h2>Ask about an event booking.</h2>
-            <p class="form-helper">Use this for conference tickets, class access, payment help, certificate questions, or group bookings.</p>
-            <label>Name
-                <input name="name" required placeholder="Attendee name">
-            </label>
-            <label>Email
-                <input type="email" name="email" required placeholder="attendee@example.com">
-            </label>
-            <label>Phone
-                <input name="phone" placeholder="+91 98765 43210">
-            </label>
-            <label>Event
+            <label>Event or Class
                 <select name="event_slug">
-                    <option value="">Select an event</option>
+                    <option value="">Not related to an event</option>
                     <?php foreach(($events ?? []) as $event): ?>
                         <option value="<?= e($event['slug'] ?? '') ?>"><?= e($event['name'] ?? $event['slug'] ?? 'Event') ?></option>
                     <?php endforeach; ?>
                 </select>
             </label>
             <label>Subject
-                <input name="subject" value="<?= e($subject ?: 'Event Booking Enquiry') ?>">
+                <input name="subject" value="<?= e($subject ?: 'GutConference Enquiry') ?>">
             </label>
             <label>Message
-                <textarea name="message" required placeholder="Mention ticket quantity, payment question, class access, or certificate requirement."></textarea>
+                <textarea name="message" required placeholder="Share appointment details, preferred timing, ticket quantity, payment question, class access, or certificate requirement."></textarea>
             </label>
-            <button class="link-arrow link-arrow-primary" type="submit">Send Event Enquiry <span aria-hidden="true">→</span></button>
+            <button class="btn btn-primary btn-block" type="submit">Send Enquiry</button>
         </form>
     </div>
 </section>
 
 <section class="section-tight">
-    <div class="container contact-card contact-details-card">
-        <div>
-            <strong>Email</strong>
+    <div class="container contact-details-card">
+        <div class="contact-detail-item">
+            <small>Email</small>
             <span>gutconference2026@gmail.com</span>
         </div>
-        <div>
-            <strong>Phone</strong>
+        <div class="contact-detail-item">
+            <small>Phone</small>
             <span>+91 97314 82585</span>
         </div>
-        <div>
-            <strong>Domain</strong>
+        <div class="contact-detail-item">
+            <small>Website</small>
             <span>gutconference.online</span>
         </div>
     </div>

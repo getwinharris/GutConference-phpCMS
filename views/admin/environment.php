@@ -10,6 +10,31 @@
 </div>
 
 <div class="admin-card">
+    <h2>Google AI Studio Diagnostics</h2>
+    <p>Gemini API config is read from <code>.env</code>. Use separate model lists for vision/language, audio, and TTS routing.</p>
+    <div class="admin-form__row">
+        <label>Configured
+            <input readonly value="<?= !empty($geminiDiagnostics['configured']) ? 'Yes' : 'No API key in .env' ?>">
+        </label>
+        <label>Models Supporting generateContent
+            <input readonly value="<?= e((string)count(array_filter($geminiDiagnostics['models'] ?? [], fn($model) => !empty($model['supports_generate_content'])))) ?>">
+        </label>
+    </div>
+    <?php if(!empty($geminiDiagnostics['failures'])): ?>
+        <div class="table-wrap" style="margin-top:14px;">
+            <table>
+                <thead><tr><th>Category</th><th>Model</th><th>Failures</th><th>Last Error</th></tr></thead>
+                <tbody>
+                    <?php foreach($geminiDiagnostics['failures'] as $failure): ?>
+                        <tr><td><?= e($failure['category'] ?? '') ?></td><td><?= e($failure['model'] ?? '') ?></td><td><?= e((string)($failure['failure_count'] ?? 0)) ?></td><td><?= e($failure['last_error'] ?? '') ?></td></tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
+</div>
+
+<div class="admin-card">
     <div style="display:flex; justify-content:space-between; align-items:center; gap:var(--space-md); flex-wrap:wrap; margin-bottom:var(--space-md);">
         <div>
             <h2 style="margin:0 0 var(--space-xs);">Storage Permissions</h2>

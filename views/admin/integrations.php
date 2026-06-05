@@ -20,6 +20,15 @@
             <label>Calendar Reminder Timezone<input name="google_calendar_timezone" value="<?= e($secrets['google_calendar_timezone']??'Asia/Kolkata') ?>"></label>
         </div>
         <br>
+        <h2>Google Site Kit / Search Console</h2>
+        <p style="color:var(--muted)">For this PHP CMS, use the same Google tag and verification values that Site Kit manages on WordPress: Analytics/Tag Manager, Search Console verification, and optional Ads tag IDs.</p>
+        <div class="admin-form__row">
+            <label>Google Tag ID<input name="google_site_tag_id" value="<?= e($secrets['google_site_tag_id']??'') ?>" placeholder="G-XXXXXXXXXX or GT-XXXXXXX"></label>
+            <label>Google Tag Manager ID<input name="google_tag_manager_id" value="<?= e($secrets['google_tag_manager_id']??'') ?>" placeholder="GTM-XXXXXXX"></label>
+            <label>Search Console Verification<input name="google_search_console_verification" value="<?= e($secrets['google_search_console_verification']??'') ?>" placeholder="google-site-verification token"></label>
+            <label>Google Ads / AW ID<input name="google_ads_id" value="<?= e($secrets['google_ads_id']??'') ?>" placeholder="AW-XXXXXXXXX"></label>
+        </div>
+        <br>
         <h2>Official Meta WhatsApp Cloud API</h2>
         <p style="color:var(--muted)">Use approved WhatsApp templates for booking, payment, and conference reminders. Template wording is managed in Notification Templates.</p>
         <div class="admin-form__row">
@@ -37,6 +46,7 @@
             <label>SMTP Password<input name="smtp_password" value="<?= e($secrets['smtp_password']??'') ?>"></label>
             <label>From Email<input name="smtp_from_email" value="<?= e($secrets['smtp_from_email']??'') ?>"></label>
             <label>From Name<input name="smtp_from_name" value="<?= e($secrets['smtp_from_name']??'GutConference Online') ?>"></label>
+            <label>Admin Notification Email<input name="admin_notification_email" value="<?= e($secrets['admin_notification_email']??($_ENV['ADMIN_EMAIL'] ?? 'admin@gutconference.online')) ?>"></label>
         </div>
         <br><button class="btn btn-primary">Save Integrations</button>
     </form>

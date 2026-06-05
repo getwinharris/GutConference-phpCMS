@@ -14,6 +14,11 @@
                         <label style="flex-direction:row; align-items:center; gap:var(--space-xs); text-transform:none; font-weight:400;">
                             <input type="checkbox" name="<?= e($field) ?>" id="field-<?= e($field) ?>" value="1" checked> <?= e(ucwords(str_replace('_',' ',$field))) ?>
                         </label>
+                    <?php elseif($field === 'payment_mode'): ?>
+                        <select name="<?= e($field) ?>" id="field-<?= e($field) ?>">
+                            <option value="payment_page">Payment Page</option>
+                            <option value="razorpay_integration">Razorpay Integration</option>
+                        </select>
                     <?php elseif(str_contains($field, '_url') && !in_array($field, ['image_url', 'photo_url'], true)): ?>
                         <input type="url" name="<?= e($field) ?>" id="field-<?= e($field) ?>" placeholder="https://...">
                     <?php elseif(str_contains($field, 'price') || str_contains($field, 'amount') || str_contains($field, 'value') || $field === 'sort_order'): ?>
@@ -79,7 +84,9 @@
                     <tr>
                         <?php foreach($fields as $field): ?>
                             <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-                                <?php if(str_contains($field, '_url') && !empty($item[$field])): ?>
+                                <?php if(in_array($field, ['photo_url', 'image_url', 'logo_url', 'hero_image_url', 'thumbnail_url'], true) && !empty($item[$field])): ?>
+                                    <img class="admin-table-thumb" src="<?= e($item[$field]) ?>" alt="<?= e($item['name'] ?? $item['title'] ?? 'Media') ?>">
+                                <?php elseif(str_contains($field, '_url') && !empty($item[$field])): ?>
                                     <a href="<?= e($item[$field]) ?>" target="_blank" style="font-size:0.8rem;">
                                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                                         View
@@ -128,7 +135,7 @@ document.querySelectorAll('.edit-item').forEach(button => {
                 }
             }
         <?php endforeach; ?>
-        renderProductImages(item.image_urls || item.image_url || []);
+        renderProductImages(item.photo_url || item.image_urls || item.image_url || item.logo_url || item.hero_image_url || item.thumbnail_url || []);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 });

@@ -64,13 +64,9 @@ final class EventService {
 
     public function slotSummary(array $event, array $sessions = []): string {
         $label = trim((string)($event['slot_label'] ?? ''));
-        $remaining = (int)($event['remaining_slots'] ?? 0);
-        $total = (int)($event['total_slots'] ?? 0);
-        if ($remaining > 0 && $total > 0) {
-            return $remaining . ' of ' . $total . ' ' . ($label !== '' ? strtolower($label) : 'slots') . ' available';
-        }
-        if ($total > 0) {
-            return $total . ' ' . ($label !== '' ? strtolower($label) : 'slots');
+        $availability = $this->availability($event);
+        if ($availability['total'] > 0) {
+            return $availability['available'] . ' of ' . $availability['total'] . ' ' . ($label !== '' ? strtolower($label) : 'slots') . ' available';
         }
         if ($label !== '') {
             return $label;
@@ -81,12 +77,54 @@ final class EventService {
 
     public function shortSlotSummary(array $event, array $sessions = []): string {
         $label = trim((string)($event['slot_label'] ?? ''));
-        $total = (int)($event['total_slots'] ?? 0);
-        if ($total > 0) {
-            return $total . ' ' . ($label !== '' ? strtolower($label) : 'slots');
+        $availability = $this->availability($event);
+        if ($availability['total'] > 0) {
+            return $availability['available'] . '/' . $availability['total'] . ' ' . ($label !== '' ? strtolower($label) : 'slots');
         }
         $count = count($sessions);
         return $count > 0 ? $count . ' agenda slots' : 'Admin managed';
+    }
+
+    public function availability(array $event): array {
+        $total = max(0, (int)($event['total_slots'] ?? 0));
+        $remaining = array_key_exists('remaining_slots', $event) ? max(0, (int)($event['remaining_slots'] ?? 0)) : $total;
+        $adminFilled = $total > 0 ? max(0, $total - min($remaining, $total)) : 0;
+        $paidFilled = $this->paidRegistrationCount((string)($event['slug'] ?? ''));
+        $filled = $adminFilled + $paidFilled;
+        if ($total > 0) {
+            $filled = min($filled, $total);
+        }
+        $available = $total > 0 ? max(0, $total - $filled) : 0;
+        return [
+            'total' => $total,
+            'filled' => $filled,
+            'available' => $available,
+            'paid_registrations' => $paidFilled,
+            'admin_filled' => $adminFilled,
+            'label' => trim((string)($event['slot_label'] ?? 'slots')) ?: 'slots',
+        ];
+    }
+
+    public function countdownDeadline(array $event): ?string {
+        $dateLabel = trim((string)($event['date_label'] ?? ''));
+        if ($dateLabel === '') return null;
+        $timezone = $this->phpTimezone((string)($event['timezone'] ?? 'Asia/Kolkata'));
+        $zone = new \DateTimeZone($timezone);
+        $deadline = \DateTimeImmutable::createFromFormat('j F Y H:i', $dateLabel . ' 00:00', $zone)
+            ?: \DateTimeImmutable::createFromFormat('d F Y H:i', $dateLabel . ' 00:00', $zone);
+        return $deadline ? $deadline->format(\DateTimeInterface::ATOM) : null;
+    }
+
+    private function paidRegistrationCount(string $slug): int {
+        if ($slug === '') return 0;
+        $paidStatuses = ['paid', 'manual'];
+        return count(array_filter($this->store->read('registrations'), fn($registration) => ($registration['event_slug'] ?? '') === $slug && in_array(($registration['payment_status'] ?? ''), $paidStatuses, true)));
+    }
+
+    private function phpTimezone(string $timezone): string {
+        $timezone = trim($timezone);
+        if (strtoupper($timezone) === 'IST') return 'Asia/Kolkata';
+        return $timezone !== '' ? $timezone : 'Asia/Kolkata';
     }
 
     private function formatTime(string $time): string {

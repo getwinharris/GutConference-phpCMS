@@ -1,5 +1,55 @@
 [
   {
+    "id": "tpl-signup-welcome-email",
+    "key": "signup-welcome",
+    "channel": "email",
+    "enabled": true,
+    "subject": "Welcome to GutConference",
+    "template_name": "",
+    "language": "en",
+    "body": "Hi {{name}}, your GutConference account is ready. Use your dashboard to track event bookings, courses, and certificates."
+  },
+  {
+    "id": "tpl-admin-new-signup-email",
+    "key": "admin-new-signup",
+    "channel": "email",
+    "enabled": true,
+    "subject": "New GutConference signup",
+    "template_name": "",
+    "language": "en",
+    "body": "{{message}}"
+  },
+  {
+    "id": "tpl-booking-received-email",
+    "key": "booking-received",
+    "channel": "email",
+    "enabled": true,
+    "subject": "Booking received for {{event_name}}",
+    "template_name": "",
+    "language": "en",
+    "body": "Hi {{name}}, your booking request for {{event_name}} has been received. We will keep your dashboard updated with payment and certificate status."
+  },
+  {
+    "id": "tpl-admin-new-booking-email",
+    "key": "admin-new-booking",
+    "channel": "email",
+    "enabled": true,
+    "subject": "New booking for {{event_name}}",
+    "template_name": "",
+    "language": "en",
+    "body": "{{message}}"
+  },
+  {
+    "id": "tpl-new-event-email",
+    "key": "new-event",
+    "channel": "email",
+    "enabled": true,
+    "subject": "New event: {{event_name}}",
+    "template_name": "",
+    "language": "en",
+    "body": "Hi {{name}}, a new GutConference event is available: {{event_name}}."
+  },
+  {
     "id": "tpl-payment-success-email",
     "key": "payment-success",
     "channel": "email",

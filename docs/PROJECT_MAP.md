@@ -1,12 +1,16 @@
 # Project Map
 
 - `/` → `PublicController@home` → EventService, ResourceService
-- `/about` → `PublicController@about` → none
 - `/events` → `PublicController@events` → EventService
+- `/dashboard` → `PublicController@dashboard` → AuthService, JsonStoreService, EventService
 - `/events/{slug}` → `PublicController@event` → EventService, SecretService
+- `/events/{slug}/checkout` → `PaymentController@checkout` → AuthService, EventService, SecretService, JsonStoreService
+- `/events/{slug}/payment/verify` → `PaymentController@verify` → AuthService, EventService, SecretService, JsonStoreService, PaymentService, PurchaseNotificationService
 - `/conference/{slug}` → `PublicController@event` → EventService, SecretService
 - `/contact` → `PublicController@contact` → none
 - `/contact` → `PublicController@contact` → ContactService
+- `/support/chat` → `SupportController@chat` → AuthService, SupportAgentService, AgentContextService, JsonStoreService, SecretService
+- `/support/admin/apply` → `SupportController@adminApply` → AuthService, ResourceService, SchemaService, AuditLogService
 - `/login` → `PublicController@login` → AuthService
 - `/signup` → `PublicController@signup` → AuthService
 - `/signup` → `AuthController@signupPost` → JsonStoreService
@@ -42,6 +46,7 @@
 - `/admin/notification_templates/save` → `AdminController@saveNotificationTemplate` → ResourceService, AuditLogService, AuthService
 - `/admin/notification_templates/delete` → `AdminController@deleteNotificationTemplate` → ResourceService, AuditLogService, AuthService
 - `/admin/notification_queue` → `AdminController@notificationQueue` → ResourceService, AuthService
+- `/admin/notification_queue/process` → `AdminController@processNotificationQueue` → NotificationQueueService, AuthService
 - `/admin/settings` → `AdminController@settings` → SettingsService, AuthService
 - `/admin/settings/save` → `AdminController@saveSettings` → SettingsService, AuthService
 - `/admin/settings/admin-credentials` → `AdminController@saveAdminCredentials` → EnvService, AuthService
@@ -49,6 +54,7 @@
 - `/admin/integrations/save` → `AdminController@saveIntegrations` → SecretService, AuthService
 - `/admin/contact-submissions` → `AdminController@contactSubmissions` → ContactService, AuthService
 - `/admin/support-tickets` → `AdminController@supportTickets` → ResourceService, AuthService
+- `/admin/branding` → `AdminController@branding` → SettingsService, SecretService, AuthService
 - `/admin/media` → `AdminController@media` → MediaService, AuthService
 - `/admin/media/upload` → `AdminController@uploadMedia` → MediaService, AuditLogService, AuthService
 - `/admin/audit-log` → `AdminController@audit` → AuditLogService, AuthService

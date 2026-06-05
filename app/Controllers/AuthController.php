@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 use App\Integrations\GoogleOAuth\GoogleOAuthClient;
-use App\Services\{EnvService,JsonStoreService,PasswordResetService,SecretService,SmtpMailer};
+use App\Services\{EmailTemplateService,EnvService,JsonStoreService,NotificationQueueService,PasswordResetService,SecretService,SmtpMailer};
 final class AuthController extends BaseController {
  public function logout(): void {
   $_SESSION = [];
@@ -28,9 +28,9 @@ final class AuthController extends BaseController {
     $users = $store->read('users');
     foreach ($users as $u) {
         if (($u['email'] ?? '') === $email && !empty($u['password_hash']) && password_verify($password,$u['password_hash'])) {
-            $_SESSION['user'] = ['sub'=>$u['id'],'email'=>$u['email'],'name'=>$u['name'] ?? '','role'=>$u['role'] ?? (!empty($u['is_admin']) ? 'admin' : 'customer')];
+            $_SESSION['user'] = ['sub'=>$u['id'],'email'=>$u['email'],'name'=>$u['name'] ?? '','certificate_name'=>$u['certificate_name'] ?? $u['name'] ?? '','role'=>$u['role'] ?? (!empty($u['is_admin']) ? 'admin' : 'customer')];
             $this->flash('Signed in.');
-            $this->redirect('/');
+            $this->redirect('/dashboard');
         }
     }
     $this->flash('Invalid credentials.');
@@ -38,11 +38,12 @@ final class AuthController extends BaseController {
  }
  public function signupPost(): void {
     $name = trim($_POST['name'] ?? '');
+    $certificateName = trim($_POST['certificate_name'] ?? $name);
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
     $confirm = $_POST['password_confirm'] ?? '';
-    if ($name === '' || $email === '' || $password === '' || $password !== $confirm) {
-        $this->flash('Enter your name, email, and matching passwords.');
+    if ($name === '' || $certificateName === '' || $email === '' || $password === '' || $password !== $confirm) {
+        $this->flash('Enter your name, certificate name, email, and matching passwords.');
         $this->redirect('/signup');
     }
     $store = new JsonStoreService();
@@ -57,14 +58,16 @@ final class AuthController extends BaseController {
         'id' => uniqid('user_', true),
         'email' => $email,
         'name' => $name,
+        'certificate_name' => $certificateName,
         'role' => 'customer',
         'password_hash' => password_hash($password, PASSWORD_DEFAULT),
         'created_at' => time(),
     ];
     $store->upsert('users', $user);
-    $_SESSION['user'] = ['sub'=>$user['id'],'email'=>$user['email'],'name'=>$user['name'],'role'=>'customer'];
+    (new NotificationQueueService($store))->queueSignup($user);
+    $_SESSION['user'] = ['sub'=>$user['id'],'email'=>$user['email'],'name'=>$user['name'],'certificate_name'=>$user['certificate_name'],'role'=>'customer'];
     $this->flash('Account created.');
-    $this->redirect('/');
+    $this->redirect('/dashboard');
  }
  public function googleRedirect(): void {
     $client = new GoogleOAuthClient((new SecretService())->all());
@@ -103,7 +106,14 @@ final class AuthController extends BaseController {
             $mailer = new SmtpMailer((new SecretService())->all());
             if ($mailer->configured()) {
                 try {
-                    $mailer->send($email, 'Reset your GutConference password', '<p>Use this secure link to reset your password:</p><p><a href="' . e($link) . '">' . e($link) . '</a></p>');
+                    $rendered = (new EmailTemplateService())->render('password-reset', [
+                        'reset_link' => $link,
+                        'title' => 'Reset your password',
+                        'message' => 'Use this secure link to reset your GutConference password: ' . $link,
+                        'cta_url' => $link,
+                        'cta_label' => 'Reset Password',
+                    ]);
+                    $mailer->send($email, $rendered['subject'], $rendered['html']);
                 } catch (\Throwable $e) {
                     $_SESSION['smtp_reset_error'] = $e->getMessage();
                 }

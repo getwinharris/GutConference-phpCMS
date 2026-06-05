@@ -19,7 +19,7 @@ try {
         '/events' => 200,
         '/events/global-gut-summit-2026' => 200,
         '/conference/global-gut-summit-2026' => 200,
-        '/about' => 200,
+        '/about' => 404,
         '/contact' => 200,
         '/forgot-password' => 200,
         '/reset-password' => 200,
