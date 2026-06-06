@@ -14,6 +14,7 @@ Harris / bapxmediahub is the developer, branding, design, and digital marketing 
 - Schema contract: `storage/schema/collections.json`.
 - Admin: `/admin`.
 - Integrations: Razorpay keys, SMTP settings, official Meta WhatsApp Cloud API settings, Google OAuth, and Google Calendar.
+- Design guide: `Design.md` for GutConference UI colors, interaction tone, Neuform-reference adaptation, and content-preservation rules.
 - Deployment: Hostinger-style `public_html` PHP hosting with writable `storage/`.
 
 ## Current Seed Event
@@ -85,4 +86,4 @@ php tools/generate-project-map.php
 
 ## Agent Workflow
 
-Follow `AGENTS.md`, `example-Agent.md`, and the repo skill folders before changing backend, schema, admin, frontend, docs, or deployment behavior. Keep JSON storage first, update `storage/schema/collections.json` before changing collection shapes, and use `gutconference-admin` for admin workflow changes.
+Follow `AGENTS.md`, `example-Agent.md`, `Design.md`, and the repo skill folders before changing backend, schema, admin, frontend, docs, or deployment behavior. Use `gutconference-orchestrator` for broad cross-cutting work, then the narrow GutConference skill for the touched area. Keep JSON storage first, update `storage/schema/collections.json` before changing collection shapes, and use `gutconference-admin` for admin workflow changes.

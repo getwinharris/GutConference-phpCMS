@@ -40,7 +40,7 @@ $settings = (new \App\Services\SettingsService())->public();
 assertTrue($featured !== null, 'featured published event exists');
 assertTrue(($featured['slug'] ?? '') === 'global-gut-summit-2026', 'featured event slug is seeded');
 assertTrue(($featured['name'] ?? '') === 'International Conference On Microbiome, Probiotics & Gut Nutrition', 'featured event uses admin-hosted conference name');
-assertTrue(($featured['payment_mode'] ?? '') === 'payment_page' && ($featured['payment_page_url'] ?? '') === 'https://pages.razorpay.com/gutconference', 'featured event stores external Razorpay payment page');
+assertTrue(($featured['payment_mode'] ?? '') === 'razorpay_integration' && ($featured['payment_page_url'] ?? '') === '', 'featured event uses internal Razorpay integration');
 assertTrue($events->timeRange($featured) === '9:30 AM - 4:30 PM IST', 'featured event time comes from event fields');
 assertTrue(str_contains($events->slotSummary($featured), '1500') && str_contains($events->shortSlotSummary($featured), '1500'), 'featured event slots come from event fields');
 assertTrue(($events->availability($featured)['filled'] ?? 0) === 49 && ($events->availability($featured)['available'] ?? 0) === 1451, 'featured event derives 49 filled and 1451 available seats from admin baseline');
@@ -72,7 +72,7 @@ assertTrue($validation['missing_collections'] === [], 'project map collections a
 
 $routePaths = array_column($map['routes'], 'path');
 assertTrue(!in_array('/about', $routePaths, true), 'about route is removed from public routes');
-foreach (['/','/signup','/auth/google','/auth/google/callback','/dashboard','/events','/events/{slug}','/events/{slug}/checkout','/events/{slug}/payment/verify','/support/chat','/support/admin/apply','/admin/events','/admin/event_sections','/admin/speakers','/admin/sessions','/admin/venues','/admin/publishers','/admin/registrations','/admin/notification_templates','/admin/support-tickets','/admin/branding'] as $path) {
+foreach (['/','/terms','/privacy','/signup','/auth/google','/auth/google/callback','/dashboard','/events','/events/{slug}','/events/{slug}/checkout','/events/{slug}/payment/verify','/support/chat','/support/admin/apply','/admin/events','/admin/event_sections','/admin/speakers','/admin/sessions','/admin/venues','/admin/publishers','/admin/registrations','/admin/notification_templates','/admin/support-tickets','/admin/branding'] as $path) {
     assertTrue(in_array($path, $routePaths, true), "route exists: {$path}");
 }
 
@@ -80,9 +80,11 @@ $home = file_get_contents(app_path('views/public/home.php')) ?: '';
 $event = file_get_contents(app_path('views/public/event.php')) ?: '';
 $admin = file_get_contents(app_path('views/layouts/admin.php')) ?: '';
 $appLayout = file_get_contents(app_path('views/layouts/app.php')) ?: '';
+$supportWidget = file_get_contents(app_path('views/partials/support-widget.php')) ?: '';
 $integrations = file_get_contents(app_path('views/admin/integrations.php')) ?: '';
 $branding = file_get_contents(app_path('views/admin/branding.php')) ?: '';
 $paymentController = file_get_contents(app_path('app/Controllers/PaymentController.php')) ?: '';
+$checkout = file_get_contents(app_path('views/public/checkout.php')) ?: '';
 $index = file_get_contents(app_path('index.php')) ?: '';
 assertTrue(str_contains($home, 'GutConference'), 'home is rebranded');
 assertTrue(is_file(app_path('assets/images/media/speakers/owner-dr-praveen-jacob-also-speaker.jpeg')), 'owner hero portrait asset exists');
@@ -99,8 +101,8 @@ assertTrue(str_contains($index, "'/signup'") && str_contains($index, "'/auth'"),
 assertTrue(str_contains($index, "'/dashboard'"), 'front controller allows customer dashboard route');
 assertTrue(str_contains($index, "'/support'"), 'front controller allows support chat route');
 assertTrue(str_contains(file_get_contents(app_path('views/public/dashboard.php')) ?: '', 'Event/Course') && str_contains(file_get_contents(app_path('views/public/dashboard.php')) ?: '', 'Certificates') && str_contains(file_get_contents(app_path('views/layouts/app.php')) ?: '', '/dashboard'), 'customer dashboard exposes account menus');
-assertTrue(str_contains($appLayout, 'data-support-widget') && str_contains($appLayout, '/support/chat'), 'public layout wires floating support widget');
-assertTrue(!str_contains($appLayout, 'Hi, I can help with speakers') && str_contains($appLayout, "ask('__intro', false)") && str_contains($appLayout, "event.key === 'Enter'") && str_contains($appLayout, 'support-actions') && str_contains($appLayout, 'AbortController'), 'public support widget uses agent-driven intro, action links, enter send, and stop control');
+assertTrue(str_contains($appLayout, 'views/partials/support-widget.php') && str_contains($supportWidget, 'data-support-widget') && str_contains($supportWidget, '/support/chat'), 'public layout wires floating support widget');
+assertTrue(!str_contains($supportWidget, 'Hi, I can help with speakers') && str_contains($supportWidget, "ask('__intro', false)") && str_contains($supportWidget, "event.key === 'Enter'") && str_contains($supportWidget, 'support-actions') && str_contains($supportWidget, 'AbortController'), 'public support widget uses agent-driven intro, action links, enter send, and stop control');
 assertTrue(str_contains($appLayout, 'google-site-verification') && str_contains($appLayout, 'googletagmanager.com/gtag/js'), 'public layout wires Google tag and Search Console verification');
 assertTrue(str_contains($integrations, 'google_site_tag_id') && str_contains($integrations, 'google_search_console_verification') && str_contains($integrations, 'admin_notification_email'), 'integrations expose Google Site Kit and SMTP admin notification fields');
 assertTrue(str_contains(file_get_contents(app_path('views/admin/environment.php')) ?: '', 'Google AI Studio Diagnostics') && str_contains(file_get_contents(app_path('.env.example')) ?: '', 'GOOGLE_AI_VISION_LANGUAGE_MODELS'), 'environment exposes Google AI Studio env routing fields');
@@ -113,9 +115,10 @@ assertTrue(str_contains($event, 'Join Now') && str_contains($event, 'Pay with Ra
 assertTrue(str_contains($event, 'speaker-initials') && str_contains($event, 'credentials'), 'event page supports speaker credentials and image fallback');
 assertTrue(str_contains($paymentController, 'Razorpay integration is not configured yet'), 'internal Razorpay mode fails gracefully when keys are absent');
 assertTrue(str_contains($paymentController, "upsert('registrations'") && strpos($paymentController, "upsert('registrations'") < strpos($paymentController, "header('Location: ' . \$paymentPageUrl)"), 'external payment page creates pending registration before redirect');
+assertTrue(str_contains($checkout, 'checkout-popup') && str_contains($checkout, '/terms') && str_contains($checkout, '/privacy') && str_contains($checkout, 'checkout.razorpay.com/v1/checkout.js'), 'checkout uses in-app Razorpay popup with policy links');
 assertTrue(str_contains($event, 'sticky-register') && str_contains($event, 'section-nav'), 'event page includes sticky registration and section navigation');
-assertTrue(str_contains($event, 'event-hero-copy') && !str_contains($event, 'event-thumbnail') && !str_contains($event, '<span>Mode</span>') && str_contains($event, 'slot-chip'), 'event page centers hero content without the old media or mode card and keeps agenda slot display');
-assertTrue(str_contains($event, 'Hurry, time is ticking') && str_contains($event, 'event-slots') && str_contains($event, 'data-countdown-deadline') && !str_contains($event, 'E-certificate included') && !str_contains($event, 'conference-note') && !str_contains($event, 'agenda slots'), 'event page shows countdown urgency and derived availability instead of old trust strip');
+assertTrue(str_contains($event, 'event-hero-copy') && !str_contains($event, 'event-thumbnail') && !str_contains($event, '<span>Mode</span>') && str_contains($event, 'timeline-row') && str_contains($event, 'agenda-time') && str_contains($event, 'agenda-copy'), 'event page centers hero content without the old media or mode card and keeps agenda display');
+assertTrue(str_contains($event, 'HURRY') && str_contains($event, 'TICKING') && str_contains($event, 'event-slots') && str_contains($event, 'data-countdown-deadline') && !str_contains($event, 'E-certificate included') && !str_contains($event, 'conference-note') && !str_contains($event, 'agenda slots'), 'event page shows countdown urgency and derived availability instead of old trust strip');
 assertTrue(str_contains($admin, 'Event Management') && str_contains($admin, 'Events &amp; Classes') && strpos($admin, '/admin/speakers') > strpos($admin, 'Event Management'), 'admin nav groups event resources');
 assertTrue(str_contains($admin, '/admin/support-tickets'), 'admin nav exposes support agent tickets');
 assertTrue(str_contains($admin, '/admin/branding'), 'admin nav exposes branding system');

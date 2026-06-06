@@ -122,6 +122,7 @@ final class NotificationQueueService {
     }
 
     private function url(string $path): string {
-        return rtrim((string)(getenv('APP_URL') ?: 'https://gutconference.online'), '/') . $path;
+        $secrets = (new SecretService())->all();
+        return rtrim((string)($secrets['app_url'] ?? getenv('APP_URL') ?: 'https://gutconference.online'), '/') . $path;
     }
 }

@@ -1,0 +1,20 @@
+{
+    "user": {
+        "sub": "user_6a23025e0ba307.92023902",
+        "email": "getwinharris@gmail.com",
+        "name": "Mohamed Harris",
+        "certificate_name": "Mohamed Harris",
+        "role": "customer"
+    },
+    "bookings": [],
+    "tickets": [],
+    "appointments": [],
+    "conversations": [
+        {
+            "message": "__intro",
+            "answer": "Welcome to GutConference support. This portal presents Dr. Praveen Jacob's clinical profile, gut-health education, consultation pathways, and microbiome-focused events. Current featured event: International Conference On Microbiome, Probiotics & Gut Nutrition on 28 June 2026 at 9:30 AM - 4:30 PM IST. You can ask about speakers, agenda, booking, certificates, or contact options.",
+            "created_at": "2026-06-05T22:37:55+05:30"
+        }
+    ],
+    "updated_at": "2026-06-05T22:37:55+05:30"
+}

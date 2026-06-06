@@ -9,10 +9,11 @@ final class GeminiModelRouter {
     }
 
     public function answer(string $category, array $payload): string {
-        $key = trim((string)(getenv('GOOGLE_AI_STUDIO_API_KEY') ?: ''));
+        $secrets = (new SecretService())->all();
+        $key = trim((string)($secrets['google_ai_api_key'] ?? getenv('GOOGLE_AI_STUDIO_API_KEY') ?: ''));
         if ($key === '') return '';
-        $endpointBase = rtrim(trim((string)(getenv('GOOGLE_AI_ENDPOINT_BASE') ?: 'https://generativelanguage.googleapis.com/v1beta')), '/');
-        $tries = max(1, (int)(getenv('GOOGLE_AI_MODEL_RETRIES') ?: 3));
+        $endpointBase = rtrim(trim((string)($secrets['google_ai_endpoint'] ?? getenv('GOOGLE_AI_ENDPOINT_BASE') ?: 'https://generativelanguage.googleapis.com/v1beta')), '/');
+        $tries = max(1, (int)($secrets['google_ai_retries'] ?? getenv('GOOGLE_AI_MODEL_RETRIES') ?: 3));
         foreach ($this->models($category) as $model) {
             for ($attempt = 1; $attempt <= $tries; $attempt++) {
                 $answer = $this->generate($endpointBase, $key, $model, $payload);
@@ -27,9 +28,10 @@ final class GeminiModelRouter {
     }
 
     public function diagnostics(): array {
-        $key = trim((string)(getenv('GOOGLE_AI_STUDIO_API_KEY') ?: ''));
+        $secrets = (new SecretService())->all();
+        $key = trim((string)($secrets['google_ai_api_key'] ?? getenv('GOOGLE_AI_STUDIO_API_KEY') ?: ''));
         if ($key === '') return ['configured' => false, 'models' => [], 'failures' => $this->failures()];
-        $endpointBase = rtrim(trim((string)(getenv('GOOGLE_AI_ENDPOINT_BASE') ?: 'https://generativelanguage.googleapis.com/v1beta')), '/');
+        $endpointBase = rtrim(trim((string)($secrets['google_ai_endpoint'] ?? getenv('GOOGLE_AI_ENDPOINT_BASE') ?: 'https://generativelanguage.googleapis.com/v1beta')), '/');
         $response = @file_get_contents($endpointBase . '/models?key=' . rawurlencode($key));
         $json = $response ? (json_decode($response, true) ?: []) : [];
         return [
@@ -60,13 +62,20 @@ final class GeminiModelRouter {
     }
 
     private function models(string $category): array {
+        $secrets = (new SecretService())->all();
         $env = match ($category) {
+            'audio' => 'google_ai_audio_models',
+            'tts' => 'google_ai_tts_models',
+            default => 'google_ai_vision_language_models',
+        };
+        $envLegacy = match ($category) {
             'audio' => 'GOOGLE_AI_AUDIO_MODELS',
             'tts' => 'GOOGLE_AI_TTS_MODELS',
             default => 'GOOGLE_AI_VISION_LANGUAGE_MODELS',
         };
         $fallback = 'gemini-2.5-flash, gemini-2.5-flash-lite, gemini-2.5-pro';
-        return array_values(array_unique(array_filter(array_map('trim', preg_split('/[\r\n,]+/', (string)(getenv($env) ?: $fallback)) ?: []))));
+        $value = (string)($secrets[$env] ?? getenv($envLegacy) ?: $fallback);
+        return array_values(array_unique(array_filter(array_map('trim', preg_split('/[\r\n,]+/', $value) ?: []))));
     }
 
     private function failures(): array {

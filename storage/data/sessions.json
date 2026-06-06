@@ -1,12 +1,101 @@
 [
-  {"id": "ses-welcome", "event_slug": "global-gut-summit-2026", "sort_order": 10, "time_label": "09:30 AM - 09:45 AM", "title": "Welcome Address & Conference Introduction", "speaker_name": "", "description": ""},
-  {"id": "ses-siba-dolai", "event_slug": "global-gut-summit-2026", "sort_order": 20, "time_label": "09:45 AM - 10:35 AM", "title": "The Role of Gut Microbiome in Health and Disease", "speaker_name": "Dr. Siba Dolai", "description": ""},
-  {"id": "ses-vijay-murthy", "event_slug": "global-gut-summit-2026", "sort_order": 30, "time_label": "10:35 AM - 11:25 AM", "title": "META-GUT: From Microbiome to Meta-Phenotype", "speaker_name": "Dr. Vijay Murthy", "description": ""},
-  {"id": "ses-sanjay-sachdeva", "event_slug": "global-gut-summit-2026", "sort_order": 40, "time_label": "11:25 AM - 11:55 AM", "title": "Topic To Be Confirmed", "speaker_name": "Dr. Sanjay Sachdeva", "description": ""},
-  {"id": "ses-praveen-jacob", "event_slug": "global-gut-summit-2026", "sort_order": 50, "time_label": "11:55 AM - 12:50 PM", "title": "Topic To Be Confirmed", "speaker_name": "Dr. Praveen Jacob", "description": ""},
-  {"id": "ses-ayurveda", "event_slug": "global-gut-summit-2026", "sort_order": 60, "time_label": "12:50 PM - 01:20 PM", "title": "Ayurveda and Traditional Medicine Perspective", "speaker_name": "Dr. Somashekar Huddar", "description": ""},
-  {"id": "ses-lunch", "event_slug": "global-gut-summit-2026", "sort_order": 70, "time_label": "01:20 PM - 02:00 PM", "title": "Lunch Break", "speaker_name": "", "description": ""},
-  {"id": "ses-mili-shah", "event_slug": "global-gut-summit-2026", "sort_order": 80, "time_label": "02:00 PM - 02:40 PM", "title": "Ozone Therapy in Gut Health", "speaker_name": "Dr. Mili Shah", "description": ""},
-  {"id": "ses-alejandro-diaz", "event_slug": "global-gut-summit-2026", "sort_order": 90, "time_label": "02:40 PM - 03:35 PM", "title": "Gut-Brain Connection", "speaker_name": "Dr. Alejandro Diaz", "description": ""},
-  {"id": "ses-daryl-turner", "event_slug": "global-gut-summit-2026", "sort_order": 100, "time_label": "03:35 PM - 04:30 PM", "title": "Hashimoto's and Stress Impact on Gut Health", "speaker_name": "Daryl Turner", "description": ""}
+  {
+    "id": "ses-welcome",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 10,
+    "time_label": "09:30 AM – 09:45 AM",
+    "title": "Welcome Address & Conference Introduction",
+    "speaker_name": "",
+    "description": "Opening ceremony and introduction to the conference agenda."
+  },
+  {
+    "id": "ses-siba-dolai",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 20,
+    "time_label": "09:45 AM – 10:25 AM",
+    "title": "The Role of Gut Microbiome in Health and Disease",
+    "speaker_name": "Dr. Siba Dolai, PhD",
+    "description": "Understanding the role of gut microorganisms in health, disease prevention, and personalized medicine."
+  },
+  {
+    "id": "ses-vijay-murthy",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 30,
+    "time_label": "10:25 AM – 11:05 AM",
+    "title": "META-GUT: From Microbiome to Meta-Phenotype",
+    "speaker_name": "Dr. Vijay Murthy, MD",
+    "description": "Exploring the relationship between microbial ecosystems and human physiology in clinical practice."
+  },
+  {
+    "id": "ses-sanjay-sachdeva",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 40,
+    "time_label": "11:05 AM – 11:35 AM",
+    "title": "The Gut Hears Every Thought: How Thoughts, Emotions and Beliefs Shape the Microbiome, Digestion and Healing",
+    "speaker_name": "Dr. Sanjay Sachdeva, MD",
+    "description": "The profound influence of mental and emotional states on gut function and overall health."
+  },
+  {
+    "id": "ses-tom-obryan",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 50,
+    "time_label": "11:35 AM – 12:15 PM",
+    "title": "Autoimmunity, Gut Health & Functional Medicine",
+    "speaker_name": "Dr. Tom O'Bryan, DC, CCN, DACBN, CIFM",
+    "description": "The critical relationship between gut health, immune dysfunction, and chronic disease prevention."
+  },
+  {
+    "id": "ses-praveen-jacob",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 60,
+    "time_label": "12:15 PM – 12:55 PM",
+    "title": "Prebiotics and Their Role in Health",
+    "speaker_name": "Dr. Praveen Jacob, BNYS, MSc Biochemistry, PhD Scholar",
+    "description": "The therapeutic role of prebiotics in supporting digestive, metabolic, immune, and microbiome health."
+  },
+  {
+    "id": "ses-somashekhar-huddar",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 70,
+    "time_label": "12:55 PM – 01:30 PM",
+    "title": "Gut Health: An Ayurvedic Perspective – Agni & Grahani",
+    "speaker_name": "Dr. Somashekhar Huddar, BAMS",
+    "description": "Ayurvedic approaches to digestive health through the concepts of Agni and Grahani."
+  },
+  {
+    "id": "ses-lunch",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 80,
+    "time_label": "01:30 PM – 02:00 PM",
+    "title": "Lunch Break",
+    "speaker_name": "",
+    "description": "Networking and refreshment break."
+  },
+  {
+    "id": "ses-mili-shah",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 90,
+    "time_label": "02:00 PM – 02:40 PM",
+    "title": "Ozone Therapy in Gut Health",
+    "speaker_name": "Dr. Mili Shah, MD",
+    "description": "Advanced therapeutic approaches to improve digestive health and inflammation management."
+  },
+  {
+    "id": "ses-alejandro-diaz",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 100,
+    "time_label": "02:40 PM – 03:35 PM",
+    "title": "Gut-Brain Connection",
+    "speaker_name": "Dr. Alejandro Diaz, MD",
+    "description": "The interaction between the nervous system, microbiome, and digestive health."
+  },
+  {
+    "id": "ses-daryl-turner",
+    "event_slug": "global-gut-summit-2026",
+    "sort_order": 110,
+    "time_label": "03:35 PM – 04:30 PM",
+    "title": "Hashimoto's and Stress Impact on Gut Health",
+    "speaker_name": "Daryl Turner",
+    "description": "Autoimmune disorders, thyroid health, and stress physiology's influence on gut function."
+  }
 ]

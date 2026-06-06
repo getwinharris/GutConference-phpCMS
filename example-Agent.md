@@ -10,7 +10,9 @@ Use this file as the operating note for coding agents working on the GutConferen
 - The data store is JSON under `storage/data/`.
 - The schema contract is `storage/schema/collections.json`.
 - Built-in skills live under `.agents/skills/`.
+- Broad cross-cutting work uses the `gutconference-orchestrator` skill.
 - Admin work uses the `gutconference-admin` skill.
+- Broad UI work uses `Design.md` plus the `gutconference-frontend` skill.
 - There is no SPA fallback. Unknown routes return the PHP 404 page.
 
 ## Required Workflow
@@ -18,14 +20,15 @@ Use this file as the operating note for coding agents working on the GutConferen
 1. Read `AGENTS.md`, `README.md`, `docs/PROJECT_MAP.md`, and `storage/schema/collections.json`.
 2. Use the project map before editing routes, controllers, services, or pages.
 3. Update schema before changing JSON collections or admin fields.
-4. For UI changes, make the surface modern HTML/CSS with JSON-backed data and schema-driven forms. PHP should run the shared-hosted app, route requests, and bind data; do not use PHP as the visual design model. Do not add React, CDN React, or a SPA shell.
-5. Run locally when browser testing is needed:
+4. For broad or reference-driven UI changes, read `Design.md`. Make the surface modern HTML/CSS with JSON-backed data and schema-driven forms. PHP should run the shared-hosted app, route requests, and bind data; do not use PHP as the visual design model. Do not add React, CDN React, or a SPA shell.
+5. For UI-only refactors, preserve visible text/content meaning unless the user explicitly asks for copy changes.
+6. Run locally when browser testing is needed:
 
 ```bash
 php -S 127.0.0.1:6040 index.php
 ```
 
-6. Validate before finishing:
+7. Validate before finishing:
 
 ```bash
 php tests/run.php
@@ -33,7 +36,7 @@ php tools/validate-project-map.php
 php tools/smoke-local.php
 ```
 
-7. Regenerate project map docs after route changes:
+8. Regenerate project map docs after route changes:
 
 ```bash
 php tools/generate-project-map.php
@@ -46,9 +49,9 @@ php tools/generate-project-map.php
 - Schema: `SchemaService`, `storage/schema/collections.json`.
 - Events: `EventService`, `events`, `event_sections`, `speakers`, `sessions`, `venues`.
 - Media: `MediaService`, `/admin/media`, `assets/images/media`.
-- Integrations: `SecretService`, Razorpay, SMTP, Meta WhatsApp Cloud API settings.
+- Integrations: `SecretService`, encrypted `storage/data/adminsecrets.json`, Razorpay, SMTP, Meta WhatsApp Cloud API settings.
 - Audit: `AuditLogService`.
-- Skills: update the matching `.agents/skills/` files when the product workflow evolves, especially for default ports, schema rules, admin surfaces, deployment, and browser/UI review expectations.
+- Skills: update the matching GutConference `.agents/skills/` files when the product workflow evolves, especially for default ports, schema rules, admin surfaces, deployment, and browser/UI review expectations.
 
 ## Admin Automation Principles
 

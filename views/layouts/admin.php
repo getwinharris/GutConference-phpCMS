@@ -22,6 +22,9 @@ input,textarea,select{width:100%;border:1px solid var(--line);border-radius:8px;
 @media(min-width:841px){body.support-open .admin-shell{margin-right:430px}}
 @media(max-width:840px){.admin-shell{grid-template-columns:1fr}.admin-sidebar{position:relative;height:auto}.admin-body{padding:14px}.support-panel{inset:0;width:100vw;height:100vh;border-radius:0}.support-form{grid-template-columns:1fr}}
 </style>
+<style>
+.support-message--working{display:inline-flex;align-items:center;gap:10px;width:fit-content;color:#073a66;font-weight:800}.agent-working-copy{color:var(--muted);font-size:12px;letter-spacing:.02em}.agent-orbit{position:relative;display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle,#fff 0 38%,rgba(249,115,22,.10) 39% 100%);border:1px solid rgba(249,115,22,.32)}.agent-orbit:before,.agent-orbit:after,.agent-orbit i{content:"";position:absolute;border-radius:50%}.agent-orbit:before{inset:4px;border:2px solid rgba(7,58,102,.16);border-top-color:#f97316;animation:agent-spin 1.1s linear infinite}.agent-orbit:after{width:6px;height:6px;background:var(--teal);box-shadow:0 0 16px rgba(57,185,168,.7);transform:translateY(-10px);animation:agent-dot 1.1s linear infinite}.agent-orbit i{width:8px;height:8px;background:#073a66;opacity:.9}.agent-orbit--button{width:24px;height:24px;background:transparent;border-color:rgba(255,255,255,.48)}.agent-orbit--button i{background:#fff}.agent-orbit--button:before{border-color:rgba(255,255,255,.26);border-top-color:#fff}.agent-orbit--button:after{background:#fb923c;box-shadow:0 0 12px rgba(251,146,60,.8);transform:translateY(-8px)}.support-widget.is-thinking .gemini-mark:before{animation:agent-spin 1.4s linear infinite}@keyframes agent-spin{to{transform:rotate(360deg)}}@keyframes agent-dot{to{transform:rotate(360deg) translateY(-10px)}}@media(prefers-reduced-motion:reduce){.support-widget.is-thinking .gemini-mark:before,.agent-orbit:before,.agent-orbit:after{animation:none}}
+</style>
 </head>
 <body>
 <div class="admin-shell">
@@ -63,103 +66,6 @@ input,textarea,select{width:100%;border:1px solid var(--line);border-radius:8px;
         </div>
     </main>
 </div>
-<div class="support-widget" data-support-widget>
-    <div class="support-panel" data-support-panel aria-hidden="true">
-        <div class="support-chat">
-            <div class="support-chat__head">
-                <div><strong>Gemini Support Agent</strong><span>Grounded in GutConference CMS data</span></div>
-                <button type="button" data-support-close aria-label="Minimize support">-</button>
-            </div>
-            <div class="support-messages" data-support-messages></div>
-            <form class="support-form" data-support-form>
-                <textarea name="message" rows="2" required placeholder="Ask about events, speakers, tickets, certificates, or improvements"></textarea>
-                <button class="support-send" type="submit" data-support-send aria-label="Send message"><span aria-hidden="true">↑</span></button>
-            </form>
-        </div>
-    </div>
-</div>
-<script>
-(() => {
-    const widget = document.querySelector('[data-support-widget]');
-    if (!widget) return;
-    const panel = widget.querySelector('[data-support-panel]');
-    const messages = widget.querySelector('[data-support-messages]');
-    const form = widget.querySelector('[data-support-form]');
-    const sendButton = widget.querySelector('[data-support-send]');
-    let started = false;
-    let controller = null;
-    const open = () => { widget.classList.add('is-open'); document.body.classList.add('support-open'); panel?.setAttribute('aria-hidden', 'false'); if (!started) { started = true; ask('__intro', false); } };
-    const close = () => { widget.classList.remove('is-open'); document.body.classList.remove('support-open'); panel?.setAttribute('aria-hidden', 'true'); };
-    const add = (text, type, links = []) => {
-        const item = document.createElement('p');
-        item.className = 'support-message support-message--' + type;
-        item.textContent = text;
-        messages.appendChild(item);
-        if (links.length) {
-            const actions = document.createElement('div');
-            actions.className = 'support-actions';
-            links.forEach(link => {
-                if (!link.url || !link.label) return;
-                const action = document.createElement('a');
-                action.href = link.url;
-                action.textContent = link.label;
-                actions.appendChild(action);
-            });
-            messages.appendChild(actions);
-        }
-        messages.scrollTop = messages.scrollHeight;
-    };
-    const setThinking = active => {
-        widget.classList.toggle('is-thinking', active);
-        if (sendButton) {
-            sendButton.setAttribute('aria-label', active ? 'Stop response' : 'Send message');
-            sendButton.innerHTML = active ? '<span aria-hidden="true">■</span>' : '<span aria-hidden="true">↑</span>';
-        }
-    };
-    const ask = async (message, echo = true) => {
-        if (echo) add(message, 'user');
-        controller = new AbortController();
-        setThinking(true);
-        try {
-            const body = new URLSearchParams({ message });
-            const response = await fetch('/support/chat', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body, signal: controller.signal });
-            const data = await response.json();
-            add(data.answer || 'Support is available. Please try again.', 'agent', data.links || []);
-        } catch (error) {
-            if (error.name !== 'AbortError') add('Support chat could not connect. Please use the Contact page or try again.', 'agent', [{ label: 'Contact Team', url: '/contact' }]);
-        } finally {
-            controller = null;
-            setThinking(false);
-            form?.elements.message?.focus();
-        }
-    };
-    document.querySelectorAll('[data-support-open]').forEach(button => {
-        button.addEventListener('click', () => widget.classList.contains('is-open') ? close() : open());
-    });
-    widget.querySelector('[data-support-close]')?.addEventListener('click', close);
-    form?.elements.message?.addEventListener('keydown', event => {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault();
-            form.requestSubmit();
-        }
-    });
-    sendButton?.addEventListener('click', event => {
-        if (controller) {
-            event.preventDefault();
-            controller.abort();
-            controller = null;
-            setThinking(false);
-        }
-    });
-    form?.addEventListener('submit', async event => {
-        event.preventDefault();
-        const input = form.elements.message;
-        const message = input.value.trim();
-        if (!message) return;
-        input.value = '';
-        ask(message);
-    });
-})();
-</script>
+<?php $supportPlaceholder = 'Ask about events, speakers, tickets, certificates, or improvements'; require app_path('views/partials/support-widget.php'); ?>
 </body>
 </html>

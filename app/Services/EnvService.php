@@ -45,10 +45,12 @@ final class EnvService {
     }
 
     public function adminCredentials(): array {
+        // Read from SecretService first (preferred), fallback to .env for backward compatibility
+        $secrets = (new SecretService())->all();
         return [
-            'username' => getenv('ADMIN_USERNAME') ?: '',
-            'email' => getenv('ADMIN_EMAIL') ?: '',
-            'password' => getenv('ADMIN_PASSWORD') ?: '',
+            'username' => trim((string)($secrets['admin_username'] ?? getenv('ADMIN_USERNAME') ?: '')),
+            'email' => trim((string)($secrets['admin_email'] ?? getenv('ADMIN_EMAIL') ?: '')),
+            'password' => trim((string)($secrets['admin_password'] ?? getenv('ADMIN_PASSWORD') ?: '')),
         ];
     }
 

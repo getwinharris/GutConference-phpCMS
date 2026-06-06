@@ -5,15 +5,16 @@ final class EmailTemplateService {
     public function __construct(private JsonStoreService $store = new JsonStoreService()) {}
 
     public function render(string $templateKey, array $payload): array {
+        $secrets = (new SecretService())->all();
         $template = $this->template($templateKey);
         $subject = $this->replace((string)($template['subject'] ?? 'GutConference update'), $payload);
         $body = $this->replace((string)($template['body'] ?? ''), $payload);
-        $ctaUrl = (string)($payload['cta_url'] ?? getenv('APP_URL') ?: 'https://gutconference.online');
+        $ctaUrl = (string)($payload['cta_url'] ?? $secrets['app_url'] ?? getenv('APP_URL') ?: 'https://gutconference.online');
         $ctaLabel = (string)($payload['cta_label'] ?? 'Open GutConference');
         $title = $this->replace((string)($payload['title'] ?? $subject), $payload);
         return [
             'subject' => $subject,
-            'html' => $this->layout($title, $body, $ctaUrl, $ctaLabel),
+            'html' => $this->layout($title, $body, $ctaUrl, $ctaLabel, $secrets),
         ];
     }
 
@@ -33,8 +34,8 @@ final class EmailTemplateService {
         return $text;
     }
 
-    private function layout(string $title, string $body, string $ctaUrl, string $ctaLabel): string {
-        $logo = rtrim((string)(getenv('APP_URL') ?: 'https://gutconference.online'), '/') . '/assets/images/media/gutconference-logo.png';
+    private function layout(string $title, string $body, string $ctaUrl, string $ctaLabel, array $secrets = []): string {
+        $logo = rtrim((string)($secrets['app_url'] ?? getenv('APP_URL') ?: 'https://gutconference.online'), '/') . '/assets/images/media/gutconference-logo.png';
         $safeBody = nl2br(e($body));
         return '<!doctype html><html><body style="margin:0;background:#f3fbf9;font-family:Plus Jakarta Sans,Arial,sans-serif;color:#10263a;">'
             . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3fbf9;padding:24px 0;"><tr><td align="center">'

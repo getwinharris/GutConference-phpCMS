@@ -46,8 +46,29 @@
             <label>SMTP Password<input name="smtp_password" value="<?= e($secrets['smtp_password']??'') ?>"></label>
             <label>From Email<input name="smtp_from_email" value="<?= e($secrets['smtp_from_email']??'') ?>"></label>
             <label>From Name<input name="smtp_from_name" value="<?= e($secrets['smtp_from_name']??'GutConference Online') ?>"></label>
-            <label>Admin Notification Email<input name="admin_notification_email" value="<?= e($secrets['admin_notification_email']??($_ENV['ADMIN_EMAIL'] ?? 'admin@gutconference.online')) ?>"></label>
+            <label>Admin Notification Email<input name="admin_notification_email" value="<?= e($secrets['admin_notification_email']??'') ?>"></label>
         </div>
-        <br><button class="btn btn-primary">Save Integrations</button>
+        <br>
+        <h2>Google AI / Gemini API</h2>
+        <p style="color:var(--muted)">Configure Gemini API for support agent and AI-powered features.</p>
+        <div class="admin-form__row">
+            <label>API Key<input name="gemini_api_key" value="<?= e($secrets['gemini_api_key']??'') ?>" placeholder="AI..."></label>
+            <label>Endpoint Base<input name="gemini_endpoint_base" value="<?= e($secrets['gemini_endpoint_base']??'https://generativelanguage.googleapis.com/v1beta') ?>"></label>
+            <label>Model Retries<input type="number" name="gemini_model_retries" value="<?= e($secrets['gemini_model_retries']??'3') ?>"></label>
+        </div>
+        <div class="admin-form__row">
+            <label>Vision/Language Models<textarea name="gemini_vision_language_models" rows="2"><?= e($secrets['gemini_vision_language_models']??'gemini-2.5-flash, gemini-2.5-pro, gemini-2.5-flash-lite') ?></textarea></label>
+            <label>Audio Models<textarea name="gemini_audio_models" rows="2"><?= e($secrets['gemini_audio_models']??'gemini-2.5-flash') ?></textarea></label>
+            <label>TTS Models<textarea name="gemini_tts_models" rows="2"><?= e($secrets['gemini_tts_models']??'gemini-2.5-flash-preview-tts') ?></textarea></label>
+        </div>
+        <br>
+        <h2>Application Configuration</h2>
+        <div class="admin-form__row">
+            <label>App URL<input name="app_url" value="<?= e($secrets['app_url']??'https://gutconference.online') ?>" placeholder="https://gutconference.online"></label>
+            <label>Admin Username<input name="admin_username" value="<?= e($secrets['admin_username']??'') ?>" autocomplete="username"></label>
+            <label>Admin Email<input name="admin_email" value="<?= e($secrets['admin_email']??'') ?>" autocomplete="email"></label>
+            <label>Admin Password<input type="password" name="admin_password" value="<?= e($secrets['admin_password']??'') ?>" placeholder="Leave blank to keep current" autocomplete="new-password"></label>
+        </div>
+        <br><button class="btn btn-primary">Save All Integrations</button>
     </form>
 </div>

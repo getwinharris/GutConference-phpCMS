@@ -2,11 +2,17 @@
 namespace App\Services;
 final class SecretService {
     private string $file;
+    private string $legacyFile;
     private string $keyFile;
-    public function __construct() { $this->file = storage_path('data/settings.secrets.json'); $this->keyFile = storage_path('runtime-key.php'); }
+    public function __construct() {
+        $this->file = storage_path('data/adminsecrets.json');
+        $this->legacyFile = storage_path('data/settings.secrets.json');
+        $this->keyFile = storage_path('runtime-key.php');
+    }
     public function all(): array {
-        if (!is_file($this->file)) return [];
-        $payload = json_decode(file_get_contents($this->file), true) ?: [];
+        $source = is_file($this->file) ? $this->file : $this->legacyFile;
+        if (!is_file($source)) return [];
+        $payload = json_decode(file_get_contents($source), true) ?: [];
         if (!$payload) return [];
         $raw = base64_decode($payload['ciphertext']);
         $plain = openssl_decrypt($raw, 'aes-256-cbc', $this->key(), OPENSSL_RAW_DATA, base64_decode($payload['iv']));

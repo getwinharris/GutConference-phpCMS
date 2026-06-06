@@ -15,6 +15,8 @@ $layoutRegisterPath = !empty($layoutFeaturedEvent['slug']) ? '/events/' . $layou
 $layoutContactEmail = (string)($layoutFeaturedEvent['contact_email'] ?? 'gutconference2026@gmail.com');
 $layoutContactPhone = (string)($layoutFeaturedEvent['contact_phone'] ?? '+91 97314 82585');
 $layoutContactPhoneHref = preg_replace('/[^\d+]/', '', $layoutContactPhone);
+$layoutPathOnly = strtok($path, '?') ?: $path;
+$isContactPage = $layoutPathOnly === '/contact';
 $showLayoutEventSlider = !str_starts_with($path, '/events');
 $layoutSecrets = (new \App\Services\SecretService())->all();
 $googleSiteTagId = trim((string)($layoutSecrets['google_site_tag_id'] ?? ''));
@@ -64,7 +66,7 @@ gtag('config', '<?= e($googleSiteTagId) ?>');
 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','<?= e($googleTagManagerId) ?>');
 </script>
 <?php endif; ?>
-<link rel="stylesheet" href="/assets/css/index.css">
+<link rel="stylesheet" href="/assets/css/index.css?v=<?= e((string)@filemtime(app_path('assets/css/index.css'))) ?>">
 </head>
 <body class="<?= $isSignedIn ? 'has-user-rail' : 'is-guest' ?>">
 <?php if($googleTagManagerId !== ''): ?><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<?= e($googleTagManagerId) ?>" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><?php endif; ?>
@@ -114,6 +116,7 @@ gtag('config', '<?= e($googleSiteTagId) ?>');
 <?php endif; ?>
 <main><?php require $viewFile; ?></main>
 <?php if($showLayoutEventSlider && !empty($layoutEvents)): ?>
+<?php $layoutEventCount = count($layoutEvents); ?>
 <section class="section site-event-slider" aria-labelledby="site-event-slider-title">
     <div class="container">
         <div class="site-section-heading">
@@ -123,8 +126,13 @@ gtag('config', '<?= e($googleSiteTagId) ?>');
             </div>
             <a class="link-arrow" href="/events">View all <span aria-hidden="true">→</span></a>
         </div>
-        <div class="event-card-scroll" aria-label="Scrollable event cards">
-            <?php foreach($layoutEvents as $layoutEvent): ?>
+        <div
+            class="event-card-scroll <?= $layoutEventCount > 1 ? 'event-card-scroll--fade' : 'event-card-scroll--single' ?>"
+            aria-label="<?= $layoutEventCount > 1 ? 'Featured event carousel' : 'Featured event card' ?>"
+            data-event-carousel
+            data-event-count="<?= e((string)$layoutEventCount) ?>"
+        >
+            <?php foreach($layoutEvents as $layoutIndex => $layoutEvent): ?>
                 <?php
                     $layoutSlug = (string)($layoutEvent['slug'] ?? '');
                     $layoutThumb = $layoutEvent['thumbnail_url'] ?? $layoutEvent['hero_image_url'] ?? $layoutEvent['logo_url'] ?? '/assets/images/media/gutconference-logo.jpg';
@@ -132,7 +140,7 @@ gtag('config', '<?= e($googleSiteTagId) ?>');
                     $layoutSessions = $layoutEventService->sessions($layoutSlug);
                     $layoutSlotSummary = $layoutEventService->shortSlotSummary($layoutEvent, $layoutSessions);
                 ?>
-                <article class="event-card site-event-card">
+                <article class="event-card site-event-card <?= $layoutIndex === 0 ? 'is-active' : '' ?>" data-event-slide>
                     <a class="event-card__media" href="/events/<?= e($layoutSlug) ?>" aria-label="<?= e($layoutEvent['name'] ?? 'Event') ?>">
                         <img src="<?= e($layoutThumb) ?>" alt="<?= e($layoutEvent['name'] ?? 'Conference thumbnail') ?>" loading="lazy">
                     </a>
@@ -153,146 +161,179 @@ gtag('config', '<?= e($googleSiteTagId) ?>');
                 </article>
             <?php endforeach; ?>
         </div>
+        <?php if($layoutEventCount > 1): ?>
+            <div class="event-card-dots" aria-label="Choose featured event">
+                <?php foreach($layoutEvents as $layoutIndex => $layoutEvent): ?>
+                    <button class="<?= $layoutIndex === 0 ? 'is-active' : '' ?>" type="button" data-event-dot="<?= e((string)$layoutIndex) ?>" aria-label="Show event <?= e((string)($layoutIndex + 1)) ?>"></button>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </div>
 </section>
+<?php if($layoutEventCount > 1): ?>
+<script>
+(() => {
+    const carousel = document.querySelector('[data-event-carousel]');
+    if (!carousel || Number(carousel.dataset.eventCount || 0) < 2) return;
+
+    const slides = [...carousel.querySelectorAll('[data-event-slide]')];
+    const dots = [...document.querySelectorAll('[data-event-dot]')];
+    let current = 0;
+    let timer = null;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const render = () => {
+        slides.forEach((slide, index) => {
+            const active = index === current;
+            slide.classList.toggle('is-active', active);
+            slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+        });
+        dots.forEach((dot, index) => dot.classList.toggle('is-active', index === current));
+    };
+    const go = index => {
+        current = (index + slides.length) % slides.length;
+        render();
+    };
+    const start = () => {
+        if (reduceMotion) return;
+        window.clearInterval(timer);
+        timer = window.setInterval(() => go(current + 1), 5200);
+    };
+
+    dots.forEach((dot, index) => dot.addEventListener('click', () => {
+        go(index);
+        start();
+    }));
+    carousel.addEventListener('mouseenter', () => window.clearInterval(timer));
+    carousel.addEventListener('mouseleave', start);
+    render();
+    start();
+})();
+</script>
+<?php endif; ?>
 <?php endif; ?>
 <section class="section site-contact-cta" aria-labelledby="site-contact-cta-title">
     <div class="container grid-2 cta-grid">
         <div>
             <p class="eyebrow">Need Guidance?</p>
-            <h2 id="site-contact-cta-title">Ask about consultations, events, certificates, or support.</h2>
+            <h2 id="site-contact-cta-title">Ask about Course, Events, Certificates, or Support.</h2>
             <p class="lede">Send your enquiry through the contact form and the GutConference team will route it to the right support path.</p>
         </div>
         <div class="cta-actions">
-            <div class="site-contact-actions" aria-label="Contact and account actions">
-                <a class="contact-chip" href="tel:<?= e($layoutContactPhoneHref) ?>">
-                    <span>Call</span>
-                    <strong><?= e($layoutContactPhone) ?></strong>
-                </a>
-                <a class="contact-chip" href="mailto:<?= e($layoutContactEmail) ?>">
-                    <span>Email</span>
-                    <strong><?= e($layoutContactEmail) ?></strong>
-                </a>
-                <div class="contact-auth-actions">
-                    <a class="google-login-button" href="/auth/google"><span class="google-mark" aria-hidden="true">G</span><span>Google Login</span></a>
-                    <a class="google-login-button" href="/signup"><span class="google-mark" aria-hidden="true">G</span><span>Google Signup</span></a>
+            <?php if($isContactPage): ?>
+                <div class="site-contact-actions site-contact-actions--details" aria-label="Direct contact details">
+                    <a class="contact-direct-card" href="mailto:<?= e($layoutContactEmail) ?>">
+                        <span>Email</span>
+                        <strong><?= e($layoutContactEmail) ?></strong>
+                    </a>
+                    <a class="contact-direct-card" href="tel:<?= e($layoutContactPhoneHref) ?>">
+                        <span>Phone</span>
+                        <strong><?= e($layoutContactPhone) ?></strong>
+                    </a>
                 </div>
-            </div>
+            <?php else: ?>
+                <div class="site-contact-actions" aria-label="Contact form action">
+                    <a class="contact-form-button" href="/contact">
+                        <span>Open Contact Form</span>
+                        <strong>Send Enquiry</strong>
+                        <small>Course, events, certificates, or support</small>
+                    </a>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>
 <footer class="footer">
     <div class="container footer-grid">
-        <div><strong>GutConference</strong><p>Dr. Praveen Jacob's clinical profile, gut-health education, consultation pathways, and microbiome-focused events.</p></div>
-        <div><strong>Navigate</strong><p><a href="/events">Events</a><br><a href="/contact">Contact</a></p></div>
+        <div>
+            <strong>gutconference.online</strong>
+            <p>Dr. Praveen Jacob's clinical profile, gut-health education, consultation pathways, event booking, online class booking, and microbiome-focused events.</p>
+            <p class="footer-links"><a href="/events">Event Booking</a><br><a href="/events">Online Class Booking</a><br><a href="/contact">Contact</a></p>
+        </div>
+        <div><strong>Legal</strong><p><a href="/terms">Terms</a><br><a href="/privacy">Privacy</a></p></div>
         <div><strong>Contact</strong><p>gutconference2026@gmail.com<br>+91 97314 82585</p></div>
     </div>
 </footer>
-<div class="support-widget" data-support-widget>
-    <div class="support-panel" data-support-panel aria-hidden="true">
-        <div class="support-chat">
-            <div class="support-chat__head">
-                <div><strong>Gemini Support Agent</strong><span>Grounded in GutConference CMS data</span></div>
-                <button type="button" data-support-close aria-label="Minimize support">-</button>
-            </div>
-            <div class="support-messages" data-support-messages></div>
-            <form class="support-form" data-support-form>
-                <textarea name="message" rows="2" required placeholder="Ask about events, joined courses, certificates, or tell us what to improve"></textarea>
-                <button class="support-send" type="submit" data-support-send aria-label="Send message"><span aria-hidden="true">↑</span></button>
-            </form>
-        </div>
-    </div>
-</div>
+<?php $supportPlaceholder = 'Ask about events, joined courses, certificates, or tell us what to improve'; require app_path('views/partials/support-widget.php'); ?>
 <script>
 (() => {
-    const widget = document.querySelector('[data-support-widget]');
-    if (!widget) return;
-    const panel = widget.querySelector('[data-support-panel]');
-    const messages = widget.querySelector('[data-support-messages]');
-    const form = widget.querySelector('[data-support-form]');
-    const sendButton = widget.querySelector('[data-support-send]');
-    let started = false;
-    let controller = null;
-    const open = () => {
-        widget.classList.add('is-open');
-        document.body.classList.add('support-open');
-        panel?.setAttribute('aria-hidden', 'false');
-        if (!started) {
-            started = true;
-            ask('__intro', false);
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!canHover || reduceMotion) return;
+
+    const bubble = document.createElement('span');
+    bubble.className = 'cursor-bubble';
+    bubble.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(bubble);
+
+    let x = -100;
+    let y = -100;
+    let displayX = x;
+    let displayY = y;
+    let visible = false;
+    let bursting = false;
+
+    const draw = () => {
+        displayX += (x - displayX) * 0.24;
+        displayY += (y - displayY) * 0.24;
+        if (!bursting) {
+            bubble.style.setProperty('--bubble-x', `${displayX - 10}px`);
+            bubble.style.setProperty('--bubble-y', `${displayY - 10}px`);
+            bubble.style.transform = `translate3d(${displayX - 10}px, ${displayY - 10}px, 0) scale(1)`;
+        }
+        window.requestAnimationFrame(draw);
+    };
+
+    const makePop = (originX, originY) => {
+        const count = 8;
+        for (let index = 0; index < count; index++) {
+            const particle = document.createElement('span');
+            const angle = (Math.PI * 2 * index) / count;
+            const distance = 22 + Math.random() * 18;
+            particle.className = 'cursor-bubble__pop';
+            particle.setAttribute('aria-hidden', 'true');
+            particle.style.setProperty('--pop-x', `${originX - 5}px`);
+            particle.style.setProperty('--pop-y', `${originY - 5}px`);
+            particle.style.setProperty('--pop-dx', `${Math.cos(angle) * distance}px`);
+            particle.style.setProperty('--pop-dy', `${Math.sin(angle) * distance}px`);
+            document.body.appendChild(particle);
+            window.setTimeout(() => particle.remove(), 650);
         }
     };
-    const close = () => { widget.classList.remove('is-open'); document.body.classList.remove('support-open'); panel?.setAttribute('aria-hidden', 'true'); };
-    const add = (text, type, links = []) => {
-        const item = document.createElement('p');
-        item.className = 'support-message support-message--' + type;
-        item.textContent = text;
-        messages.appendChild(item);
-        if (links.length) {
-            const actions = document.createElement('div');
-            actions.className = 'support-actions';
-            links.forEach(link => {
-                if (!link.url || !link.label) return;
-                const action = document.createElement('a');
-                action.href = link.url;
-                action.textContent = link.label;
-                actions.appendChild(action);
-            });
-            messages.appendChild(actions);
+
+    window.addEventListener('pointermove', event => {
+        x = event.clientX;
+        y = event.clientY;
+        if (!visible) {
+            visible = true;
+            bubble.classList.add('is-visible');
         }
-        messages.scrollTop = messages.scrollHeight;
-    };
-    const setThinking = active => {
-        widget.classList.toggle('is-thinking', active);
-        if (sendButton) {
-            sendButton.setAttribute('aria-label', active ? 'Stop response' : 'Send message');
-            sendButton.innerHTML = active ? '<span aria-hidden="true">■</span>' : '<span aria-hidden="true">↑</span>';
-        }
-    };
-    const ask = async (message, echo = true) => {
-        const input = form.elements.message;
-        if (echo) add(message, 'user');
-        controller = new AbortController();
-        setThinking(true);
-        try {
-            const body = new URLSearchParams({ message });
-            const response = await fetch('/support/chat', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body, signal: controller.signal });
-            const data = await response.json();
-            add(data.answer || 'Support is available. Please try again.', 'agent', data.links || []);
-        } catch (error) {
-            if (error.name !== 'AbortError') add('Support chat could not connect. Please use the Contact page or try again.', 'agent', [{ label: 'Contact Team', url: '/contact' }]);
-        } finally {
-            controller = null;
-            setThinking(false);
-            if (input) input.focus();
-        }
-    };
-    document.querySelectorAll('[data-support-open]').forEach(button => {
-        button.addEventListener('click', () => widget.classList.contains('is-open') ? close() : open());
-    });
-    widget.querySelector('[data-support-close]')?.addEventListener('click', close);
-    form?.elements.message?.addEventListener('keydown', event => {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault();
-            form.requestSubmit();
-        }
-    });
-    sendButton?.addEventListener('click', event => {
-        if (controller) {
-            event.preventDefault();
-            controller.abort();
-            controller = null;
-            setThinking(false);
-        }
-    });
-    form?.addEventListener('submit', async event => {
-        event.preventDefault();
-        const input = form.elements.message;
-        const message = input.value.trim();
-        if (!message) return;
-        input.value = '';
-        ask(message);
-    });
+    }, { passive: true });
+
+    window.addEventListener('pointerleave', () => {
+        visible = false;
+        bubble.classList.remove('is-visible');
+    }, { passive: true });
+
+    window.addEventListener('pointerdown', event => {
+        if (bursting) return;
+        bursting = true;
+        x = event.clientX;
+        y = event.clientY;
+        displayX = x;
+        displayY = y;
+        bubble.style.setProperty('--bubble-x', `${x - 10}px`);
+        bubble.style.setProperty('--bubble-y', `${y - 10}px`);
+        bubble.classList.add('is-bursting');
+        makePop(x, y);
+        window.setTimeout(() => {
+            bubble.classList.remove('is-bursting');
+            bursting = false;
+            if (visible) bubble.classList.add('is-visible');
+        }, 390);
+    }, { passive: true });
+
+    draw();
 })();
 </script>
 </body>

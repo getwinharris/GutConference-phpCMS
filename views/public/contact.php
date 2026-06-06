@@ -48,20 +48,3 @@
         </form>
     </div>
 </section>
-
-<section class="section-tight">
-    <div class="container contact-details-card">
-        <div class="contact-detail-item">
-            <small>Email</small>
-            <span>gutconference2026@gmail.com</span>
-        </div>
-        <div class="contact-detail-item">
-            <small>Phone</small>
-            <span>+91 97314 82585</span>
-        </div>
-        <div class="contact-detail-item">
-            <small>Website</small>
-            <span>gutconference.online</span>
-        </div>
-    </div>
-</section>

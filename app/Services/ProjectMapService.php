@@ -6,6 +6,8 @@ final class ProjectMapService {
         $routes = [
             ['method'=>'GET','path'=>'/','name'=>'home','page'=>'public/home','controller'=>'PublicController@home','services'=>['EventService','ResourceService']],
             ['method'=>'GET','path'=>'/events','name'=>'events','page'=>'public/events','controller'=>'PublicController@events','services'=>['EventService']],
+            ['method'=>'GET','path'=>'/terms','name'=>'terms','page'=>'public/terms','controller'=>'PublicController@terms','services'=>[]],
+            ['method'=>'GET','path'=>'/privacy','name'=>'privacy','page'=>'public/privacy','controller'=>'PublicController@privacy','services'=>[]],
             ['method'=>'GET','path'=>'/dashboard','name'=>'dashboard','page'=>'public/dashboard','controller'=>'PublicController@dashboard','services'=>['AuthService','JsonStoreService','EventService']],
             ['method'=>'GET','path'=>'/events/{slug}','name'=>'events.show','page'=>'public/event','controller'=>'PublicController@event','services'=>['EventService','SecretService']],
             ['method'=>'POST','path'=>'/events/{slug}/checkout','name'=>'events.checkout','page'=>'public/checkout','controller'=>'PaymentController@checkout','services'=>['AuthService','EventService','SecretService','JsonStoreService']],

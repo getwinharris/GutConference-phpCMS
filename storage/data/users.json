@@ -1,1 +1,11 @@
-[]
+[
+    {
+        "id": "user_6a23025e0ba307.92023902",
+        "email": "getwinharris@gmail.com",
+        "name": "Mohamed Harris",
+        "certificate_name": "Mohamed Harris",
+        "role": "customer",
+        "password_hash": "$2y$12$rI1a1Cf5pgqvyVgubWuuRu3lNs5xDu4/ZVoGt1v9SVqGNrac8XiBW",
+        "created_at": 1780679262
+    }
+]

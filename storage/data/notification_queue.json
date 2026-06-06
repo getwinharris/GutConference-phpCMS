@@ -1,1 +1,91 @@
-[]
+[
+    {
+        "id": "notify_6a23025e4ae3e2.11079939",
+        "event_slug": "",
+        "registration_id": "",
+        "channel": "email",
+        "to": "getwinharris@gmail.com",
+        "template_key": "signup-welcome",
+        "payload": {
+            "name": "Mohamed Harris",
+            "title": "Welcome to GutConference",
+            "message": "Your GutConference account is ready.",
+            "cta_url": "https://gutconference.online/dashboard",
+            "cta_label": "Open Dashboard"
+        },
+        "status": "failed",
+        "error": "SMTP is not configured.",
+        "attempts": 1,
+        "available_at": 1780679262,
+        "created_at": 1780679262
+    },
+    {
+        "id": "notify_6a23025e4b1019.47076119",
+        "event_slug": "",
+        "registration_id": "",
+        "channel": "email",
+        "to": "admin@gutconference.online",
+        "template_key": "admin-new-signup",
+        "payload": {
+            "name": "Mohamed Harris",
+            "email": "getwinharris@gmail.com",
+            "title": "New signup",
+            "message": "A new user signed up: Mohamed Harris <getwinharris@gmail.com>",
+            "cta_url": "https://gutconference.online/admin",
+            "cta_label": "Open Admin"
+        },
+        "status": "failed",
+        "error": "SMTP is not configured.",
+        "attempts": 1,
+        "available_at": 1780679262,
+        "created_at": 1780679262
+    },
+    {
+        "id": "notify_6a2302878d7488.87936936",
+        "event_slug": "global-gut-summit-2026",
+        "registration_id": "reg_6a2302873c1dd5.72824435",
+        "channel": "email",
+        "to": "getwinharris@gmail.com",
+        "template_key": "booking-received",
+        "payload": {
+            "name": "Mohamed Harris",
+            "email": "getwinharris@gmail.com",
+            "event_name": "International Conference On Microbiome, Probiotics & Gut Nutrition",
+            "event_slug": "global-gut-summit-2026",
+            "registration_id": "reg_6a2302873c1dd5.72824435",
+            "title": "Booking received",
+            "message": "Your booking request for International Conference On Microbiome, Probiotics & Gut Nutrition has been received. Payment status: pending.",
+            "cta_url": "https://gutconference.online/dashboard",
+            "cta_label": "View Dashboard"
+        },
+        "status": "failed",
+        "error": "SMTP is not configured.",
+        "attempts": 1,
+        "available_at": 1780679303,
+        "created_at": 1780679303
+    },
+    {
+        "id": "notify_6a2302878dc4d4.10379546",
+        "event_slug": "global-gut-summit-2026",
+        "registration_id": "reg_6a2302873c1dd5.72824435",
+        "channel": "email",
+        "to": "admin@gutconference.online",
+        "template_key": "admin-new-booking",
+        "payload": {
+            "name": "Mohamed Harris",
+            "email": "getwinharris@gmail.com",
+            "event_name": "International Conference On Microbiome, Probiotics & Gut Nutrition",
+            "event_slug": "global-gut-summit-2026",
+            "registration_id": "reg_6a2302873c1dd5.72824435",
+            "title": "New booking",
+            "message": "New booking for International Conference On Microbiome, Probiotics & Gut Nutrition: Mohamed Harris <getwinharris@gmail.com>",
+            "cta_url": "https://gutconference.online/admin/registrations",
+            "cta_label": "View Registrations"
+        },
+        "status": "failed",
+        "error": "SMTP is not configured.",
+        "attempts": 1,
+        "available_at": 1780679303,
+        "created_at": 1780679303
+    }
+]

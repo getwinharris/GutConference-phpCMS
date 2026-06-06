@@ -25,6 +25,16 @@ final class PublicController extends BaseController {
         $this->render('public/events', ['events' => $events->published(), 'eventService' => $events]);
     }
 
+    public function terms(): void {
+        $this->detectApiRequest();
+        $this->render('public/terms', ['pageTitle' => 'Terms of Service']);
+    }
+
+    public function privacy(): void {
+        $this->detectApiRequest();
+        $this->render('public/privacy', ['pageTitle' => 'Privacy Policy']);
+    }
+
     public function dashboard(): void {
         $this->detectApiRequest();
         (new AuthService())->requireUser();

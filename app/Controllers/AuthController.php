@@ -28,9 +28,10 @@ final class AuthController extends BaseController {
     $users = $store->read('users');
     foreach ($users as $u) {
         if (($u['email'] ?? '') === $email && !empty($u['password_hash']) && password_verify($password,$u['password_hash'])) {
-            $_SESSION['user'] = ['sub'=>$u['id'],'email'=>$u['email'],'name'=>$u['name'] ?? '','certificate_name'=>$u['certificate_name'] ?? $u['name'] ?? '','role'=>$u['role'] ?? (!empty($u['is_admin']) ? 'admin' : 'customer')];
+            $isAdmin = ($u['role'] ?? '') === 'admin' || !empty($u['is_admin']);
+            $_SESSION['user'] = ['sub'=>$u['id'],'email'=>$u['email'],'name'=>$u['name'] ?? '','certificate_name'=>$u['certificate_name'] ?? $u['name'] ?? '','role'=>$u['role'] ?? ($isAdmin ? 'admin' : 'customer')];
             $this->flash('Signed in.');
-            $this->redirect('/dashboard');
+            $this->redirect($isAdmin ? '/admin' : '/dashboard');
         }
     }
     $this->flash('Invalid credentials.');

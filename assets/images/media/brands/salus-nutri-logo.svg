@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="132" viewBox="0 0 420 132" role="img" aria-labelledby="title desc">
+  <title id="title">Salus Nutri logo</title>
+  <desc id="desc">Four green and blue leaf mark with salus nutri wordmark.</desc>
+  <rect width="420" height="132" fill="#ffffff"/>
+  <g transform="translate(22 18)">
+    <path d="M48 44 C18 38 6 18 14 1 C39 5 55 21 48 44 Z" fill="#64ae20"/>
+    <path d="M57 39 C61 10 82 -2 99 6 C94 31 78 47 57 39 Z" fill="#0ea3cf"/>
+    <path d="M51 54 C45 84 24 96 7 87 C12 62 29 46 51 54 Z" fill="#56a51d"/>
+    <path d="M61 58 C89 65 101 85 92 102 C67 97 52 81 61 58 Z" fill="#7fbc15"/>
+  </g>
+  <g fill="#2c261c" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-weight="400">
+    <text x="146" y="78" font-size="42" letter-spacing=".5">salus nutri</text>
+  </g>
+</svg>

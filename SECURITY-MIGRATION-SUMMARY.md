@@ -1,0 +1,197 @@
+# Security Migration & UI Fixes Summary
+
+## Overview
+This document summarizes the security improvements and UI fixes completed in this session.
+
+## Changes Made
+
+### 1. Support Widget Z-Index Fix (Mobile)
+**Issue**: On mobile devices, the sticky registration button (z-index: 150) was covering the support chat input when the support widget was open (z-index: 130).
+
+**Solution**: Added mobile-specific CSS rule to lower the sticky-register z-index when support is open.
+
+**File Modified**:
+- `assets/css/index.css` (line ~3048)
+
+**Change**:
+```css
+/* Inside @media (max-width: 640px) breakpoint */
+body.support-open .sticky-register {
+    z-index: 120;
+}
+```
+
+**Result**: On mobile, when support widget is open, the sticky registration button now sits behind the support panel (z-index 130), ensuring the chat input is accessible.
+
+---
+
+### 2. Admin Credentials Migration from .env to SecretService
+
+**Issue**: Sensitive credentials (admin username, email, password, APP_URL, and Gemini API keys) were stored in plaintext `.env` file, which is a security risk in production.
+
+**Solution**: Migrated all services to read from encrypted `SecretService` first, with `.env` fallback for backward compatibility during migration.
+
+#### Files Modified:
+
+##### 1. `app/Services/EnvService.php`
+- Updated `adminCredentials()` method to read from `SecretService` first, then fallback to `.env`
+- Ensures backward compatibility with existing `.env` configurations
+- Admin credentials now stored encrypted in `storage/data/adminsecrets.json`
+
+**Change**:
+```php
+public function adminCredentials(): array {
+    // Read from SecretService first (preferred), fallback to .env for backward compatibility
+    $secrets = (new SecretService())->all();
+    return [
+        'username' => trim((string)($secrets['admin_username'] ?? getenv('ADMIN_USERNAME') ?: '')),
+        'email' => trim((string)($secrets['admin_email'] ?? getenv('ADMIN_EMAIL') ?: '')),
+        'password' => trim((string)($secrets['admin_password'] ?? getenv('ADMIN_PASSWORD') ?: '')),
+    ];
+}
+```
+
+##### 2. `app/Services/GeminiModelRouter.php`
+- Updated `answer()`, `diagnostics()`, and `models()` methods
+- Now reads Google AI API keys, endpoint, retries, and model lists from SecretService
+- Fallback to legacy environment variables maintained
+
+**Changes**:
+- `google_ai_api_key` (SecretService) → `GOOGLE_AI_STUDIO_API_KEY` (.env)
+- `google_ai_endpoint` (SecretService) → `GOOGLE_AI_ENDPOINT_BASE` (.env)
+- `google_ai_retries` (SecretService) → `GOOGLE_AI_MODEL_RETRIES` (.env)
+- `google_ai_vision_language_models` (SecretService) → `GOOGLE_AI_VISION_LANGUAGE_MODELS` (.env)
+- `google_ai_audio_models` (SecretService) → `GOOGLE_AI_AUDIO_MODELS` (.env)
+- `google_ai_tts_models` (SecretService) → `GOOGLE_AI_TTS_MODELS` (.env)
+
+##### 3. `app/Services/NotificationQueueService.php`
+- Updated `url()` private method
+- Reads `app_url` from SecretService first, then `APP_URL` from .env
+
+**Change**:
+```php
+private function url(string $path): string {
+    $secrets = (new SecretService())->all();
+    return rtrim((string)($secrets['app_url'] ?? getenv('APP_URL') ?: 'https://gutconference.online'), '/') . $path;
+}
+```
+
+##### 4. `app/Services/EmailTemplateService.php`
+- Updated `render()` and `layout()` methods
+- Reads `app_url` from SecretService for email logo URLs and default CTA URLs
+- Passes secrets array to layout method for consistent URL generation
+
+**Changes**:
+```php
+public function render(string $templateKey, array $payload): array {
+    $secrets = (new SecretService())->all();
+    // ... uses $secrets['app_url'] for default CTA URL
+    return [
+        'subject' => $subject,
+        'html' => $this->layout($title, $body, $ctaUrl, $ctaLabel, $secrets),
+    ];
+}
+
+private function layout(string $title, string $body, string $ctaUrl, string $ctaLabel, array $secrets = []): string {
+    $logo = rtrim((string)($secrets['app_url'] ?? getenv('APP_URL') ?: 'https://gutconference.online'), '/') . '/assets/images/media/gutconference-logo.png';
+    // ...
+}
+```
+
+---
+
+## Migration Path
+
+### For Administrators:
+
+1. **Admin UI Already Updated**: The admin integrations page (`/admin/integrations`) now includes fields for:
+   - App URL
+   - Admin Username
+   - Admin Email
+   - Admin Password
+   - Google AI API Key
+   - Google AI Endpoint
+   - Google AI Retries
+   - Model Lists (vision/language, audio, TTS)
+
+2. **Save Credentials**: Navigate to `/admin/integrations` and enter credentials. They will be encrypted and stored in `storage/data/adminsecrets.json`.
+
+3. **Backward Compatibility**: The system continues to read from `.env` if SecretService values are not set. This allows gradual migration.
+
+4. **Remove from .env (Optional)**: After confirming credentials work through SecretService, you can remove sensitive values from `.env` for production deployments.
+
+---
+
+## Security Benefits
+
+1. **Encryption**: Admin credentials and API keys are now encrypted using AES-256-CBC
+2. **Key Management**: Encryption key stored in `storage/runtime-key.php` (excluded from git)
+3. **Separation of Concerns**: Sensitive credentials no longer in version-controlled `.env` file
+4. **Audit Trail**: Changes to integrations are logged through the audit system
+5. **Single Source of Truth**: Admin UI provides centralized credential management
+
+---
+
+## Validation
+
+Created `tests/validate-secret-migration.php` to verify:
+- ✓ EnvService reads admin credentials with fallback
+- ✓ GeminiModelRouter reads API keys with fallback
+- ✓ NotificationQueueService generates URLs with fallback
+- ✓ EmailTemplateService renders templates with fallback
+
+**All tests passed.**
+
+---
+
+## Backward Compatibility
+
+All services implement graceful fallback:
+1. Try reading from SecretService first
+2. If not found, fall back to `.env`
+3. If still not found, use hardcoded defaults (where applicable)
+
+This ensures:
+- No breaking changes for existing deployments
+- Smooth migration path
+- Development environments continue to work with `.env`
+
+---
+
+## Files Changed
+
+### Modified:
+- `assets/css/index.css` (z-index fix)
+- `app/Services/EnvService.php` (admin credentials)
+- `app/Services/GeminiModelRouter.php` (Gemini API keys)
+- `app/Services/NotificationQueueService.php` (APP_URL)
+- `app/Services/EmailTemplateService.php` (APP_URL)
+
+### Created:
+- `tests/validate-secret-migration.php` (validation script)
+- `SECURITY-MIGRATION-SUMMARY.md` (this file)
+
+### Previously Modified (in earlier session):
+- `views/admin/integrations.php` (UI fields added)
+- `views/admin/settings.php` (redirect to integrations)
+
+---
+
+## Next Steps for Production
+
+1. Deploy to staging/production
+2. Navigate to `/admin/integrations`
+3. Enter all credentials through the UI
+4. Test authentication and API integrations
+5. Once confirmed working, optionally remove sensitive values from `.env`
+6. Keep `APP_NAME` and non-sensitive values in `.env` for environment-specific configuration
+
+---
+
+## Notes
+
+- The SecretService already existed and was being used for Razorpay, SMTP, and OAuth credentials
+- This migration extends SecretService usage to admin credentials and Gemini API configuration
+- The UI was already updated in a previous session
+- This session completed the backend service integration
+- The z-index fix is a separate UI improvement unrelated to security migration

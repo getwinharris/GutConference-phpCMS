@@ -2,6 +2,8 @@
 
 - `/` → `PublicController@home` → EventService, ResourceService
 - `/events` → `PublicController@events` → EventService
+- `/terms` → `PublicController@terms` → none
+- `/privacy` → `PublicController@privacy` → none
 - `/dashboard` → `PublicController@dashboard` → AuthService, JsonStoreService, EventService
 - `/events/{slug}` → `PublicController@event` → EventService, SecretService
 - `/events/{slug}/checkout` → `PaymentController@checkout` → AuthService, EventService, SecretService, JsonStoreService
