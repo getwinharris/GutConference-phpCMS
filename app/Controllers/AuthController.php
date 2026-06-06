@@ -88,6 +88,17 @@ final class AuthController extends BaseController {
         $this->redirect('/login');
     }
     unset($_SESSION['google_oauth_state']);
+    $googleError = trim((string)($_GET['error'] ?? ''));
+    if ($googleError !== '') {
+        $description = trim((string)($_GET['error_description'] ?? ''));
+        $_SESSION['google_oauth_error'] = trim($googleError . ($description !== '' ? ': ' . $description : ''));
+        if ($googleError === 'access_denied') {
+            $this->flash('Google sign-in is blocked because the OAuth app is still in testing or not approved for this account. Add this email as a Google OAuth test user or publish/verify the app in Google Cloud Console.');
+        } else {
+            $this->flash('Google sign-in failed: ' . $googleError . '. Check the OAuth consent screen and client setup.');
+        }
+        $this->redirect('/login');
+    }
     $code = (string)($_GET['code'] ?? '');
     if ($code === '') {
         $this->flash('Google did not return an authorization code.');
