@@ -39,7 +39,7 @@ $featured = $events->featured();
 $settings = (new \App\Services\SettingsService())->public();
 assertTrue($featured !== null, 'featured published event exists');
 assertTrue(($featured['slug'] ?? '') === 'global-gut-summit-2026', 'featured event slug is seeded');
-assertTrue(($featured['name'] ?? '') === 'International Conference On Microbiome, Probiotics & Gut Nutrition', 'featured event uses admin-hosted conference name');
+assertTrue(($featured['name'] ?? '') === 'Gut Health, Probiotics & Prebiotics Conference 2026', 'featured event uses admin-hosted conference name');
 assertTrue(($featured['payment_mode'] ?? '') === 'razorpay_integration' && ($featured['payment_page_url'] ?? '') === '', 'featured event uses internal Razorpay integration');
 assertTrue($events->timeRange($featured) === '9:30 AM - 4:30 PM IST', 'featured event time comes from event fields');
 assertTrue(str_contains($events->slotSummary($featured), '1500') && str_contains($events->shortSlotSummary($featured), '1500'), 'featured event slots come from event fields');
