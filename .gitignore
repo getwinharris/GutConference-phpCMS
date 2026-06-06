@@ -1,11 +1,1 @@
-.env
-.env.*
 
-/storage/runtime-key.php
-/storage/data/adminsecrets.json
-/storage/data/settings.secrets.json
-/storage/logs/*.log
-/storage/backups/*
-!/storage/backups/.gitkeep
-
-/storage/data/*.lock
