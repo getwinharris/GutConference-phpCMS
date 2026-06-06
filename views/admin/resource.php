@@ -19,6 +19,11 @@
                             <option value="payment_page">Payment Page</option>
                             <option value="razorpay_integration">Razorpay Integration</option>
                         </select>
+                    <?php elseif($field === 'delivery_mode'): ?>
+                        <select name="<?= e($field) ?>" id="field-<?= e($field) ?>">
+                            <option value="online">Online</option>
+                            <option value="direct">Direct (In-Person)</option>
+                        </select>
                     <?php elseif(str_contains($field, '_url') && !in_array($field, ['image_url', 'photo_url'], true)): ?>
                         <input type="url" name="<?= e($field) ?>" id="field-<?= e($field) ?>" placeholder="https://...">
                     <?php elseif(str_contains($field, 'price') || str_contains($field, 'amount') || str_contains($field, 'value') || $field === 'sort_order'): ?>

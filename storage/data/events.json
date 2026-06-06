@@ -14,6 +14,7 @@
     "end_time": "16:30",
     "time_label": "9:30 AM – 4:30 PM IST",
     "timezone": "Asia/Kolkata",
+    "delivery_mode": "online",
     "mode": "Online",
     "slot_label": "Live access seats",
     "total_slots": 1500,

@@ -7,150 +7,504 @@
       "primary_key": "id",
       "owner_field": "email",
       "admin_managed": false,
-      "agent_context": ["id", "email", "name", "certificate_name", "role"],
+      "agent_context": [
+        "id",
+        "email",
+        "name",
+        "certificate_name",
+        "role"
+      ],
       "fields": {
-        "id": {"type": "string", "required": true},
-        "email": {"type": "email", "required": true},
-        "name": {"type": "string"},
-        "certificate_name": {"type": "string"},
-        "role": {"type": "enum", "values": ["customer", "admin"]},
-        "google_sub": {"type": "string"},
-        "google_email_verified": {"type": "boolean"},
-        "google_calendar_enabled": {"type": "boolean"},
-        "newsletter_opt_in": {"type": "boolean"},
-        "password_hash": {"type": "secret"}
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "email": {
+          "type": "email",
+          "required": true
+        },
+        "name": {
+          "type": "string"
+        },
+        "certificate_name": {
+          "type": "string"
+        },
+        "role": {
+          "type": "enum",
+          "values": [
+            "customer",
+            "admin"
+          ]
+        },
+        "google_sub": {
+          "type": "string"
+        },
+        "google_email_verified": {
+          "type": "boolean"
+        },
+        "google_calendar_enabled": {
+          "type": "boolean"
+        },
+        "newsletter_opt_in": {
+          "type": "boolean"
+        },
+        "password_hash": {
+          "type": "secret"
+        }
       }
     },
     "events": {
       "file": "storage/data/events.json",
       "primary_key": "id",
       "admin_managed": true,
-      "media_fields": ["logo_url", "hero_image_url", "thumbnail_url"],
-      "admin_fields": ["slug", "status", "featured", "name", "eyebrow", "headline", "subheadline", "description", "date_label", "start_time", "end_time", "time_label", "timezone", "mode", "slot_label", "total_slots", "remaining_slots", "price", "currency", "payment_mode", "payment_page_url", "cta_label", "logo_url", "hero_image_url", "thumbnail_url", "organizers", "contact_email", "contact_phone"],
-      "agent_context": ["id", "slug", "status", "featured", "name", "headline", "date_label", "start_time", "end_time", "time_label", "timezone", "mode", "slot_label", "total_slots", "remaining_slots", "payment_mode", "payment_page_url"],
+      "media_fields": [
+        "logo_url",
+        "hero_image_url",
+        "thumbnail_url"
+      ],
+      "admin_fields": [
+        "slug",
+        "status",
+        "featured",
+        "name",
+        "eyebrow",
+        "headline",
+        "subheadline",
+        "description",
+        "date_label",
+        "start_time",
+        "end_time",
+        "time_label",
+        "timezone",
+        "delivery_mode",
+        "mode",
+        "slot_label",
+        "total_slots",
+        "remaining_slots",
+        "price",
+        "currency",
+        "payment_mode",
+        "payment_page_url",
+        "cta_label",
+        "logo_url",
+        "hero_image_url",
+        "thumbnail_url",
+        "organizers",
+        "contact_email",
+        "contact_phone"
+      ],
+      "agent_context": [
+        "id",
+        "slug",
+        "status",
+        "featured",
+        "name",
+        "headline",
+        "date_label",
+        "start_time",
+        "end_time",
+        "time_label",
+        "timezone",
+        "delivery_mode",
+        "mode",
+        "slot_label",
+        "total_slots",
+        "remaining_slots",
+        "payment_mode",
+        "payment_page_url"
+      ],
       "fields": {
-        "id": {"type": "string", "required": true},
-        "slug": {"type": "slug", "required": true},
-        "status": {"type": "enum", "values": ["draft", "published", "archived"]},
-        "featured": {"type": "boolean"},
-        "name": {"type": "string", "required": true},
-        "eyebrow": {"type": "string"},
-        "headline": {"type": "string"},
-        "subheadline": {"type": "text"},
-        "description": {"type": "text"},
-        "date_label": {"type": "string"},
-        "start_time": {"type": "time"},
-        "end_time": {"type": "time"},
-        "time_label": {"type": "string"},
-        "timezone": {"type": "string"},
-        "mode": {"type": "string"},
-        "slot_label": {"type": "string"},
-        "total_slots": {"type": "number"},
-        "remaining_slots": {"type": "number"},
-        "price": {"type": "number"},
-        "currency": {"type": "string"},
-        "payment_mode": {"type": "enum", "values": ["payment_page", "razorpay_integration"]},
-        "payment_page_url": {"type": "url"},
-        "registration_url": {"type": "url"},
-        "cta_label": {"type": "string"},
-        "logo_url": {"type": "local_or_remote_path"},
-        "hero_image_url": {"type": "local_or_remote_path"},
-        "thumbnail_url": {"type": "local_or_remote_path"},
-        "organizers": {"type": "string"},
-        "contact_email": {"type": "email"},
-        "contact_phone": {"type": "string"}
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "slug": {
+          "type": "slug",
+          "required": true
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "draft",
+            "published",
+            "archived"
+          ]
+        },
+        "featured": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "eyebrow": {
+          "type": "string"
+        },
+        "headline": {
+          "type": "string"
+        },
+        "subheadline": {
+          "type": "text"
+        },
+        "description": {
+          "type": "text"
+        },
+        "date_label": {
+          "type": "string"
+        },
+        "start_time": {
+          "type": "time"
+        },
+        "end_time": {
+          "type": "time"
+        },
+        "time_label": {
+          "type": "string"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "delivery_mode": {
+          "type": "enum",
+          "values": [
+            "online",
+            "direct"
+          ]
+        },
+        "mode": {
+          "type": "string"
+        },
+        "slot_label": {
+          "type": "string"
+        },
+        "total_slots": {
+          "type": "number"
+        },
+        "remaining_slots": {
+          "type": "number"
+        },
+        "price": {
+          "type": "number"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "payment_mode": {
+          "type": "enum",
+          "values": [
+            "payment_page",
+            "razorpay_integration"
+          ]
+        },
+        "payment_page_url": {
+          "type": "url"
+        },
+        "registration_url": {
+          "type": "url"
+        },
+        "cta_label": {
+          "type": "string"
+        },
+        "logo_url": {
+          "type": "local_or_remote_path"
+        },
+        "hero_image_url": {
+          "type": "local_or_remote_path"
+        },
+        "thumbnail_url": {
+          "type": "local_or_remote_path"
+        },
+        "organizers": {
+          "type": "string"
+        },
+        "contact_email": {
+          "type": "email"
+        },
+        "contact_phone": {
+          "type": "string"
+        }
       }
     },
     "event_sections": {
       "file": "storage/data/event_sections.json",
       "primary_key": "id",
       "admin_managed": true,
-      "admin_fields": ["event_slug", "type", "enabled", "sort_order", "title", "subtitle", "body", "items"],
-      "agent_context": ["event_slug", "type", "enabled", "sort_order", "title", "body", "items"],
+      "admin_fields": [
+        "event_slug",
+        "type",
+        "enabled",
+        "sort_order",
+        "title",
+        "subtitle",
+        "body",
+        "items"
+      ],
+      "agent_context": [
+        "event_slug",
+        "type",
+        "enabled",
+        "sort_order",
+        "title",
+        "body",
+        "items"
+      ],
       "fields": {
-        "id": {"type": "string"},
-        "event_slug": {"type": "slug", "required": true},
-        "type": {"type": "enum", "values": ["outcomes", "audience", "trust", "bonus", "faq", "policy", "custom"]},
-        "enabled": {"type": "boolean"},
-        "sort_order": {"type": "number"},
-        "title": {"type": "string"},
-        "subtitle": {"type": "text"},
-        "body": {"type": "text"},
-        "items": {"type": "array", "items": "string"}
+        "id": {
+          "type": "string"
+        },
+        "event_slug": {
+          "type": "slug",
+          "required": true
+        },
+        "type": {
+          "type": "enum",
+          "values": [
+            "outcomes",
+            "audience",
+            "trust",
+            "bonus",
+            "faq",
+            "policy",
+            "custom"
+          ]
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "sort_order": {
+          "type": "number"
+        },
+        "title": {
+          "type": "string"
+        },
+        "subtitle": {
+          "type": "text"
+        },
+        "body": {
+          "type": "text"
+        },
+        "items": {
+          "type": "array",
+          "items": "string"
+        }
       }
     },
     "speakers": {
       "file": "storage/data/speakers.json",
       "primary_key": "id",
       "admin_managed": true,
-      "media_fields": ["photo_url"],
-      "admin_fields": ["event_slug", "sort_order", "name", "credentials", "country", "topic", "session_time", "profile", "photo_url"],
-      "agent_context": ["event_slug", "name", "credentials", "country", "topic", "session_time", "profile"],
+      "media_fields": [
+        "photo_url"
+      ],
+      "admin_fields": [
+        "event_slug",
+        "sort_order",
+        "name",
+        "credentials",
+        "country",
+        "topic",
+        "session_time",
+        "profile",
+        "photo_url"
+      ],
+      "agent_context": [
+        "event_slug",
+        "name",
+        "credentials",
+        "country",
+        "topic",
+        "session_time",
+        "profile"
+      ],
       "fields": {
-        "id": {"type": "string"},
-        "event_slug": {"type": "slug", "required": true},
-        "sort_order": {"type": "number"},
-        "name": {"type": "string", "required": true},
-        "credentials": {"type": "string"},
-        "country": {"type": "string"},
-        "topic": {"type": "string"},
-        "session_time": {"type": "string"},
-        "profile": {"type": "text"},
-        "photo_url": {"type": "local_or_remote_path"}
+        "id": {
+          "type": "string"
+        },
+        "event_slug": {
+          "type": "slug",
+          "required": true
+        },
+        "sort_order": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "credentials": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string"
+        },
+        "session_time": {
+          "type": "string"
+        },
+        "profile": {
+          "type": "text"
+        },
+        "photo_url": {
+          "type": "local_or_remote_path"
+        }
       }
     },
     "sessions": {
       "file": "storage/data/sessions.json",
       "primary_key": "id",
       "admin_managed": true,
-      "admin_fields": ["event_slug", "sort_order", "time_label", "title", "speaker_name", "description"],
-      "agent_context": ["event_slug", "time_label", "title", "speaker_name"],
+      "admin_fields": [
+        "event_slug",
+        "sort_order",
+        "time_label",
+        "title",
+        "speaker_name",
+        "description"
+      ],
+      "agent_context": [
+        "event_slug",
+        "time_label",
+        "title",
+        "speaker_name"
+      ],
       "fields": {
-        "id": {"type": "string"},
-        "event_slug": {"type": "slug", "required": true},
-        "sort_order": {"type": "number"},
-        "time_label": {"type": "string"},
-        "title": {"type": "string", "required": true},
-        "speaker_name": {"type": "string"},
-        "description": {"type": "text"}
+        "id": {
+          "type": "string"
+        },
+        "event_slug": {
+          "type": "slug",
+          "required": true
+        },
+        "sort_order": {
+          "type": "number"
+        },
+        "time_label": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "speaker_name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "text"
+        }
       }
     },
     "venues": {
       "file": "storage/data/venues.json",
       "primary_key": "id",
       "admin_managed": true,
-      "media_fields": ["image_url"],
-      "admin_fields": ["event_slug", "name", "mode", "address", "map_link", "map_embed_url", "joining_note", "image_url"],
-      "agent_context": ["event_slug", "name", "mode", "address", "map_link", "joining_note"],
+      "media_fields": [
+        "image_url"
+      ],
+      "admin_fields": [
+        "event_slug",
+        "name",
+        "mode",
+        "address",
+        "map_link",
+        "map_embed_url",
+        "joining_note",
+        "image_url"
+      ],
+      "agent_context": [
+        "event_slug",
+        "name",
+        "mode",
+        "address",
+        "map_link",
+        "joining_note"
+      ],
       "fields": {
-        "id": {"type": "string"},
-        "event_slug": {"type": "slug", "required": true},
-        "name": {"type": "string"},
-        "mode": {"type": "string"},
-        "address": {"type": "text"},
-        "map_link": {"type": "url"},
-        "map_embed_url": {"type": "url"},
-        "joining_note": {"type": "text"},
-        "image_url": {"type": "local_or_remote_path"}
+        "id": {
+          "type": "string"
+        },
+        "event_slug": {
+          "type": "slug",
+          "required": true
+        },
+        "name": {
+          "type": "string"
+        },
+        "mode": {
+          "type": "string"
+        },
+        "address": {
+          "type": "text"
+        },
+        "map_link": {
+          "type": "url"
+        },
+        "map_embed_url": {
+          "type": "url"
+        },
+        "joining_note": {
+          "type": "text"
+        },
+        "image_url": {
+          "type": "local_or_remote_path"
+        }
       }
     },
     "publishers": {
       "file": "storage/data/publishers.json",
       "primary_key": "id",
       "admin_managed": true,
-      "media_fields": ["logo_url"],
-      "admin_fields": ["enabled", "sort_order", "source", "date_label", "title", "summary", "url", "logo_url"],
-      "agent_context": ["source", "date_label", "title", "url"],
+      "media_fields": [
+        "logo_url"
+      ],
+      "admin_fields": [
+        "enabled",
+        "sort_order",
+        "source",
+        "date_label",
+        "title",
+        "summary",
+        "url",
+        "logo_url"
+      ],
+      "agent_context": [
+        "source",
+        "date_label",
+        "title",
+        "url"
+      ],
       "fields": {
-        "id": {"type": "string"},
-        "enabled": {"type": "boolean"},
-        "sort_order": {"type": "number"},
-        "source": {"type": "string", "required": true},
-        "date_label": {"type": "string"},
-        "title": {"type": "string", "required": true},
-        "summary": {"type": "text"},
-        "url": {"type": "url", "required": true},
-        "logo_url": {"type": "local_or_remote_path"}
+        "id": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "sort_order": {
+          "type": "number"
+        },
+        "source": {
+          "type": "string",
+          "required": true
+        },
+        "date_label": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "summary": {
+          "type": "text"
+        },
+        "url": {
+          "type": "url",
+          "required": true
+        },
+        "logo_url": {
+          "type": "local_or_remote_path"
+        }
       }
     },
     "registrations": {
@@ -158,37 +512,121 @@
       "primary_key": "id",
       "owner_field": "email",
       "admin_managed": true,
-      "agent_context": ["id", "event_slug", "purchase_type", "name", "email", "phone", "profession", "payment_status", "certificate_status", "created_at"],
+      "agent_context": [
+        "id",
+        "event_slug",
+        "purchase_type",
+        "name",
+        "email",
+        "phone",
+        "profession",
+        "payment_status",
+        "certificate_status",
+        "created_at"
+      ],
       "fields": {
-        "id": {"type": "string"},
-        "event_slug": {"type": "slug"},
-        "purchase_type": {"type": "enum", "values": ["event", "class", "appointment", "course"]},
-        "name": {"type": "string"},
-        "email": {"type": "email"},
-        "phone": {"type": "string"},
-        "profession": {"type": "string"},
-        "payment_status": {"type": "enum", "values": ["pending", "paid", "failed", "manual"]},
-        "razorpay_order_id": {"type": "string"},
-        "razorpay_payment_id": {"type": "string"},
-        "certificate_status": {"type": "enum", "values": ["not_applicable", "pending", "sent"]},
-        "google_calendar_event_ids": {"type": "array", "items": "string"},
-        "created_at": {"type": "datetime"}
+        "id": {
+          "type": "string"
+        },
+        "event_slug": {
+          "type": "slug"
+        },
+        "purchase_type": {
+          "type": "enum",
+          "values": [
+            "event",
+            "class",
+            "appointment",
+            "course"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "email"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "profession": {
+          "type": "string"
+        },
+        "payment_status": {
+          "type": "enum",
+          "values": [
+            "pending",
+            "paid",
+            "failed",
+            "manual"
+          ]
+        },
+        "razorpay_order_id": {
+          "type": "string"
+        },
+        "razorpay_payment_id": {
+          "type": "string"
+        },
+        "certificate_status": {
+          "type": "enum",
+          "values": [
+            "not_applicable",
+            "pending",
+            "sent"
+          ]
+        },
+        "google_calendar_event_ids": {
+          "type": "array",
+          "items": "string"
+        },
+        "created_at": {
+          "type": "datetime"
+        }
       }
     },
     "notification_templates": {
       "file": "storage/data/notification_templates.json",
       "primary_key": "id",
       "admin_managed": true,
-      "admin_fields": ["key", "channel", "enabled", "subject", "template_name", "language", "body"],
+      "admin_fields": [
+        "key",
+        "channel",
+        "enabled",
+        "subject",
+        "template_name",
+        "language",
+        "body"
+      ],
       "fields": {
-        "id": {"type": "string"},
-        "key": {"type": "slug"},
-        "channel": {"type": "enum", "values": ["email", "whatsapp", "calendar"]},
-        "enabled": {"type": "boolean"},
-        "subject": {"type": "string"},
-        "template_name": {"type": "string"},
-        "language": {"type": "string"},
-        "body": {"type": "text"}
+        "id": {
+          "type": "string"
+        },
+        "key": {
+          "type": "slug"
+        },
+        "channel": {
+          "type": "enum",
+          "values": [
+            "email",
+            "whatsapp",
+            "calendar"
+          ]
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "template_name": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "body": {
+          "type": "text"
+        }
       }
     },
     "notification_queue": {
@@ -196,19 +634,55 @@
       "primary_key": "id",
       "admin_managed": true,
       "fields": {
-        "id": {"type": "string"},
-        "event_slug": {"type": "slug"},
-        "registration_id": {"type": "string"},
-        "channel": {"type": "enum", "values": ["email", "whatsapp", "calendar"]},
-        "to": {"type": "string"},
-        "template_key": {"type": "slug"},
-        "payload": {"type": "object"},
-        "status": {"type": "enum", "values": ["pending", "sent", "failed"]},
-        "error": {"type": "text"},
-        "attempts": {"type": "number"},
-        "available_at": {"type": "datetime"},
-        "sent_at": {"type": "datetime"},
-        "created_at": {"type": "datetime"}
+        "id": {
+          "type": "string"
+        },
+        "event_slug": {
+          "type": "slug"
+        },
+        "registration_id": {
+          "type": "string"
+        },
+        "channel": {
+          "type": "enum",
+          "values": [
+            "email",
+            "whatsapp",
+            "calendar"
+          ]
+        },
+        "to": {
+          "type": "string"
+        },
+        "template_key": {
+          "type": "slug"
+        },
+        "payload": {
+          "type": "object"
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "pending",
+            "sent",
+            "failed"
+          ]
+        },
+        "error": {
+          "type": "text"
+        },
+        "attempts": {
+          "type": "number"
+        },
+        "available_at": {
+          "type": "datetime"
+        },
+        "sent_at": {
+          "type": "datetime"
+        },
+        "created_at": {
+          "type": "datetime"
+        }
       }
     },
     "contact_submissions": {
@@ -216,15 +690,38 @@
       "primary_key": "id",
       "admin_managed": true,
       "fields": {
-        "id": {"type": "string"},
-        "name": {"type": "string"},
-        "email": {"type": "email"},
-        "phone": {"type": "string"},
-        "request_type": {"type": "enum", "values": ["consultation", "event_booking", "support"]},
-        "event_slug": {"type": "slug"},
-        "subject": {"type": "string"},
-        "message": {"type": "text"},
-        "status": {"type": "string"}
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "email"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "request_type": {
+          "type": "enum",
+          "values": [
+            "consultation",
+            "event_booking",
+            "support"
+          ]
+        },
+        "event_slug": {
+          "type": "slug"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "message": {
+          "type": "text"
+        },
+        "status": {
+          "type": "string"
+        }
       }
     },
     "support_tickets": {
@@ -232,36 +729,75 @@
       "primary_key": "id",
       "owner_field": "email",
       "admin_managed": true,
-      "agent_context": ["id", "name", "email", "subject", "status", "created_at"],
+      "agent_context": [
+        "id",
+        "name",
+        "email",
+        "subject",
+        "status",
+        "created_at"
+      ],
       "fields": {
-        "id": {"type": "string"},
-        "name": {"type": "string"},
-        "email": {"type": "email"},
-        "subject": {"type": "string"},
-        "message": {"type": "text"},
-        "status": {"type": "string"},
-        "created_at": {"type": "datetime"}
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "email"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "message": {
+          "type": "text"
+        },
+        "status": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "datetime"
+        }
       }
     },
     "settings": {
       "file": "storage/data/settings.json",
       "primary_key": "id",
       "fields": {
-        "id": {"type": "string"},
-        "key": {"type": "string"},
-        "value": {"type": "object"}
+        "id": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "object"
+        }
       }
     },
     "audit_events": {
       "file": "storage/data/audit_events.json",
       "primary_key": "id",
       "fields": {
-        "id": {"type": "string"},
-        "action": {"type": "string"},
-        "collection": {"type": "string"},
-        "record_id": {"type": "string"},
-        "meta": {"type": "object"},
-        "created_at": {"type": "datetime"}
+        "id": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        },
+        "collection": {
+          "type": "string"
+        },
+        "record_id": {
+          "type": "string"
+        },
+        "meta": {
+          "type": "object"
+        },
+        "created_at": {
+          "type": "datetime"
+        }
       }
     },
     "media_files": {
@@ -269,13 +805,33 @@
       "primary_key": "id",
       "admin_managed": true,
       "fields": {
-        "id": {"type": "string"},
-        "filename": {"type": "string"},
-        "original_name": {"type": "string"},
-        "path": {"type": "local_or_remote_path"},
-        "context": {"type": "enum", "values": ["shared", "events", "speakers", "venues"]},
-        "mime": {"type": "string"},
-        "created_at": {"type": "datetime"}
+        "id": {
+          "type": "string"
+        },
+        "filename": {
+          "type": "string"
+        },
+        "original_name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "local_or_remote_path"
+        },
+        "context": {
+          "type": "enum",
+          "values": [
+            "shared",
+            "events",
+            "speakers",
+            "venues"
+          ]
+        },
+        "mime": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "datetime"
+        }
       }
     }
   }

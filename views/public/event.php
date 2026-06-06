@@ -8,7 +8,12 @@
             <?php $eventPrice = trim((string)($event['currency'] ?? 'INR') . ' ' . (string)($event['price'] ?? '')); ?>
             <?php $paymentAction = '/events/' . rawurlencode((string)($event['slug'] ?? '')) . '/checkout'; ?>
             <p class="eyebrow"><?= e($event['eyebrow'] ?? 'Microbiome Conference') ?></p>
-            <h1><?= e($event['headline'] ?? $event['name']) ?></h1>
+            <h1>
+                <?= e($event['headline'] ?? $event['name']) ?>
+                <?php if(($event['delivery_mode'] ?? '') === 'online'): ?>
+                    <span style="font-style: italic; font-weight: 700;"> - Online</span>
+                <?php endif; ?>
+            </h1>
             <div class="event-organizer-logos" aria-label="Organized by Alpha Natural and Salus Nutri">
                 <span>Organized by</span>
                 <div class="event-organizer-logos__row">
@@ -594,42 +599,40 @@ foreach($sections as $section) {
             <h2 id="certificate-preview-title">Participants receive a verified E-certificate.</h2>
             <p class="lede" style="margin-left: auto; margin-right: auto;">Use this sample to preview the participation certificate format for the conference. Final certificates are issued after the event completion workflow.</p>
         </div>
-        <article class="certificate-sample" aria-label="Sample certificate of participation" style="aspect-ratio: 1.414 / 1; width: 100%; max-width: 100%; margin: 0 auto;">
-            <div class="certificate-sample__corner certificate-sample__corner--tl"></div>
-            <div class="certificate-sample__corner certificate-sample__corner--tr"></div>
-            <div class="certificate-sample__corner certificate-sample__corner--bl"></div>
-            <div class="certificate-sample__corner certificate-sample__corner--br"></div>
-            <div class="certificate-sample__accent certificate-sample__accent--top"></div>
-            <div class="certificate-sample__accent certificate-sample__accent--bottom"></div>
-            <div class="certificate-sample__seal"></div>
+        <article class="certificate-sample" aria-label="Sample certificate of participation" style="min-height: 480px; width: 100%; max-width: 100%; margin: 0 auto;">
+            <div class="certificate-sample__frame" aria-hidden="true"></div>
+            <div class="certificate-sample__corner certificate-sample__corner--tl" aria-hidden="true"></div>
+            <div class="certificate-sample__corner certificate-sample__corner--tr" aria-hidden="true"></div>
+            <div class="certificate-sample__corner certificate-sample__corner--bl" aria-hidden="true"></div>
+            <div class="certificate-sample__corner certificate-sample__corner--br" aria-hidden="true"></div>
+            <div class="certificate-sample__monogram" aria-hidden="true">GC</div>
             <div class="certificate-sample__body">
-                <div class="certificate-sample__header">
-                    <div class="certificate-sample__logo-container">
+                <header class="certificate-sample__header">
+                    <div class="certificate-sample__logo">
                         <img src="/assets/images/media/gutconference-mark.png" alt="" loading="lazy">
-                        <div class="certificate-sample__logo-ring"></div>
                     </div>
                     <div class="certificate-sample__event-info">
-                        <span class="certificate-sample__edition">3rd International Conference On</span>
+                        <span class="certificate-sample__edition">3<sup>rd</sup> International Conference on</span>
                         <strong class="certificate-sample__event-title">Gut Health, Probiotics &amp; Prebiotics</strong>
                         <em class="certificate-sample__tagline">Bridging Science &amp; Clinical Healing</em>
                     </div>
-                </div>
+                </header>
                 <div class="certificate-sample__title">
-                    <div class="certificate-sample__title-ornament certificate-sample__title-ornament--left"></div>
+                    <span class="certificate-sample__title-ornament certificate-sample__title-ornament--left" aria-hidden="true"></span>
                     <div class="certificate-sample__title-text">
                         <h3>Certificate</h3>
                         <span>of participation</span>
                     </div>
-                    <div class="certificate-sample__title-ornament certificate-sample__title-ornament--right"></div>
+                    <span class="certificate-sample__title-ornament certificate-sample__title-ornament--right" aria-hidden="true"></span>
                 </div>
-                <p class="certificate-sample__certify">This is to certify that</p>
-                <div class="certificate-sample__name-container">
-                    <div class="certificate-sample__name-line" aria-hidden="true"></div>
-                    <div class="certificate-sample__name-decoration"></div>
+                <p class="certificate-sample__certify">This certificate is proudly presented to</p>
+                <div class="certificate-sample__name">
+                    <span class="certificate-sample__name-text">Dr. Sample Participant</span>
+                    <span class="certificate-sample__name-underline" aria-hidden="true"></span>
                 </div>
                 <p class="certificate-sample__details">
-                    has successfully participated as a <strong>Healthcare Professional Delegate</strong> in the
-                    <strong><?= e($event['name'] ?? 'GutConference event') ?></strong>
+                    in recognition of successful participation as a <strong>Healthcare Professional Delegate</strong>
+                    at the <strong><?= e($event['name'] ?? 'GutConference Event') ?></strong>,
                     held on <strong><?= e($event['date_label'] ?? '') ?></strong>.
                 </p>
                 <div class="certificate-sample__meta">
@@ -646,17 +649,21 @@ foreach($sections as $section) {
                         <strong class="certificate-sample__meta-value">GGS2026-______</strong>
                     </div>
                 </div>
-                <div class="certificate-sample__footer">
-                    <div class="certificate-sample__signature-line">
-                        <div class="certificate-sample__signature">
-                            <div class="certificate-sample__signature-mark"></div>
-                            <span>Authorized Signature</span>
-                        </div>
+                <footer class="certificate-sample__footer">
+                    <div class="certificate-sample__signatory">
+                        <span class="certificate-sample__signature-script">Praveen Jacob</span>
+                        <span class="certificate-sample__signature-line" aria-hidden="true"></span>
+                        <strong class="certificate-sample__signatory-name">Dr. Praveen Jacob</strong>
+                        <em class="certificate-sample__signatory-title">Conference Director</em>
                     </div>
-                    <div class="certificate-sample__organizer">
-                        <span>Organized by</span>
-                        <strong><?= e($event['organizers'] ?? 'GutConference') ?></strong>
+                    <div class="certificate-sample__seal" aria-hidden="true">
+                        <span class="certificate-sample__seal-text">Verified<br>E-Certificate</span>
                     </div>
+                </footer>
+                <div class="certificate-sample__verification">
+                    <span>Verify at <strong>gutconference.online/verify/</strong></span>
+                    <span class="certificate-sample__verification-divider" aria-hidden="true">·</span>
+                    <span>Organized by <strong><?= e($event['organizers'] ?? 'GutConference') ?></strong></span>
                 </div>
             </div>
         </article>
