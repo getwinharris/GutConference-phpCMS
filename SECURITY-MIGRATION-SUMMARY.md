@@ -116,9 +116,9 @@ private function layout(string $title, string $body, string $ctaUrl, string $cta
 
 2. **Save Credentials**: Navigate to `/admin/integrations` and enter credentials. They will be encrypted and stored in `storage/data/adminsecrets.json`.
 
-3. **Backward Compatibility**: The system continues to read from `.env` if SecretService values are not set. This allows gradual migration.
+3. **Backward Compatibility**: The system continues to read from host/local `.env` if SecretService values are not set. Env files are deployment-local and must stay out of Git.
 
-4. **Remove from .env (Optional)**: After confirming credentials work through SecretService, you can remove sensitive values from `.env` for production deployments.
+4. **Remove from .env**: After confirming credentials work through SecretService, remove sensitive values from production `.env` and keep them in encrypted admin integrations.
 
 ---
 
@@ -126,7 +126,7 @@ private function layout(string $title, string $body, string $ctaUrl, string $cta
 
 1. **Encryption**: Admin credentials and API keys are now encrypted using AES-256-CBC
 2. **Key Management**: Encryption key stored in `storage/runtime-key.php` (excluded from git)
-3. **Separation of Concerns**: Sensitive credentials no longer in version-controlled `.env` file
+3. **Separation of Concerns**: Sensitive credentials no longer in version-controlled `.env` files or tracked env templates
 4. **Audit Trail**: Changes to integrations are logged through the audit system
 5. **Single Source of Truth**: Admin UI provides centralized credential management
 
@@ -154,7 +154,7 @@ All services implement graceful fallback:
 This ensures:
 - No breaking changes for existing deployments
 - Smooth migration path
-- Development environments continue to work with `.env`
+- Development environments continue to work with local untracked `.env`
 
 ---
 
@@ -183,8 +183,8 @@ This ensures:
 2. Navigate to `/admin/integrations`
 3. Enter all credentials through the UI
 4. Test authentication and API integrations
-5. Once confirmed working, optionally remove sensitive values from `.env`
-6. Keep `APP_NAME` and non-sensitive values in `.env` for environment-specific configuration
+5. Once confirmed working, remove sensitive values from `.env`
+6. Keep any remaining environment-specific values in local/host-only `.env`; do not commit `.env` or `.env.example`
 
 ---
 

@@ -57,7 +57,8 @@ final class EventService {
         $end = trim((string)($event['end_time'] ?? ''));
         $timezone = trim((string)($event['timezone'] ?? ''));
         if ($start !== '' && $end !== '') {
-            return $this->formatTime($start) . ' - ' . $this->formatTime($end) . ($timezone !== '' ? ' ' . $timezone : '');
+            $displayTimezone = $this->displayTimezone($timezone);
+            return $this->formatTime($start) . ' - ' . $this->formatTime($end) . ($displayTimezone !== '' ? ' ' . $displayTimezone : '');
         }
         return (string)($event['time_label'] ?? '');
     }
@@ -125,6 +126,13 @@ final class EventService {
         $timezone = trim($timezone);
         if (strtoupper($timezone) === 'IST') return 'Asia/Kolkata';
         return $timezone !== '' ? $timezone : 'Asia/Kolkata';
+    }
+
+    private function displayTimezone(string $timezone): string {
+        $timezone = trim($timezone);
+        if ($timezone === '') return '';
+        if ($timezone === 'Asia/Kolkata' || strtoupper($timezone) === 'IST') return 'IST';
+        return $timezone;
     }
 
     private function formatTime(string $time): string {

@@ -14,5 +14,7 @@ description: GutConference Orchestrator Skill. Use for broad GutConference work 
 - For Razorpay, keep external payment page and internal verified checkout modes; verify internal payments server-side before marking registrations paid or queuing notifications.
 - For analytics, use admin/reporting insights from JSON-backed data and configured tags; do not introduce SQL or a new analytics stack unless requested.
 - After route/controller/service changes, run or regenerate the project map as appropriate.
+- Before release comparison, rebase, or push preparation, run `git fetch origin main` and verify against the freshly fetched GitHub baseline. If the remote moved, rebase local commits onto it before validation.
+- Preserve the env migration: `.env` and `.env.example` stay out of Git, with secrets supplied by host/local `.env` or encrypted admin integrations. Resolve env modify/delete conflicts by keeping the remote deletion.
 - Before commit or release prep, write a PR-style summary with changed areas, new/deleted files, risks, migration notes, and verification.
 - Never push to `origin/main` without explicit approval because it deploys to `gutconference.online`.

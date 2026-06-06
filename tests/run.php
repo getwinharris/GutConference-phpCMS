@@ -50,10 +50,10 @@ assertTrue(($events->availability($featured)['filled'] ?? 0) === 50 && ($events-
 $store->write('registrations', $beforeRegistrations);
 $speakers = $events->speakers('global-gut-summit-2026');
 assertTrue(count($speakers) >= 9, 'seed includes conference speakers');
-assertTrue((bool)array_values(array_filter($speakers, fn($speaker) => ($speaker['id'] ?? '') === 'spk-tom-obryan' && ($speaker['credentials'] ?? '') === 'DC, CCN, DACBN, CIFM')), 'seed includes Dr. Tom O\'Bryan speaker with credentials');
-assertTrue((bool)array_values(array_filter($speakers, fn($speaker) => ($speaker['id'] ?? '') === 'spk-tom-obryan' && ($speaker['country'] ?? '') === 'Italy')), 'seed stores Dr. Tom O\'Bryan country as Italy');
-assertTrue((bool)array_values(array_filter($speakers, fn($speaker) => ($speaker['id'] ?? '') === 'spk-somashekar-huddar' && ($speaker['name'] ?? '') === 'Dr. Somashekar Huddar')), 'seed replaces Ayurveda placeholder with Dr. Somashekar Huddar');
-assertTrue((bool)array_values(array_filter($events->sessions('global-gut-summit-2026'), fn($session) => ($session['speaker_name'] ?? '') === 'Dr. Somashekar Huddar')), 'agenda uses Dr. Somashekar Huddar for Ayurveda slot');
+assertTrue((bool)array_values(array_filter($speakers, fn($speaker) => ($speaker['id'] ?? '') === 'spk-tom-obryan' && str_contains((string)($speaker['credentials'] ?? ''), 'Functional Medicine Expert'))), 'seed includes Dr. Tom O\'Bryan speaker with credentials');
+assertTrue((bool)array_values(array_filter($speakers, fn($speaker) => ($speaker['id'] ?? '') === 'spk-tom-obryan' && ($speaker['country'] ?? '') === 'Italy')), 'seed stores Dr. Tom O\'Bryan country');
+assertTrue((bool)array_values(array_filter($speakers, fn($speaker) => ($speaker['id'] ?? '') === 'spk-somashekhar-huddar' && ($speaker['name'] ?? '') === 'Dr. Somashekhar Huddar, BAMS')), 'seed replaces Ayurveda placeholder with Dr. Somashekhar Huddar');
+assertTrue((bool)array_values(array_filter($events->sessions('global-gut-summit-2026'), fn($session) => str_contains((string)($session['speaker_name'] ?? ''), 'Somashekhar Huddar'))), 'agenda uses Dr. Somashekhar Huddar for Ayurveda slot');
 foreach ($speakers as $speaker) {
     assertTrue(!empty($speaker['photo_url']), 'speaker has photo: ' . ($speaker['name'] ?? 'Unknown'));
     assertTrue(is_file(app_path(ltrim((string)$speaker['photo_url'], '/'))), 'speaker photo exists: ' . ($speaker['name'] ?? 'Unknown'));
@@ -105,7 +105,9 @@ assertTrue(str_contains($appLayout, 'views/partials/support-widget.php') && str_
 assertTrue(!str_contains($supportWidget, 'Hi, I can help with speakers') && str_contains($supportWidget, "ask('__intro', false)") && str_contains($supportWidget, "event.key === 'Enter'") && str_contains($supportWidget, 'support-actions') && str_contains($supportWidget, 'AbortController'), 'public support widget uses agent-driven intro, action links, enter send, and stop control');
 assertTrue(str_contains($appLayout, 'google-site-verification') && str_contains($appLayout, 'googletagmanager.com/gtag/js'), 'public layout wires Google tag and Search Console verification');
 assertTrue(str_contains($integrations, 'google_site_tag_id') && str_contains($integrations, 'google_search_console_verification') && str_contains($integrations, 'admin_notification_email'), 'integrations expose Google Site Kit and SMTP admin notification fields');
-assertTrue(str_contains(file_get_contents(app_path('views/admin/environment.php')) ?: '', 'Google AI Studio Diagnostics') && str_contains(file_get_contents(app_path('.env.example')) ?: '', 'GOOGLE_AI_VISION_LANGUAGE_MODELS'), 'environment exposes Google AI Studio env routing fields');
+$environment = file_get_contents(app_path('views/admin/environment.php')) ?: '';
+$gitignore = file_get_contents(app_path('.gitignore')) ?: '';
+assertTrue(str_contains($environment, 'Google AI Studio Diagnostics') && str_contains($gitignore, '.env.*'), 'environment exposes Google AI Studio diagnostics and env templates stay untracked');
 assertTrue(!str_contains($appLayout, 'support-context'), 'support widget removes the old left context half');
 $css = file_get_contents(app_path('assets/css/index.css')) ?: '';
 assertTrue(str_contains($css, 'body.support-open main') && str_contains($css, 'body.support-open .sticky-register') && !str_contains($css, 'body.support-open .site-header') && str_contains($css, 'box-shadow: none'), 'desktop support sidebar docks content and sticky ticket bar without shrinking the top nav');

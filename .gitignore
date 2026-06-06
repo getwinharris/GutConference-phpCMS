@@ -1,5 +1,5 @@
 .env
-!.env.example
+.env.*
 
 /storage/runtime-key.php
 /storage/data/adminsecrets.json
