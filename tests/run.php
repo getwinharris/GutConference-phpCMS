@@ -97,6 +97,9 @@ assertTrue(str_contains($home, 'LinkedIn') && str_contains($home, 'YouTube') && 
 assertTrue(str_contains(file_get_contents(app_path('views/public/signup.php')) ?: '', 'Google OAuth is the required customer signup path'), 'signup documents mandatory Google OAuth customer flow');
 assertTrue(str_contains(file_get_contents(app_path('views/public/signup.php')) ?: '', 'certificate_name'), 'signup asks for certificate name');
 assertTrue(str_contains(file_get_contents(app_path('views/public/login.php')) ?: '', '/auth/google'), 'login exposes Google OAuth endpoint');
+assertTrue(str_contains(file_get_contents(app_path('integrations/google-oauth/GoogleOAuthClient.php')) ?: '', 'https://oauth2.googleapis.com/token') && str_contains(file_get_contents(app_path('integrations/google-oauth/GoogleOAuthClient.php')) ?: '', 'oauth2/v3/userinfo'), 'Google OAuth client exchanges codes and fetches userinfo');
+assertTrue(str_contains(file_get_contents(app_path('app/Controllers/AuthController.php')) ?: '', 'exchangeCode($code)') && str_contains(file_get_contents(app_path('app/Controllers/AuthController.php')) ?: '', "upsert('users'"), 'Google OAuth callback creates or updates customer session');
+assertTrue(isset($collections['users']['fields']['google_refresh_token']) && ($collections['users']['fields']['google_refresh_token']['type'] ?? '') === 'secret', 'users schema stores Google refresh token as secret');
 assertTrue(str_contains($index, "'/signup'") && str_contains($index, "'/auth'"), 'front controller allows signup and auth routes');
 assertTrue(str_contains($index, "'/dashboard'"), 'front controller allows customer dashboard route');
 assertTrue(str_contains($index, "'/support'"), 'front controller allows support chat route');

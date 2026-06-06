@@ -88,8 +88,64 @@ final class AuthController extends BaseController {
         $this->redirect('/login');
     }
     unset($_SESSION['google_oauth_state']);
-    $this->flash('Google OAuth callback reached. Token exchange will activate after live Google credentials are configured.');
-    $this->redirect('/login');
+    $code = (string)($_GET['code'] ?? '');
+    if ($code === '') {
+        $this->flash('Google did not return an authorization code.');
+        $this->redirect('/login');
+    }
+    $client = new GoogleOAuthClient((new SecretService())->all());
+    if (!$client->configured()) {
+        $this->flash('Google OAuth is not configured yet. Add Google credentials in Admin -> Integrations.');
+        $this->redirect('/login');
+    }
+    try {
+        $tokens = $client->exchangeCode($code);
+        $profile = $client->userInfo((string)$tokens['access_token']);
+    } catch (\Throwable $e) {
+        $_SESSION['google_oauth_error'] = $e->getMessage();
+        $this->flash('Google sign-in failed. Check the OAuth client setup and redirect URI.');
+        $this->redirect('/login');
+    }
+    $store = new JsonStoreService();
+    $users = $store->read('users');
+    $email = strtolower(trim((string)$profile['email']));
+    $existing = null;
+    foreach ($users as $user) {
+        if (($user['google_sub'] ?? '') === ($profile['sub'] ?? '') || strtolower((string)($user['email'] ?? '')) === $email) {
+            $existing = $user;
+            break;
+        }
+    }
+    $scope = (string)($tokens['scope'] ?? '');
+    $user = array_merge($existing ?: [], [
+        'id' => $existing['id'] ?? uniqid('user_', true),
+        'email' => $email,
+        'name' => trim((string)($profile['name'] ?? $existing['name'] ?? $email)),
+        'certificate_name' => trim((string)($existing['certificate_name'] ?? $profile['name'] ?? $email)),
+        'role' => $existing['role'] ?? 'customer',
+        'google_sub' => (string)$profile['sub'],
+        'google_email_verified' => (bool)($profile['email_verified'] ?? false),
+        'google_calendar_enabled' => str_contains($scope, 'https://www.googleapis.com/auth/calendar.events'),
+        'google_oauth_scope' => $scope,
+        'google_token_expires_at' => time() + (int)($tokens['expires_in'] ?? 0),
+        'updated_at' => time(),
+    ]);
+    if (!empty($tokens['refresh_token'])) {
+        $user['google_refresh_token'] = (string)$tokens['refresh_token'];
+    }
+    if (empty($existing['created_at'])) {
+        $user['created_at'] = time();
+    }
+    $store->upsert('users', $user);
+    $_SESSION['user'] = [
+        'sub' => $user['id'],
+        'email' => $user['email'],
+        'name' => $user['name'],
+        'certificate_name' => $user['certificate_name'],
+        'role' => $user['role'],
+    ];
+    $this->flash('Signed in with Google.');
+    $this->redirect(($user['role'] ?? '') === 'admin' ? '/admin' : '/dashboard');
  }
  public function forgotPassword(): void {
     $this->render('public/forgot-password');

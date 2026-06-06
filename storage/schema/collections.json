@@ -45,6 +45,15 @@
         "google_calendar_enabled": {
           "type": "boolean"
         },
+        "google_oauth_scope": {
+          "type": "string"
+        },
+        "google_token_expires_at": {
+          "type": "number"
+        },
+        "google_refresh_token": {
+          "type": "secret"
+        },
         "newsletter_opt_in": {
           "type": "boolean"
         },
