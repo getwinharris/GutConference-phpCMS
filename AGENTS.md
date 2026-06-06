@@ -70,10 +70,11 @@ The production remote for this repo is GitHub `getwinharris/GutConference-phpCMS
 
 ```bash
 git remote set-url origin https://github.com/getwinharris/GutConference-phpCMS.git
-git fetch origin main
+git fetch --prune origin +refs/heads/main:refs/remotes/origin/main
+git branch --set-upstream-to=origin/main main
 ```
 
-Use the freshly fetched `origin/main` / `FETCH_HEAD` as the remote baseline, not a stale local tracking ref. If GitHub `main` moved, rebase local commits onto the fetched remote branch and resolve conflicts in favor of the current secret policy: tracked `.env` files stay deleted and are not reintroduced.
+Treat `refs/remotes/origin/main` as valid only after that forced GitHub fetch. Do not trust a pre-existing local `origin/main` ref from this machine, because the project was created locally before being pushed to GitHub. Use the freshly rebuilt GitHub remote-tracking ref as the baseline. If GitHub `main` moved, rebase local commits onto the fetched remote branch and resolve conflicts in favor of the current secret policy: tracked `.env` files stay deleted and are not reintroduced.
 
 ### Before pushing to `origin/main`, the agent MUST:
 
