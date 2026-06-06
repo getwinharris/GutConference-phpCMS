@@ -38,8 +38,8 @@ This repo is a GutConference Online PHP/JSON full-stack CMS for shared hosting. 
 - Public users must not be able to create conferences. Only admins create and publish events.
 - Admin mutations should be auditable.
 - Event media should use the media library picker/upload flow.
-- Environment and storage permission changes belong in `/admin/environment`.
-- Keep `.env` and `.env.example` out of Git. Secrets are host/local-only in `.env` or stored through encrypted admin integrations in `storage/data/adminsecrets.json`; do not reintroduce tracked env templates or secret placeholders that can conflict with GitHub main.
+- Environment and storage permission changes belong in `/admin/environment`, but do not introduce project `.env` files.
+- Do not use, create, restore, or track `.env`, `.env.example`, or other `.env.*` files in this project. Secrets must be configured through encrypted admin integrations in `storage/data/adminsecrets.json` or server-level environment configuration outside the repo. If a rebase reports env-file conflicts, keep the GitHub `main` deletion.
 - Keep admin navigation lean. Prefer grouped admin sections and automatic defaults over adding one-off menu items for every small action.
 - Maximize automation from event data: event date/time, timezone, ticket capacity, and paid bookings should drive labels, countdown/timer behavior, remaining seats, and notification timing.
 - Store timezone once in event/settings context and derive display labels from it instead of forcing repeated manual timezone selection.
@@ -66,13 +66,14 @@ For UI changes, use a browser workflow and check home, event detail, admin login
 
 Pushing to `origin/main` auto-deploys to **gutconference.online** via Hostinger Git auto-deploy. Treat every push as a production release.
 
-Before comparing, rebasing, validating a release, or saying the branch is current, fetch GitHub `main` directly:
+The production remote for this repo is GitHub `getwinharris/GutConference-phpCMS.git`. Before comparing, rebasing, validating a release, or saying the branch is current, make sure `origin` points there and fetch GitHub `main` directly:
 
 ```bash
+git remote set-url origin https://github.com/getwinharris/GutConference-phpCMS.git
 git fetch origin main
 ```
 
-Use the freshly fetched `origin/main` / `FETCH_HEAD` as the remote baseline, not a stale local tracking ref. If GitHub `main` moved, rebase local commits onto the fetched remote branch and resolve conflicts in favor of the current secret policy: tracked `.env` files stay deleted.
+Use the freshly fetched `origin/main` / `FETCH_HEAD` as the remote baseline, not a stale local tracking ref. If GitHub `main` moved, rebase local commits onto the fetched remote branch and resolve conflicts in favor of the current secret policy: tracked `.env` files stay deleted and are not reintroduced.
 
 ### Before pushing to `origin/main`, the agent MUST:
 

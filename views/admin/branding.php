@@ -72,5 +72,5 @@ $logos = [
 
 <div class="admin-card">
     <h2>Tracking & Support Wiring</h2>
-    <p style="color:var(--muted)">Google tag, Search Console verification, and SMTP settings are configured in <a href="/admin/integrations">Integrations</a>. Google AI Studio support routing is configured in <a href="/admin/environment">Environment</a> through <code>.env</code>.</p>
+    <p style="color:var(--muted)">Google tag, Search Console verification, SMTP settings, and Google AI Studio support routing are configured in <a href="/admin/integrations">Integrations</a>. Server-level environment variables are external fallback only.</p>
 </div>

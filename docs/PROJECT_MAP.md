@@ -51,7 +51,7 @@
 - `/admin/notification_queue/process` → `AdminController@processNotificationQueue` → NotificationQueueService, AuthService
 - `/admin/settings` → `AdminController@settings` → SettingsService, AuthService
 - `/admin/settings/save` → `AdminController@saveSettings` → SettingsService, AuthService
-- `/admin/settings/admin-credentials` → `AdminController@saveAdminCredentials` → EnvService, AuthService
+- `/admin/settings/admin-credentials` → `AdminController@saveAdminCredentials` → SecretService, AuthService
 - `/admin/integrations` → `AdminController@integrations` → SecretService, AuthService
 - `/admin/integrations/save` → `AdminController@saveIntegrations` → SecretService, AuthService
 - `/admin/contact-submissions` → `AdminController@contactSubmissions` → ContactService, AuthService
@@ -61,7 +61,7 @@
 - `/admin/media/upload` → `AdminController@uploadMedia` → MediaService, AuditLogService, AuthService
 - `/admin/audit-log` → `AdminController@audit` → AuditLogService, AuthService
 - `/admin/backups` → `AdminController@backups` → JsonStoreService, AuthService
-- `/admin/environment` → `AdminController@environment` → EnvService, StoragePermissionService, AuthService
-- `/admin/environment/save` → `AdminController@saveEnvironment` → EnvService, AuditLogService, AuthService
+- `/admin/environment` → `AdminController@environment` → StoragePermissionService, AuthService
+- `/admin/environment/save` → `AdminController@saveEnvironment` → AuditLogService, AuthService
 - `/admin/environment/fix-permissions` → `AdminController@fixPermissions` → StoragePermissionService, AuditLogService, AuthService
 - `/admin/developer/project-map` → `AdminController@projectMap` → ProjectMapService, AuthService

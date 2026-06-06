@@ -1,20 +1,14 @@
 <div class="admin-card">
-    <h2>Environment Variables</h2>
-    <p>Edit the deployed <code>.env</code> file for this PHP hosting installation. Keep one <code>KEY=value</code> per line.</p>
-    <form method="post" action="/admin/environment/save" class="admin-form">
-        <label>Editable .env File
-            <textarea name="env_raw" rows="16" spellcheck="false" style="font-family:ui-monospace, SFMono-Regular, Menlo, monospace;"><?= e($envRaw) ?></textarea>
-        </label>
-        <button class="btn btn-primary">Save Environment</button>
-    </form>
+    <h2>Environment Policy</h2>
+    <p>Project env files are disabled. Configure secrets in <a href="/admin/integrations">Integrations</a>; server-level environment variables may be provided outside this repository only when the host requires them.</p>
 </div>
 
 <div class="admin-card">
     <h2>Google AI Studio Diagnostics</h2>
-    <p>Gemini API config is read from <code>.env</code>. Use separate model lists for vision/language, audio, and TTS routing.</p>
+    <p>Gemini API config is read from encrypted integrations first, with server-level environment variables as an external fallback. Use separate model lists for vision/language, audio, and TTS routing.</p>
     <div class="admin-form__row">
         <label>Configured
-            <input readonly value="<?= !empty($geminiDiagnostics['configured']) ? 'Yes' : 'No API key in .env' ?>">
+            <input readonly value="<?= !empty($geminiDiagnostics['configured']) ? 'Yes' : 'No API key configured' ?>">
         </label>
         <label>Models Supporting generateContent
             <input readonly value="<?= e((string)count(array_filter($geminiDiagnostics['models'] ?? [], fn($model) => !empty($model['supports_generate_content'])))) ?>">
@@ -38,7 +32,7 @@
     <div style="display:flex; justify-content:space-between; align-items:center; gap:var(--space-md); flex-wrap:wrap; margin-bottom:var(--space-md);">
         <div>
             <h2 style="margin:0 0 var(--space-xs);">Storage Permissions</h2>
-            <p style="margin:0;">JSON data, backups, media uploads, and <code>.env</code> must be writable by PHP on shared hosting.</p>
+            <p style="margin:0;">JSON data, backups, and media uploads must be writable by PHP on shared hosting. Project env files are not used.</p>
         </div>
         <form method="post" action="/admin/environment/fix-permissions">
             <button class="btn btn-sm btn-ghost">Fix Writable Paths</button>

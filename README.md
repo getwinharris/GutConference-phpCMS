@@ -80,7 +80,7 @@ php tools/generate-project-map.php
 1. Connect the GitHub repository to Hostinger hPanel under Advanced -> Git.
 2. Deploy the `main` branch to `/public_html`.
 3. Keep `storage/` and `storage/data/` writable by PHP.
-4. Configure `.env` on the host for `APP_URL`, admin username, email, and password.
+4. Configure `APP_URL`, admin credentials, Razorpay, SMTP, Meta WhatsApp Cloud API, Google OAuth, and Google Calendar through Admin -> Integrations or server-level environment configuration outside this repository. Do not add `.env` or `.env.example` files to the project.
 5. Configure Razorpay, SMTP, and Meta WhatsApp Cloud API values in Admin -> Integrations.
 6. Add cron later for queue processing when notification sending is implemented.
 

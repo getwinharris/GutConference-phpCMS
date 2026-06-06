@@ -27,21 +27,21 @@ body.support-open .sticky-register {
 
 ### 2. Admin Credentials Migration from .env to SecretService
 
-**Issue**: Sensitive credentials (admin username, email, password, APP_URL, and Gemini API keys) were stored in plaintext `.env` file, which is a security risk in production.
+**Issue**: Sensitive credentials (admin username, email, password, APP_URL, and Gemini API keys) were previously stored in plaintext `.env` files, which created security and Git conflict risk.
 
-**Solution**: Migrated all services to read from encrypted `SecretService` first, with `.env` fallback for backward compatibility during migration.
+**Solution**: Migrated services to read from encrypted `SecretService` first, with legacy server environment-variable fallback only for deployments that already provide process-level values outside the repo. Project `.env` files must not be used or restored.
 
 #### Files Modified:
 
 ##### 1. `app/Services/EnvService.php`
-- Updated `adminCredentials()` method to read from `SecretService` first, then fallback to `.env`
-- Ensures backward compatibility with existing `.env` configurations
+- Updated `adminCredentials()` method to read from `SecretService` first, then fallback to server environment variables
+- Ensures backward compatibility with existing server-level environment configuration outside the repo
 - Admin credentials now stored encrypted in `storage/data/adminsecrets.json`
 
 **Change**:
 ```php
 public function adminCredentials(): array {
-    // Read from SecretService first (preferred), fallback to .env for backward compatibility
+    // Read from SecretService first (preferred), fallback to server environment variables for backward compatibility
     $secrets = (new SecretService())->all();
     return [
         'username' => trim((string)($secrets['admin_username'] ?? getenv('ADMIN_USERNAME') ?: '')),
@@ -54,19 +54,19 @@ public function adminCredentials(): array {
 ##### 2. `app/Services/GeminiModelRouter.php`
 - Updated `answer()`, `diagnostics()`, and `models()` methods
 - Now reads Google AI API keys, endpoint, retries, and model lists from SecretService
-- Fallback to legacy environment variables maintained
+- Fallback to legacy server environment variables maintained
 
 **Changes**:
-- `google_ai_api_key` (SecretService) → `GOOGLE_AI_STUDIO_API_KEY` (.env)
-- `google_ai_endpoint` (SecretService) → `GOOGLE_AI_ENDPOINT_BASE` (.env)
-- `google_ai_retries` (SecretService) → `GOOGLE_AI_MODEL_RETRIES` (.env)
-- `google_ai_vision_language_models` (SecretService) → `GOOGLE_AI_VISION_LANGUAGE_MODELS` (.env)
-- `google_ai_audio_models` (SecretService) → `GOOGLE_AI_AUDIO_MODELS` (.env)
-- `google_ai_tts_models` (SecretService) → `GOOGLE_AI_TTS_MODELS` (.env)
+- `google_ai_api_key` (SecretService) → `GOOGLE_AI_STUDIO_API_KEY` server environment variable
+- `google_ai_endpoint` (SecretService) → `GOOGLE_AI_ENDPOINT_BASE` server environment variable
+- `google_ai_retries` (SecretService) → `GOOGLE_AI_MODEL_RETRIES` server environment variable
+- `google_ai_vision_language_models` (SecretService) → `GOOGLE_AI_VISION_LANGUAGE_MODELS` server environment variable
+- `google_ai_audio_models` (SecretService) → `GOOGLE_AI_AUDIO_MODELS` server environment variable
+- `google_ai_tts_models` (SecretService) → `GOOGLE_AI_TTS_MODELS` server environment variable
 
 ##### 3. `app/Services/NotificationQueueService.php`
 - Updated `url()` private method
-- Reads `app_url` from SecretService first, then `APP_URL` from .env
+- Reads `app_url` from SecretService first, then `APP_URL` from server environment variables
 
 **Change**:
 ```php
@@ -116,9 +116,9 @@ private function layout(string $title, string $body, string $ctaUrl, string $cta
 
 2. **Save Credentials**: Navigate to `/admin/integrations` and enter credentials. They will be encrypted and stored in `storage/data/adminsecrets.json`.
 
-3. **Backward Compatibility**: The system continues to read from host/local `.env` if SecretService values are not set. Env files are deployment-local and must stay out of Git.
+3. **Backward Compatibility**: The system can read server environment variables if SecretService values are not set. Project `.env` files are not allowed.
 
-4. **Remove from .env**: After confirming credentials work through SecretService, remove sensitive values from production `.env` and keep them in encrypted admin integrations.
+4. **Remove env files**: Remove any project `.env`, `.env.example`, or `.env.*` files and keep credentials in encrypted admin integrations.
 
 ---
 
@@ -148,13 +148,13 @@ Created `tests/validate-secret-migration.php` to verify:
 
 All services implement graceful fallback:
 1. Try reading from SecretService first
-2. If not found, fall back to `.env`
+2. If not found, fall back to server environment variables
 3. If still not found, use hardcoded defaults (where applicable)
 
 This ensures:
 - No breaking changes for existing deployments
 - Smooth migration path
-- Development environments continue to work with local untracked `.env`
+- Development environments use admin integrations or server-level environment variables outside the repo
 
 ---
 
@@ -183,8 +183,8 @@ This ensures:
 2. Navigate to `/admin/integrations`
 3. Enter all credentials through the UI
 4. Test authentication and API integrations
-5. Once confirmed working, remove sensitive values from `.env`
-6. Keep any remaining environment-specific values in local/host-only `.env`; do not commit `.env` or `.env.example`
+5. Once confirmed working, remove any project `.env` files
+6. Keep any remaining environment-specific values in server configuration outside the repo; do not create or commit `.env`, `.env.example`, or `.env.*`
 
 ---
 

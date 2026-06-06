@@ -107,7 +107,7 @@ assertTrue(str_contains($appLayout, 'google-site-verification') && str_contains(
 assertTrue(str_contains($integrations, 'google_site_tag_id') && str_contains($integrations, 'google_search_console_verification') && str_contains($integrations, 'admin_notification_email'), 'integrations expose Google Site Kit and SMTP admin notification fields');
 $environment = file_get_contents(app_path('views/admin/environment.php')) ?: '';
 $gitignore = file_get_contents(app_path('.gitignore')) ?: '';
-assertTrue(str_contains($environment, 'Google AI Studio Diagnostics') && str_contains($gitignore, '.env.*'), 'environment exposes Google AI Studio diagnostics and env templates stay untracked');
+assertTrue(str_contains($environment, 'Google AI Studio Diagnostics') && str_contains($environment, 'Project env files are disabled') && !str_contains($environment, 'env_raw') && str_contains($gitignore, '.env.*'), 'environment exposes diagnostics and project env files stay disabled');
 assertTrue(!str_contains($appLayout, 'support-context'), 'support widget removes the old left context half');
 $css = file_get_contents(app_path('assets/css/index.css')) ?: '';
 assertTrue(str_contains($css, 'body.support-open main') && str_contains($css, 'body.support-open .sticky-register') && !str_contains($css, 'body.support-open .site-header') && str_contains($css, 'box-shadow: none'), 'desktop support sidebar docks content and sticky ticket bar without shrinking the top nav');

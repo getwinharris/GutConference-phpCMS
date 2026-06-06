@@ -15,6 +15,6 @@ Admin areas:
 - Media: upload event, speaker, venue, and shared assets.
 - Integrations: Razorpay, SMTP, Meta WhatsApp Cloud API, Google OAuth, and Google Calendar settings.
 - Settings: featured event, currency, timezone, and admin credentials.
-- Environment: edit `.env` and storage permissions.
+- Environment: review diagnostics and storage permissions. Project env files are disabled; use Integrations for secrets.
 
 Event Management groups Events & Classes, Page Sections, Speakers, Agenda, Venues & Maps, and Registrations in the sidebar. Only admins can create conference content.

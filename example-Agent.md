@@ -44,7 +44,7 @@ php tools/generate-project-map.php
 
 ## Backend Primitives
 
-- Auth: `AuthController`, `AuthService`, `.env` admin credentials.
+- Auth: `AuthController`, `AuthService`, and encrypted admin credentials through `SecretService`.
 - JSON database: `JsonStoreService`, `ResourceService`, `storage/data/*.json`.
 - Schema: `SchemaService`, `storage/schema/collections.json`.
 - Events: `EventService`, `events`, `event_sections`, `speakers`, `sessions`, `venues`.
@@ -63,7 +63,7 @@ php tools/generate-project-map.php
 
 ## Deployment
 
-Use Hostinger-style Git auto deployment from GitHub to `/public_html`, with writable `storage/` and host-managed `.env` secrets. Do not use Vercel as the primary production host.
+Use Hostinger-style Git auto deployment from GitHub to `/public_html`, with writable `storage/` and encrypted admin integrations. Do not use project `.env` files or Vercel as the primary production host.
 
 ## Do Not Reintroduce
 

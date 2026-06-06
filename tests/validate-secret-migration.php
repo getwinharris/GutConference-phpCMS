@@ -1,7 +1,7 @@
 <?php
 /**
  * Validation script for SecretService migration
- * Tests that services can read from SecretService with .env fallback
+ * Tests that services can read from SecretService with server environment fallback
  */
 
 require_once __DIR__ . '/../app/bootstrap.php';
@@ -79,5 +79,5 @@ try {
 
 echo "\n=== All Tests Passed ===\n";
 echo "SecretService migration is working correctly.\n";
-echo "Services fall back to .env when SecretService values are not set.\n";
+echo "Services fall back to server environment variables when SecretService values are not set.\n";
 exit(0);

@@ -3,7 +3,6 @@ namespace App\Services;
 
 final class StoragePermissionService {
     private array $paths = [
-        ['label'=>'Environment file', 'path'=>'.env', 'type'=>'file', 'mode'=>0664],
         ['label'=>'Storage root', 'path'=>'storage', 'type'=>'dir', 'mode'=>0775],
         ['label'=>'JSON data', 'path'=>'storage/data', 'type'=>'dir', 'mode'=>0775],
         ['label'=>'Backups', 'path'=>'storage/backups', 'type'=>'dir', 'mode'=>0775],

@@ -580,7 +580,7 @@
             "page": "admin/settings",
             "controller": "AdminController@saveAdminCredentials",
             "services": [
-                "EnvService",
+                "SecretService",
                 "AuthService"
             ]
         },
@@ -692,7 +692,6 @@
             "page": "admin/environment",
             "controller": "AdminController@environment",
             "services": [
-                "EnvService",
                 "StoragePermissionService",
                 "AuthService"
             ]
@@ -704,7 +703,6 @@
             "page": "admin/environment",
             "controller": "AdminController@saveEnvironment",
             "services": [
-                "EnvService",
                 "AuditLogService",
                 "AuthService"
             ]
