@@ -61,6 +61,32 @@
         },
         "password_hash": {
           "type": "secret"
+        },
+        "terms_accepted_at": {
+          "type": "number",
+          "description": "Unix timestamp of when the user accepted /terms. Set by AuthController::signupPost and AuthController::loginPost when the consent checkbox is ticked, and by AuthController::googleCallback on OAuth sign-in."
+        },
+        "privacy_accepted_at": {
+          "type": "number",
+          "description": "Unix timestamp of when the user accepted /privacy. Set by AuthController::signupPost and AuthController::loginPost when the consent checkbox is ticked, and by AuthController::googleCallback on OAuth sign-in."
+        },
+        "consent_version": {
+          "type": "string",
+          "description": "The version of the policies the user accepted (e.g. 'v1-2026-06-07'). Bump when /terms or /privacy content is materially updated and the user is asked to re-accept."
+        },
+        "consent_via": {
+          "type": "enum",
+          "values": [
+            "manual_form",
+            "google_oauth",
+            "admin_create",
+            "legacy"
+          ],
+          "description": "How the user accepted /terms and /privacy. manual_form = in-app checkbox on /signup or /login. google_oauth = consent recorded at the OAuth callback after the Google consent screen. admin_create = account created in /admin. legacy = account predates the consent field and has not yet re-accepted."
+        },
+        "consent_ip": {
+          "type": "string",
+          "description": "IP address captured at the time of consent acceptance. Optional audit field; may be empty for OAuth or admin-created users."
         }
       }
     },

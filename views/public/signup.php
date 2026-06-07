@@ -23,6 +23,10 @@
             <label>Confirm Password
                 <input type="password" name="password_confirm" required placeholder="Confirm password">
             </label>
+            <label class="consent-check">
+                <input type="checkbox" name="terms_accepted" value="1" required>
+                <span>I agree to the <a href="/terms" target="_blank" rel="noopener">Terms of Service</a> and <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>.</span>
+            </label>
             <button class="btn btn-primary form-submit">Create Account</button>
             <a class="link-arrow" href="/login">Already have an account? Login <span aria-hidden="true">→</span></a>
         </form>

@@ -14,62 +14,83 @@ final class AuthController extends BaseController {
   $this->flash('You are signed out.');
   $this->redirect('/login');
  }
- public function loginPost(): void {
-    $email = trim($_POST['email'] ?? '');
-    $password = $_POST['password'] ?? '';
-    if ($email === '' || $password === '') { $this->flash('Email and password required.'); $this->redirect('/login'); }
-    $admin = (new EnvService())->adminCredentials();
-    if ($admin['email'] !== '' && $admin['password'] !== '' && $email === $admin['email'] && hash_equals($admin['password'], $password)) {
-        $_SESSION['user'] = ['sub'=>'env-admin','email'=>$admin['email'],'name'=>$admin['username'] ?: 'Admin','role'=>'admin'];
-        $this->flash('Signed in.');
-        $this->redirect('/admin');
-    }
-    $store = new JsonStoreService();
-    $users = $store->read('users');
-    foreach ($users as $u) {
-        if (($u['email'] ?? '') === $email && !empty($u['password_hash']) && password_verify($password,$u['password_hash'])) {
-            $isAdmin = ($u['role'] ?? '') === 'admin' || !empty($u['is_admin']);
-            $_SESSION['user'] = ['sub'=>$u['id'],'email'=>$u['email'],'name'=>$u['name'] ?? '','certificate_name'=>$u['certificate_name'] ?? $u['name'] ?? '','role'=>$u['role'] ?? ($isAdmin ? 'admin' : 'customer')];
-            $this->flash('Signed in.');
-            $this->redirect($isAdmin ? '/admin' : '/dashboard');
-        }
-    }
-    $this->flash('Invalid credentials.');
-    $this->redirect('/login');
- }
- public function signupPost(): void {
-    $name = trim($_POST['name'] ?? '');
-    $certificateName = trim($_POST['certificate_name'] ?? $name);
-    $email = trim($_POST['email'] ?? '');
-    $password = $_POST['password'] ?? '';
-    $confirm = $_POST['password_confirm'] ?? '';
-    if ($name === '' || $certificateName === '' || $email === '' || $password === '' || $password !== $confirm) {
-        $this->flash('Enter your name, certificate name, email, and matching passwords.');
-        $this->redirect('/signup');
-    }
-    $store = new JsonStoreService();
-    $users = $store->read('users');
-    foreach ($users as $user) {
-        if (($user['email'] ?? '') === $email) {
-            $this->flash('An account already exists for this email.');
-            $this->redirect('/login');
-        }
-    }
-    $user = [
-        'id' => uniqid('user_', true),
-        'email' => $email,
-        'name' => $name,
-        'certificate_name' => $certificateName,
-        'role' => 'customer',
-        'password_hash' => password_hash($password, PASSWORD_DEFAULT),
-        'created_at' => time(),
-    ];
-    $store->upsert('users', $user);
-    (new NotificationQueueService($store))->queueSignup($user);
-    $_SESSION['user'] = ['sub'=>$user['id'],'email'=>$user['email'],'name'=>$user['name'],'certificate_name'=>$user['certificate_name'],'role'=>'customer'];
-    $this->flash('Account created.');
-    $this->redirect('/dashboard');
- }
+  public function loginPost(): void {
+     $email = trim($_POST['email'] ?? '');
+     $password = $_POST['password'] ?? '';
+     $termsAccepted = (string)($_POST['terms_accepted'] ?? '') === '1';
+     if ($email === '' || $password === '') { $this->flash('Email and password required.'); $this->redirect('/login'); }
+     if (!$termsAccepted) { $this->flash('Please accept the Terms of Service and Privacy Policy to sign in.'); $this->redirect('/login'); }
+     $admin = (new EnvService())->adminCredentials();
+     if ($admin['email'] !== '' && $admin['password'] !== '' && $email === $admin['email'] && hash_equals($admin['password'], $password)) {
+         $_SESSION['user'] = ['sub'=>'env-admin','email'=>$admin['email'],'name'=>$admin['username'] ?: 'Admin','role'=>'admin'];
+         $this->flash('Signed in.');
+         $this->redirect('/admin');
+     }
+     $store = new JsonStoreService();
+     $users = $store->read('users');
+     $now = time();
+     $consentIp = (string)($_SERVER['REMOTE_ADDR'] ?? '');
+     $consentVersion = 'v1-2026-06-07';
+     foreach ($users as $u) {
+         if (($u['email'] ?? '') === $email && !empty($u['password_hash']) && password_verify($password,$u['password_hash'])) {
+             $isAdmin = ($u['role'] ?? '') === 'admin' || !empty($u['is_admin']);
+             $store->upsert('users', array_merge($u, [
+                 'terms_accepted_at' => $now,
+                 'privacy_accepted_at' => $now,
+                 'consent_version' => $consentVersion,
+                 'consent_via' => 'manual_form',
+                 'consent_ip' => $consentIp,
+                 'updated_at' => $now,
+             ]));
+             $_SESSION['user'] = ['sub'=>$u['id'],'email'=>$u['email'],'name'=>$u['name'] ?? '','certificate_name'=>$u['certificate_name'] ?? $u['name'] ?? '','role'=>$u['role'] ?? ($isAdmin ? 'admin' : 'customer')];
+             $this->flash('Signed in.');
+             $this->redirect($isAdmin ? '/admin' : '/dashboard');
+         }
+     }
+     $this->flash('Invalid credentials.');
+     $this->redirect('/login');
+  }
+  public function signupPost(): void {
+     $name = trim($_POST['name'] ?? '');
+     $certificateName = trim($_POST['certificate_name'] ?? $name);
+     $email = trim($_POST['email'] ?? '');
+     $password = $_POST['password'] ?? '';
+     $confirm = $_POST['password_confirm'] ?? '';
+     $termsAccepted = (string)($_POST['terms_accepted'] ?? '') === '1';
+     if ($name === '' || $certificateName === '' || $email === '' || $password === '' || $password !== $confirm) {
+         $this->flash('Enter your name, certificate name, email, and matching passwords.');
+         $this->redirect('/signup');
+     }
+     if (!$termsAccepted) { $this->flash('Please accept the Terms of Service and Privacy Policy to create an account.'); $this->redirect('/signup'); }
+     $store = new JsonStoreService();
+     $users = $store->read('users');
+     foreach ($users as $user) {
+         if (($user['email'] ?? '') === $email) {
+             $this->flash('An account already exists for this email.');
+             $this->redirect('/login');
+         }
+     }
+     $now = time();
+     $user = [
+         'id' => uniqid('user_', true),
+         'email' => $email,
+         'name' => $name,
+         'certificate_name' => $certificateName,
+         'role' => 'customer',
+         'password_hash' => password_hash($password, PASSWORD_DEFAULT),
+         'terms_accepted_at' => $now,
+         'privacy_accepted_at' => $now,
+         'consent_version' => 'v1-2026-06-07',
+         'consent_via' => 'manual_form',
+         'consent_ip' => (string)($_SERVER['REMOTE_ADDR'] ?? ''),
+         'created_at' => $now,
+     ];
+     $store->upsert('users', $user);
+     (new NotificationQueueService($store))->queueSignup($user);
+     $_SESSION['user'] = ['sub'=>$user['id'],'email'=>$user['email'],'name'=>$user['name'],'certificate_name'=>$user['certificate_name'],'role'=>'customer'];
+     $this->flash('Account created.');
+     $this->redirect('/dashboard');
+  }
  public function googleRedirect(): void {
     $client = new GoogleOAuthClient((new SecretService())->all());
     if (!$client->configured()) {
