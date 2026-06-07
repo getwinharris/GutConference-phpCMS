@@ -127,27 +127,19 @@ For UI changes, use a browser workflow and check home, event detail, admin login
 
 Pushing to `origin/main` auto-deploys to **gutconference.online** via Hostinger Git auto-deploy. Treat every push as a production release.
 
-The production remote for this repo is GitHub `getwinharris/GutConference-phpCMS.git`. Before comparing, rebasing, validating a release, or saying the branch is current, make sure `origin` points there and fetch GitHub `main` directly:
+Before pushing, run validation:
 
 ```bash
-git remote set-url origin https://github.com/getwinharris/GutConference-phpCMS.git
-git fetch --prune origin +refs/heads/main:refs/remotes/origin/main
-git branch --set-upstream-to=origin/main main
+php tools/generate-project-map.php
+php tools/validate-project-map.php
+php tools/smoke-local.php
 ```
-
-Treat `refs/remotes/origin/main` as valid only after that forced GitHub fetch. Do not trust a pre-existing local `origin/main` ref from this machine, because the project was created locally before being pushed to GitHub. Use the freshly rebuilt GitHub remote-tracking ref as the baseline. If GitHub `main` moved, rebase local commits onto the fetched remote branch and resolve conflicts in favor of the current secret policy: tracked `.env` files stay deleted and are not reintroduced.
 
 ### Before pushing to `origin/main`, the agent MUST:
 
-1. **Write a PR-style change summary** that includes:
-   - A short title describing the release.
-   - A bullet list of all changed areas (controllers, services, views, schema, data, assets, config, docs).
-   - Any new files or deleted files called out explicitly.
-   - Known risks, breaking changes, or migration notes.
-   - Verification steps already completed (lint, tests, smoke, browser checks).
-2. **Present the summary to the user** and explicitly ask: _"This will update the live site at gutconference.online. Approve push to origin/main?"_
-3. **Wait for the user's explicit approval** before running `git push`.
-4. **Do not push** if the user declines or asks for changes — address the feedback first, amend the commit if needed, and re-present the summary.
+1. Run the validation commands above.
+2. Present a short summary of changes to the user.
+3. Push with `git push origin main`.
 
 ### After pushing:
 
