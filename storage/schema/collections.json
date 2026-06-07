@@ -43,11 +43,12 @@
           "type": "boolean"
         },
         "google_calendar_enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "True only when the user actually granted a Calendar scope at sign-in. Calendar scope is currently omitted from the OAuth request (gutconference.online's Google Cloud project has Calendar API disabled, so the scope is rejected with invalid_scope). Re-enable by enabling Google Calendar API in Google Cloud Console and re-adding the scope to GoogleOAuthClient::authUrl()."
         },
         "google_oauth_scope": {
           "type": "string",
-          "description": "Space-separated Google OAuth scopes. Includes calendar.events.created (write-only) for event creation, never the read+write calendar.events scope."
+          "description": "Space-separated Google OAuth scopes returned in the access token. Currently openid email profile only; calendar scope is omitted until Google Calendar API is enabled in Google Cloud Console."
         },
         "google_token_expires_at": {
           "type": "number"

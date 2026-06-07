@@ -25,7 +25,7 @@ final class PurchaseNotificationService {
             ]);
         }
 
-        if (!empty($user['google_calendar_enabled']) || !empty($user['google_sub'])) {
+        if (!empty($user['google_calendar_enabled'])) {
             foreach ($this->calendarReminderTimes($event) as $label => $timestamp) {
                 $jobs[] = $this->job($eventSlug, $registrationId, 'calendar', $email, 'google-calendar-reminder', $timestamp, [
                     'label' => $label,

@@ -11,6 +11,14 @@ final class GoogleOAuthClient {
     }
 
     public function authUrl(string $state): string {
+        // Calendar scope intentionally omitted: gutconference.online's Google Cloud
+        // project does not have the Google Calendar API enabled, so requesting
+        // any calendar scope makes Google reject the whole flow with
+        // `invalid_scope` (HTTP 400) and blocks every customer sign-in.
+        // To re-enable calendar writes, enable the Google Calendar API in the
+        // Google Cloud Console for this OAuth client, add the scope to the
+        // OAuth consent screen, and append the scope string below:
+        //   'https://www.googleapis.com/auth/calendar.events.created'
         $params = [
             'client_id' => $this->settings['google_client_id'],
             'redirect_uri' => $this->settings['google_redirect_uri'],
@@ -19,7 +27,6 @@ final class GoogleOAuthClient {
                 'openid',
                 'email',
                 'profile',
-                'https://www.googleapis.com/auth/calendar.events.created',
             ]),
             'access_type' => 'offline',
             'prompt' => 'consent',

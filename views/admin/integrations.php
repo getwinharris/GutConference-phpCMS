@@ -16,7 +16,12 @@
         <div style="border:1px solid var(--line);border-radius:8px;background:#f6fbfb;padding:14px;margin:12px 0;color:var(--muted)">
             <strong style="display:block;color:var(--ink);margin-bottom:6px">Fix Google 403 access_denied</strong>
             <p style="margin:0 0 8px">If Google says gutconference.online has not completed verification, the OAuth consent screen is still in Testing or the user is not approved. In Google Cloud Console, add customer/admin emails under OAuth consent screen -> Test users, or publish the app and complete verification before public Google login.</p>
-            <p style="margin:0">Authorized redirect URI must exactly match <code>https://gutconference.online/auth/google/callback</code>. Calendar access uses the write-only <code>calendar.events.created</code> scope, which avoids the heavier Google verification required for the read+write <code>calendar.events</code> scope.</p>
+            <p style="margin:0">Authorized redirect URI must exactly match <code>https://gutconference.online/auth/google/callback</code>.</p>
+        </div>
+        <div style="border:1px solid #c62828;border-radius:8px;background:#fff5f5;padding:14px;margin:12px 0;color:var(--muted)">
+            <strong style="display:block;color:#b71c1c;margin-bottom:6px">Fix Google 400 invalid_scope (calendar scope rejected)</strong>
+            <p style="margin:0 0 8px">If Google shows <code>Error 400: invalid_scope</code> on /auth/google, this OAuth client does not have the Google Calendar API enabled in Google Cloud Console, so any calendar scope makes Google reject the whole flow and blocks every customer sign-in. The OAuth request is currently scoped to <code>openid email profile</code> only so login works; calendar reminders are paused until the API is enabled.</p>
+            <p style="margin:0">To re-enable Google Calendar writes: in Google Cloud Console -> APIs &amp; Services -> Library, enable <strong>Google Calendar API</strong> for this OAuth client; under OAuth consent screen -> Scopes, add the <code>https://www.googleapis.com/auth/calendar.events.created</code> scope; then in <code>integrations/google-oauth/GoogleOAuthClient.php</code> re-add the scope line noted in the file's comment and redeploy.</p>
         </div>
         <div class="admin-form__row">
             <label>Google Client ID<input name="google_client_id" value="<?= e($secrets['google_client_id']??'') ?>" placeholder="xxxxx.apps.googleusercontent.com"></label>
