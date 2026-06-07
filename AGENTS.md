@@ -86,23 +86,22 @@ If the project map needs a new section (e.g. tools, integrations, gaps), extend 
 ## Rules
 
 - **Skill conflicts:** If two or more loaded skills give conflicting instructions for the same action, stop and report which skills conflict and which specific instructions overlap. Ask the user to resolve before proceeding. Do not silently pick one.
-- Keep JSON storage first. Do not introduce SQL/Postgres/MySQL unless the user explicitly asks for a separate migration.
-- Update `storage/schema/collections.json` before changing collection shapes, admin fields, media fields, or agent-visible context.
+- Keep all persistent data in `storage/data/*.json`; do not introduce SQL/Postgres/MySQL unless the user explicitly requests a separate migration.
+- Update `storage/schema/collections.json` before changing collection shapes, admin fields, media fields, agent-visible context, or seed data.
 - Keep route -> controller -> service -> JSON-store boundaries.
-- Do not add React, CDN React, or a SPA fallback.
-- Do not create a second frontend.
-- Build UI with modern HTML, CSS, JSON-backed data, and `storage/schema/collections.json`. Use PHP for routing, controllers, services, and shared-hosting data binding, not as the visual design model. Do not introduce a frontend framework unless explicitly requested.
-- Read `Design.md` before broad UI changes. For UI-only refactors, preserve visible text/content meaning unless the user explicitly asks for copy changes.
+- Do not add React, CDN React, SPA shells, or a second frontend or parallel implementation.
+- Build UI with modern HTML/CSS, JSON-backed data, and `storage/schema/collections.json`. PHP runs the shared-hosted app and binds data for routing, services, validation, persistence, and shared-hosting data binding; it should not drive the visual design model. Do not introduce a frontend framework unless explicitly requested.
+- Read `Design.md` before broad UI changes; use its GutConference-adapted Neuform comparison for density, motion, color, and component direction. For UI-only refactors, preserve visible text/content meaning unless the user explicitly asks for copy changes.
 - Public users must not be able to create conferences. Only admins create and publish events.
 - Admin mutations should be auditable.
 - Event media should use the media library picker/upload flow.
-- Environment and storage permission changes belong in `/admin/environment`, but do not introduce project `.env` files.
-- Do not use, create, restore, or track `.env`, `.env.example`, or other `.env.*` files in this project. Secrets must be configured through encrypted admin integrations in `storage/data/adminsecrets.json` or server-level environment configuration outside the repo. If a rebase reports env-file conflicts, keep the GitHub `main` deletion.
-- Keep admin navigation lean. Prefer grouped admin sections and automatic defaults over adding one-off menu items for every small action.
-- Maximize automation from event data: event date/time, timezone, ticket capacity, and paid bookings should drive labels, countdown/timer behavior, remaining seats, and notification timing.
-- Store timezone once in event/settings context and derive display labels from it instead of forcing repeated manual timezone selection.
-- Admin editors should only expose fields that need human judgment; generated labels, counters, queue timings, and derived availability should be computed by services or scripts.
-- Compare public event UX against provided competitor/reference URLs, but keep the tone clinical and conference-focused.
+- Environment and storage permission changes belong in `/admin/environment`, but do not introduce project `.env` files. Do not use, create, restore, or track `.env`, `.env.example`, or other `.env.*` files. Secrets must be configured through encrypted admin integrations in `storage/data/adminsecrets.json` or server-level environment configuration outside the repo. If a rebase reports env-file conflicts, keep the GitHub `main` deletion.
+- Admin integration secrets must be saved through `SecretService` into encrypted `storage/data/adminsecrets.json`. Do not model secrets in `collections.json`. Keep secret files git-ignored and out of public views.
+- Keep admin navigation lean. Prefer grouped admin sections and automatic defaults over adding one-off menu items for every small action. Group Events & Classes, Page Sections, Speakers, Agenda, Venues & Maps, and Registrations under Event Management.
+- Maximize automation from event/data: derive labels, countdown/timer values, remaining seats, and notification timing from event date/time, timezone, ticket capacity, and paid registrations. Store timezone once in event/settings context. Only expose fields in admin that need human judgment; generated labels, counters, queue timings, and derived availability should be computed by PHP services or scripts.
+- Compare public event UX against provided competitor/reference URLs, but keep the result corporate, clinical, luxury, credible, and profile-first.
+- Each event/class must expose a payment mode: external Razorpay payment page link or internal Razorpay integration. Payments require login first.
+- Customer signup is Google OAuth-first so Google Calendar reminders can be created for buyers without a second OAuth step. Manual password users are legacy/dev fallback; keep SMTP forgot-password reset support for them, but require Google connection before payment.
 - Use `php -S 127.0.0.1:6040 index.php` as the default local server command unless the port is already occupied.
 - When the product evolves, update the matching GutConference skill files under `.agents/skills/` so future agents inherit new workflow rules.
 - When working from a pull request, review previous PR comments, push fixes to the same remote branch when appropriate, and communicate PR follow-up clearly to the remote collaborator by email or the configured project communication channel when requested.
