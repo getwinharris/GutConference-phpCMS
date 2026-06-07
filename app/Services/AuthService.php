@@ -28,4 +28,22 @@ final class AuthService {
             exit;
         }
     }
+
+    public function isGoogleConnected(): bool {
+        $session = $_SESSION['user'] ?? null;
+        if (!empty($session['google_sub'])) {
+            return true;
+        }
+        $sub = (string)($session['sub'] ?? '');
+        if ($sub === '') {
+            return false;
+        }
+        $store = new JsonStoreService();
+        foreach ($store->read('users') as $user) {
+            if (($user['id'] ?? '') === $sub && !empty($user['google_sub'])) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

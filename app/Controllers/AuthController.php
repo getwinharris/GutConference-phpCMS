@@ -154,6 +154,7 @@ final class AuthController extends BaseController {
         'name' => $user['name'],
         'certificate_name' => $user['certificate_name'],
         'role' => $user['role'],
+        'google_sub' => (string)$profile['sub'],
     ];
     $this->flash('Signed in with Google.');
     $this->redirect(($user['role'] ?? '') === 'admin' ? '/admin' : '/dashboard');

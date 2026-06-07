@@ -21,6 +21,14 @@ input,textarea,select{width:100%;border:1px solid var(--line);border-radius:8px;
 .badge{display:inline-flex;border-radius:999px;padding:5px 9px;background:#edf7f5;color:var(--blue);font-size:12px;font-weight:800}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid var(--line);padding:10px;text-align:left;font-size:13px;vertical-align:top}th{color:var(--muted);text-transform:uppercase;font-size:11px}.flash{padding:12px 14px;background:#eaf8f2;border:1px solid #bee8d4;border-radius:8px;margin-bottom:18px}.admin-upload-panel{background:#f6fbfb;border:1px dashed var(--line);border-radius:8px;padding:14px;margin-top:16px}.admin-media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}.admin-media-tile{border:1px solid var(--line);border-radius:8px;padding:8px;background:#fff}.admin-media-tile img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px}.admin-image-preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.admin-image-preview img{width:76px;height:76px;object-fit:cover;border-radius:6px;border:1px solid var(--line)}.admin-table-thumb{width:48px;height:48px;object-fit:cover;border-radius:6px;border:1px solid var(--line);display:block}.brand-asset-grid,.brand-token-grid,.brand-type-grid,.brand-guideline-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.brand-asset,.brand-token,.brand-type-grid>div,.brand-guideline-grid>div{border:1px solid var(--line);border-radius:8px;background:#fff;padding:14px}.brand-asset img{height:90px;object-fit:contain;margin-bottom:12px}.brand-asset strong,.brand-token strong,.brand-guideline-grid strong{display:block;color:var(--ink);margin-bottom:4px}.brand-asset code,.brand-token code{color:var(--muted);font-size:12px;overflow-wrap:anywhere}.brand-token span{display:block;height:56px;border-radius:8px;border:1px solid var(--line);margin-bottom:10px}.brand-type-grid span{display:block;color:var(--muted);font-size:11px;font-weight:800;text-transform:uppercase;margin-bottom:8px}.brand-guideline-grid p{color:var(--muted);margin:0}
 @media(min-width:841px){body.support-open .admin-shell{margin-right:430px}}
 @media(max-width:840px){.admin-shell{grid-template-columns:1fr}.admin-sidebar{position:relative;height:auto}.admin-body{padding:14px}.support-panel{inset:0;width:100vw;height:100vh;border-radius:0}.support-form{grid-template-columns:1fr}}
+.admin-nav .admin-nav-label{padding:16px 20px 7px;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.35);font-weight:800;display:block}
+.admin-nav .admin-nav-group{margin:0}
+.admin-nav .admin-nav-group>summary{padding:16px 20px 7px;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.35);list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;font-weight:800}
+.admin-nav .admin-nav-group>summary::-webkit-details-marker{display:none}
+.admin-nav .admin-nav-group>summary::after{content:"\25BE";font-size:10px;transition:transform .2s ease;color:rgba(255,255,255,.45);margin-left:auto}
+.admin-nav .admin-nav-group[open]>summary::after{transform:rotate(180deg)}
+.admin-nav .admin-nav-group[open]>a,.admin-nav .admin-nav-group>a{padding-left:32px}
+.admin-nav .admin-nav-group>a.is-child{padding-left:32px}
 </style>
 <style>
 .support-message--working{display:inline-flex;align-items:center;gap:10px;width:fit-content;color:#073a66;font-weight:800}.agent-working-copy{color:var(--muted);font-size:12px;letter-spacing:.02em}.agent-orbit{position:relative;display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle,#fff 0 38%,rgba(249,115,22,.10) 39% 100%);border:1px solid rgba(249,115,22,.32)}.agent-orbit:before,.agent-orbit:after,.agent-orbit i{content:"";position:absolute;border-radius:50%}.agent-orbit:before{inset:4px;border:2px solid rgba(7,58,102,.16);border-top-color:#f97316;animation:agent-spin 1.1s linear infinite}.agent-orbit:after{width:6px;height:6px;background:var(--teal);box-shadow:0 0 16px rgba(57,185,168,.7);transform:translateY(-10px);animation:agent-dot 1.1s linear infinite}.agent-orbit i{width:8px;height:8px;background:#073a66;opacity:.9}.agent-orbit--button{width:24px;height:24px;background:transparent;border-color:rgba(255,255,255,.48)}.agent-orbit--button i{background:#fff}.agent-orbit--button:before{border-color:rgba(255,255,255,.26);border-top-color:#fff}.agent-orbit--button:after{background:#fb923c;box-shadow:0 0 12px rgba(251,146,60,.8);transform:translateY(-8px)}.support-widget.is-thinking .gemini-mark:before{animation:agent-spin 1.4s linear infinite}@keyframes agent-spin{to{transform:rotate(360deg)}}@keyframes agent-dot{to{transform:rotate(360deg) translateY(-10px)}}@media(prefers-reduced-motion:reduce){.support-widget.is-thinking .gemini-mark:before,.agent-orbit:before,.agent-orbit:after{animation:none}}
@@ -30,30 +38,62 @@ input,textarea,select{width:100%;border:1px solid var(--line);border-radius:8px;
 <div class="admin-shell">
     <aside class="admin-sidebar">
         <div class="admin-brand">GutConference Online<small>Admin CMS</small></div>
+        <?php
+            $adminNavPath = $_SERVER['REQUEST_URI'] ?? '/admin';
+            $adminNavGroupActive = function(string $group) use ($adminNavPath): bool {
+                $prefixes = [
+                    'event'   => ['/admin/events', '/admin/event_sections', '/admin/speakers', '/admin/sessions', '/admin/venues', '/admin/registrations'],
+                    'people'  => ['/admin/contact-submissions', '/admin/support-tickets', '/admin/publishers'],
+                    'comms'   => ['/admin/notification_templates', '/admin/notification_queue'],
+                    'branding'=> ['/admin/branding', '/admin/media'],
+                    'system'  => ['/admin/integrations', '/admin/settings', '/admin/environment', '/admin/audit-log', '/admin/developer/project-map'],
+                ];
+                foreach ($prefixes[$group] ?? [] as $prefix) {
+                    if (str_starts_with($adminNavPath, $prefix)) return true;
+                }
+                return false;
+            };
+            $adminNavActive = function(string $prefix) use ($adminNavPath): bool {
+                return $adminNavPath === $prefix || str_starts_with($adminNavPath, $prefix);
+            };
+        ?>
         <nav class="admin-nav">
-            <strong>Main</strong>
-            <a href="/admin" class="<?= ($_SERVER['REQUEST_URI'] === '/admin' ? 'active' : '') ?>">Dashboard</a>
-            <strong>Event Management</strong>
-            <a href="/admin/events" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/events') ? 'active' : '') ?>">Events &amp; Classes</a>
-            <a href="/admin/event_sections" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/event_sections') ? 'active' : '') ?>">Page Sections</a>
-            <a href="/admin/speakers" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/speakers') ? 'active' : '') ?>">Speakers</a>
-            <a href="/admin/sessions" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/sessions') ? 'active' : '') ?>">Agenda</a>
-            <a href="/admin/venues" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/venues') ? 'active' : '') ?>">Venues & Maps</a>
-            <a href="/admin/registrations" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/registrations') ? 'active' : '') ?>">Registrations</a>
-            <strong>Operations</strong>
-            <a href="/admin/notification_templates" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/notification_templates') ? 'active' : '') ?>">Notification Templates</a>
-            <a href="/admin/notification_queue" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/notification_queue') ? 'active' : '') ?>">Notification Queue</a>
-            <a href="/admin/contact-submissions" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/contact-submissions') ? 'active' : '') ?>">Contacts</a>
-            <a href="/admin/support-tickets" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/support-tickets') ? 'active' : '') ?>">Support Agent</a>
-            <a href="/admin/branding" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/branding') ? 'active' : '') ?>">Branding</a>
-            <a href="/admin/publishers" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/publishers') ? 'active' : '') ?>">Publishers</a>
-            <a href="/admin/media" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/media') ? 'active' : '') ?>">Media</a>
-            <a href="/admin/integrations" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/integrations') ? 'active' : '') ?>">Integrations</a>
-            <a href="/admin/settings" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/settings') ? 'active' : '') ?>">Settings</a>
-            <a href="/admin/environment" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/environment') ? 'active' : '') ?>">Environment</a>
-            <a href="/admin/audit-log" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/audit-log') ? 'active' : '') ?>">Audit Log</a>
-            <a href="/admin/developer/project-map" class="<?= (str_starts_with($_SERVER['REQUEST_URI'], '/admin/developer/project-map') ? 'active' : '') ?>">Project Map</a>
-            <strong>Account</strong>
+            <strong class="admin-nav-label">Overview</strong>
+            <a href="/admin" class="<?= ($adminNavPath === '/admin' ? 'active' : '') ?>">Dashboard</a>
+            <details class="admin-nav-group" <?= $adminNavGroupActive('event') ? 'open' : '' ?>>
+                <summary>Event &amp; Course</summary>
+                <a href="/admin/events" class="<?= ($adminNavActive('/admin/events') ? 'active' : '') ?>">Events</a>
+                <a href="/admin/sessions" class="<?= ($adminNavActive('/admin/sessions') ? 'active' : '') ?>">Agenda</a>
+                <a href="/admin/speakers" class="<?= ($adminNavActive('/admin/speakers') ? 'active' : '') ?>">Speakers</a>
+                <a href="/admin/event_sections" class="<?= ($adminNavActive('/admin/event_sections') ? 'active' : '') ?>">Page Sections</a>
+                <a href="/admin/venues" class="<?= ($adminNavActive('/admin/venues') ? 'active' : '') ?>">Venues &amp; Maps</a>
+                <a href="/admin/registrations" class="<?= ($adminNavActive('/admin/registrations') ? 'active' : '') ?>">Registrations</a>
+            </details>
+            <details class="admin-nav-group" <?= $adminNavGroupActive('people') ? 'open' : '' ?>>
+                <summary>People</summary>
+                <a href="/admin/contact-submissions" class="<?= ($adminNavActive('/admin/contact-submissions') ? 'active' : '') ?>">Contacts</a>
+                <a href="/admin/support-tickets" class="<?= ($adminNavActive('/admin/support-tickets') ? 'active' : '') ?>">Support Agent</a>
+                <a href="/admin/publishers" class="<?= ($adminNavActive('/admin/publishers') ? 'active' : '') ?>">Publishers</a>
+            </details>
+            <details class="admin-nav-group" <?= $adminNavGroupActive('comms') ? 'open' : '' ?>>
+                <summary>Comms</summary>
+                <a href="/admin/notification_templates" class="<?= ($adminNavActive('/admin/notification_templates') ? 'active' : '') ?>">Notification Templates</a>
+                <a href="/admin/notification_queue" class="<?= ($adminNavActive('/admin/notification_queue') ? 'active' : '') ?>">Notification Queue</a>
+            </details>
+            <details class="admin-nav-group" <?= $adminNavGroupActive('branding') ? 'open' : '' ?>>
+                <summary>Branding</summary>
+                <a href="/admin/branding" class="<?= ($adminNavActive('/admin/branding') ? 'active' : '') ?>">Branding</a>
+                <a href="/admin/media" class="<?= ($adminNavActive('/admin/media') ? 'active' : '') ?>">Media</a>
+            </details>
+            <details class="admin-nav-group" <?= $adminNavGroupActive('system') ? 'open' : '' ?>>
+                <summary>System</summary>
+                <a href="/admin/integrations" class="<?= ($adminNavActive('/admin/integrations') ? 'active' : '') ?>">Integrations</a>
+                <a href="/admin/settings" class="<?= ($adminNavActive('/admin/settings') ? 'active' : '') ?>">Settings</a>
+                <a href="/admin/environment" class="<?= ($adminNavActive('/admin/environment') ? 'active' : '') ?>">Environment</a>
+                <a href="/admin/audit-log" class="<?= ($adminNavActive('/admin/audit-log') ? 'active' : '') ?>">Audit Log</a>
+                <a href="/admin/developer/project-map" class="<?= ($adminNavActive('/admin/developer/project-map') ? 'active' : '') ?>">Project Map</a>
+            </details>
+            <strong class="admin-nav-label">Account</strong>
             <a href="/" target="_blank">View Site</a>
             <a href="/logout">Logout</a>
         </nav>

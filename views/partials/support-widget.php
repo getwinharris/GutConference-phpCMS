@@ -1,5 +1,6 @@
 <?php
 $supportPlaceholder = $supportPlaceholder ?? 'Ask about events, speakers, tickets, certificates, or improvements';
+$supportGoogleConnected = $supportGoogleConnected ?? false;
 ?>
 <div class="support-widget" data-support-widget>
     <div class="support-panel" data-support-panel aria-hidden="true">
@@ -8,6 +9,12 @@ $supportPlaceholder = $supportPlaceholder ?? 'Ask about events, speakers, ticket
                 <div><strong>Gemini Support Agent</strong><span>Grounded in GutConference CMS data</span></div>
                 <button type="button" data-support-close aria-label="Minimize support">-</button>
             </div>
+            <?php if (!$supportGoogleConnected): ?>
+            <div class="support-google-prompt" data-support-google-prompt>
+                <p>Sign in with Google to connect with the Gemini support model and get account-specific answers about your registrations and certificates.</p>
+                <a class="google-login-button support-google-button" href="/auth/google"><span class="google-mark" aria-hidden="true">G</span><span>Sign in with Google</span></a>
+            </div>
+            <?php endif; ?>
             <div class="support-messages" data-support-messages></div>
             <form class="support-form" data-support-form>
                 <textarea name="message" rows="2" required placeholder="<?= e($supportPlaceholder) ?>"></textarea>

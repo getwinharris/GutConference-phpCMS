@@ -27,11 +27,13 @@ final class PublicController extends BaseController {
 
     public function terms(): void {
         $this->detectApiRequest();
+        $this->layout = 'auth';
         $this->render('public/terms', ['pageTitle' => 'Terms of Service']);
     }
 
     public function privacy(): void {
         $this->detectApiRequest();
+        $this->layout = 'auth';
         $this->render('public/privacy', ['pageTitle' => 'Privacy Policy']);
     }
 
@@ -101,14 +103,14 @@ final class PublicController extends BaseController {
         $this->render('public/contact', ['success' => $success, 'subject' => $subject, 'events' => $events->published()]);
     }
     
-    public function login(): void { 
+    public function login(): void {
         $this->detectApiRequest();
-        $this->render('public/login'); 
+        $this->render('public/login', ['hideSiteChrome' => true, 'bodyClass' => 'auth-only']);
     }
 
     public function signup(): void {
         $this->detectApiRequest();
-        $this->render('public/signup');
+        $this->render('public/signup', ['hideSiteChrome' => true, 'bodyClass' => 'auth-only']);
     }
 
     private function certificateAvailable(array $registration, array $event): bool {

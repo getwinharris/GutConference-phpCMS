@@ -1,6 +1,6 @@
 <section class="section auth-surface">
     <div class="container">
-        <div class="auth-copy">
+        <div class="legal-copy">
             <p class="eyebrow">Terms of Service</p>
             <h1>GutConference booking terms.</h1>
             <p class="lede">These terms apply to event, class, consultation, and certificate workflows purchased or booked through GutConference.</p>

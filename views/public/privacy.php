@@ -1,6 +1,6 @@
 <section class="section auth-surface">
     <div class="container">
-        <div class="auth-copy">
+        <div class="legal-copy">
             <p class="eyebrow">Privacy Policy</p>
             <h1>How GutConference uses booking data.</h1>
             <p class="lede">GutConference collects only the details needed to manage registrations, payments, reminders, certificates, and support.</p>

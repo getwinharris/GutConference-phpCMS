@@ -127,7 +127,8 @@ assertTrue(str_contains($checkout, 'checkout-popup') && str_contains($checkout, 
 assertTrue(str_contains($event, 'sticky-register') && str_contains($event, 'section-nav'), 'event page includes sticky registration and section navigation');
 assertTrue(str_contains($event, 'event-hero-copy') && !str_contains($event, 'event-thumbnail') && !str_contains($event, '<span>Mode</span>') && str_contains($event, 'timeline-row') && str_contains($event, 'agenda-time') && str_contains($event, 'agenda-copy'), 'event page centers hero content without the old media or mode card and keeps agenda display');
 assertTrue(str_contains($event, 'HURRY') && str_contains($event, 'TICKING') && str_contains($event, 'event-slots') && str_contains($event, 'data-countdown-deadline') && !str_contains($event, 'E-certificate included') && !str_contains($event, 'conference-note') && !str_contains($event, 'agenda slots'), 'event page shows countdown urgency and derived availability instead of old trust strip');
-assertTrue(str_contains($admin, 'Event Management') && str_contains($admin, 'Events &amp; Classes') && strpos($admin, '/admin/speakers') > strpos($admin, 'Event Management'), 'admin nav groups event resources');
+assertTrue(str_contains($admin, 'Event &amp; Course') && str_contains($admin, '/admin/events') && str_contains($admin, '/admin/speakers'), 'admin nav nests event resources under Event & Course group');
+assertTrue(str_contains($admin, '<details') && str_contains($admin, '<summary') && str_contains($admin, '>Event &amp; Course<'), 'admin nav uses collapsible details groups');
 assertTrue(str_contains($admin, '/admin/support-tickets'), 'admin nav exposes support agent tickets');
 assertTrue(str_contains($admin, '/admin/branding'), 'admin nav exposes branding system');
 assertTrue(!str_contains($admin, 'legacy-marketplace') && !str_contains($home, 'legacy-source-brand'), 'active UI does not expose old domain labels');

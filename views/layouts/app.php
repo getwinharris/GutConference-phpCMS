@@ -24,6 +24,8 @@ $googleTagManagerId = trim((string)($layoutSecrets['google_tag_manager_id'] ?? '
 $googleVerification = trim((string)($layoutSecrets['google_search_console_verification'] ?? ''));
 $loggedInUser = $_SESSION['user'] ?? null;
 $isSignedIn = !empty($loggedInUser);
+$hideSiteChrome = $hideSiteChrome ?? false;
+$bodyClass = isset($bodyClass) ? (string)$bodyClass : '';
 
 // Dynamic SEO
 if (!empty($event)) {
@@ -68,7 +70,7 @@ gtag('config', '<?= e($googleSiteTagId) ?>');
 <?php endif; ?>
 <link rel="stylesheet" href="/assets/css/index.css?v=<?= e((string)@filemtime(app_path('assets/css/index.css'))) ?>">
 </head>
-<body class="<?= $isSignedIn ? 'has-user-rail' : 'is-guest' ?>">
+<body class="<?= trim(($isSignedIn ? 'has-user-rail' : 'is-guest') . ' ' . $bodyClass) ?>">
 <?php if($googleTagManagerId !== ''): ?><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<?= e($googleTagManagerId) ?>" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><?php endif; ?>
 <header class="site-header">
     <div class="container nav">
@@ -115,7 +117,7 @@ gtag('config', '<?= e($googleSiteTagId) ?>');
 </aside>
 <?php endif; ?>
 <main><?php require $viewFile; ?></main>
-<?php if($showLayoutEventSlider && !empty($layoutEvents)): ?>
+<?php if(!$hideSiteChrome && $showLayoutEventSlider && !empty($layoutEvents)): ?>
 <?php $layoutEventCount = count($layoutEvents); ?>
 <section class="section site-event-slider" aria-labelledby="site-event-slider-title">
     <div class="container">
@@ -212,6 +214,7 @@ gtag('config', '<?= e($googleSiteTagId) ?>');
 </script>
 <?php endif; ?>
 <?php endif; ?>
+<?php if(!$hideSiteChrome): ?>
 <section class="section site-contact-cta" aria-labelledby="site-contact-cta-title">
     <div class="container grid-2 cta-grid">
         <div>
@@ -248,13 +251,20 @@ gtag('config', '<?= e($googleSiteTagId) ?>');
         <div>
             <strong>gutconference.online</strong>
             <p>Dr. Praveen Jacob's clinical profile, gut-health education, consultation pathways, event booking, online class booking, and microbiome-focused events.</p>
-            <p class="footer-links"><a href="/events">Event Booking</a><br><a href="/events">Online Class Booking</a><br><a href="/contact">Contact</a></p>
+            <p class="footer-links"><a href="/events">Event &amp; Course</a><br><a href="/contact">Contact</a></p>
         </div>
         <div><strong>Legal</strong><p><a href="/terms">Terms</a><br><a href="/privacy">Privacy</a></p></div>
         <div><strong>Contact</strong><p>gutconference2026@gmail.com<br>+91 97314 82585</p></div>
     </div>
 </footer>
-<?php $supportPlaceholder = 'Ask about events, joined courses, certificates, or tell us what to improve'; require app_path('views/partials/support-widget.php'); ?>
+<?php endif; ?>
+<?php
+if(!$hideSiteChrome):
+$supportPlaceholder = 'Ask about events, joined courses, certificates, or tell us what to improve';
+$supportGoogleConnected = (new \App\Services\AuthService())->isGoogleConnected();
+require app_path('views/partials/support-widget.php');
+endif;
+?>
 <script>
 (() => {
     const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;

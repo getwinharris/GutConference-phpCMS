@@ -2670,6 +2670,9 @@ body.has-user-rail .sticky-register { left: 236px; }
 }
 .support-chat__head strong { display: block; color: var(--navy); }
 .support-chat__head span { color: var(--muted); font-size: 12px; font-weight: 800; }
+.support-google-prompt { padding: 14px 18px; border-bottom: 1px solid var(--line); background: #f6fbfb; }
+.support-google-prompt p { margin: 0 0 10px; font-size: 13px; line-height: 1.4; color: var(--navy); }
+.support-google-button { width: 100%; justify-content: center; }
 .support-chat__head button { border: 0; background: #eef6f6; color: var(--navy); border-radius: 8px; width: 36px; height: 36px; font-size: 24px; cursor: pointer; line-height: 1; }
 .support-messages { min-height: 0; overflow: auto; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
 .support-message { max-width: 88%; border-radius: 8px; padding: 10px 12px; color: var(--ink); white-space: pre-wrap; }
@@ -2849,6 +2852,17 @@ label { display: grid; gap: 7px; color: var(--navy); font-size: 13px; font-weigh
 
 .auth-surface { min-height: 70vh; display: grid; align-items: center; }
 .auth-shell { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(380px, .98fr); align-items: center; gap: 40px; }
+body.auth-only { background: #f6fbfb; min-height: 100vh; }
+body.auth-only .auth-surface { min-height: calc(100vh - 80px); }
+body.auth-only .auth-shell { grid-template-columns: minmax(0, 460px); justify-content: center; gap: 0; }
+body.auth-only .auth-copy { display: none; }
+body.auth-only .form-card { max-width: 460px; }
+body.auth-only .legal-copy { background: linear-gradient(135deg, rgba(255,255,255,.96), rgba(237,249,246,.86)); border: 1px solid var(--line); border-radius: 8px; padding: 34px; box-shadow: var(--shadow); max-width: 720px; margin: 0 auto; }
+body.auth-only .legal-copy p { color: var(--ink); }
+.auth-only-brand { position: absolute; top: 20px; left: 24px; display: inline-flex; align-items: center; gap: 10px; color: var(--navy); text-decoration: none; font-size: 14px; }
+.auth-only-brand img { height: 28px; width: auto; display: block; }
+.auth-only-brand strong { font-weight: 900; letter-spacing: .02em; }
+.auth-only-main { display: block; padding: 80px 20px 40px; }
 .auth-copy, .auth-visual, .form-card {
     background: rgba(255,255,255,.94);
     border: 1px solid var(--line);

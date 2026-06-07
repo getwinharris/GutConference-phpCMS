@@ -9,7 +9,7 @@
             <a class="google-login-button" href="/auth/google"><span class="google-mark" aria-hidden="true">G</span><span>Continue with Google</span></a>
             <p class="form-helper">Google login is required for customers buying events or classes so Calendar reminders can be created after payment.</p>
             <label>Email Address
-                <input type="email" name="email" required placeholder="admin@gutconference.online">
+                <input type="email" name="email" required placeholder="you@example.com">
             </label>
             <label>Password
                 <input type="password" name="password" required placeholder="••••••••">
@@ -17,7 +17,6 @@
             <button class="btn btn-primary form-submit">Sign In</button>
             <a class="link-arrow" href="/signup">Create Account <span aria-hidden="true">→</span></a>
             <p class="form-footer"><a href="/forgot-password">Forgot your password?</a></p>
-            <p class="form-helper">Password login is kept for admins and legacy manual users. Manual users must connect Google before payment.</p>
         </form>
     </div>
 </section>
