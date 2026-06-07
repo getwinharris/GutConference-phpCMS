@@ -2860,8 +2860,10 @@ body.auth-only .form-card { max-width: 460px; }
 body.auth-only .legal-copy { background: linear-gradient(135deg, rgba(255,255,255,.96), rgba(237,249,246,.86)); border: 1px solid var(--line); border-radius: 8px; padding: 34px; box-shadow: var(--shadow); max-width: 720px; margin: 0 auto; }
 body.auth-only .legal-copy p { color: var(--ink); }
 .auth-only-brand { position: absolute; top: 20px; left: 24px; display: inline-flex; align-items: center; gap: 10px; color: var(--navy); text-decoration: none; font-size: 14px; }
-.auth-only-brand img { height: 28px; width: auto; display: block; }
+.auth-only-brand img { height: 44px; width: auto; display: block; }
 .auth-only-brand strong { font-weight: 900; letter-spacing: .02em; }
+.auth-only-brand span { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.auth-only-brand span::after { content: ""; width: 100%; height: 2px; background: var(--brand-gradient); border-radius: 99px; }
 .auth-only-main { display: block; padding: 80px 20px 40px; }
 .auth-copy, .auth-visual, .form-card {
     background: rgba(255,255,255,.94);

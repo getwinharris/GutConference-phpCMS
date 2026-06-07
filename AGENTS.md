@@ -15,7 +15,7 @@ This repo is a GutConference Online PHP/JSON full-stack CMS for shared hosting. 
 - Database: JSON collections in `storage/data/`.
 - Schema: `storage/schema/collections.json` is the source of truth for collection shapes, admin fields, media fields, and agent-visible context.
 - Admin: owner tools for events, sections, speakers, agenda, venues/maps, registrations, notifications, media, integrations, environment, settings, audit logs, and project map. Admin is already fine-tuned — do not add admin features unless the user explicitly asks.
-- Agent workflow: `AGENTS.md`, `example-Agent.md`, `Design.md`, and `.agents/skills/`.
+- Agent workflow: `AGENTS.md`, `Design.md`, and `.agents/skills/`.
 
 ## Project Status and Mindset
 
@@ -30,9 +30,7 @@ This repo is a GutConference Online PHP/JSON full-stack CMS for shared hosting. 
 1. `README.md`
 2. `storage/schema/collections.json`
 3. `docs/systematic-map.mmd` (the single project-map artifact — comprehensive mermaid flowchart with all routes, controllers, services, views, integrations, schema, storage, tools, and gaps)
-4. `example-Agent.md`
-5. For broad work spanning UI/backend/schema/payment/review, read `.agents/skills/gutconference-orchestrator/SKILL.md`.
-6. The narrow GutConference skill under `.agents/skills/<skill-name>/SKILL.md` that matches the task. For admin work use the `gutconference-admin` skill.
+4. The narrow GutConference skill under `.agents/skills/<skill-name>/SKILL.md` that matches the task. For admin work use the `gutconference-admin` skill.
 
 ## Project Map as the Source of Truth
 
@@ -56,17 +54,19 @@ For each issue you write:
 3. The fix outline must reference existing files and existing services where possible. Do not invent new services / controllers / views / storage folders when the map shows existing code already covers the case.
 4. After implementing, regenerate the map and confirm the gap is closed (or the new gap is intentional and accepted).
 
-## Investigation Before Issues
+## User Prompt IS the Issue
 
-The user is the customer. The user types issues in chat or files GitHub issues. The agent must:
+The user is the customer. When the user types a prompt in chat, **that prompt is the issue** — not a request for clarification, not a discussion topic, not a meta-comment. The agent must execute the issue end-to-end:
 
-1. **Read the relevant code first.** Quote file paths and line numbers that demonstrate the gap.
-2. **Quote the map gap or edge** that proves the issue is real.
-3. **Quote the schema field** that the change must respect.
-4. **Then** write a focused issue. One issue per validated finding. Do not bundle unverified scope into a single issue.
-5. **Wait for explicit user instruction** before implementing. The user reviews the issue, decides priority, and tells the agent to implement.
+1. **Verify the code.** Read the affected files. Quote file paths and line numbers that demonstrate the current state (and the gap, if any). Quote the project map edge or gap node that proves the issue is real. Quote the schema field that the change must respect.
+2. **File the issue in Git.** One focused issue per prompt. Reference the verified files, the map edge, and the schema field. Do not bundle unverified scope.
+3. **Implement the fix.** Apply the small surgical change described in the issue. Extend existing code; do not scaffold parallel services / controllers / views / storage folders. Update the schema before changing code that depends on the collection shape.
+4. **Validate.** `php -l`, `php tests/run.php`, `php tools/generate-project-map.php`, `php tools/validate-project-map.php`, `php tools/smoke-local.php`. Add new tests for the new behavior.
+5. **Commit and ask for push approval.** Commit with a clear message. Present a PR-style summary to the user. **Wait for explicit push approval** before `git push` — Hostinger auto-deploys to `gutconference.online` on push, so every push is a production release.
 
-Do not invent issues out of speculation. If the user says "fix the payment flow" and the code is already correct, the answer is "the code is already correct; here is the file and line that proves it." Not a new service. Not a new view.
+Do not invent issues out of speculation. If the user says "fix the payment flow" and the code is already correct, the answer is "the code is already correct; here is the file and line that proves it." No new service. No new view. The issue is filed, the fix is "no code change needed", the validation passes, and the prompt is closed.
+
+Do not stop at filing the issue and wait for the user to say "now implement." The user already said so when they typed the prompt. The two-step "file then wait" loop from older versions of this guide is removed.
 
 ## Do Not Scaffold
 
