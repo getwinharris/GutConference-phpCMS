@@ -19,7 +19,7 @@ final class GoogleOAuthClient {
                 'openid',
                 'email',
                 'profile',
-                'https://www.googleapis.com/auth/calendar.events',
+                'https://www.googleapis.com/auth/calendar.events.created',
             ]),
             'access_type' => 'offline',
             'prompt' => 'consent',

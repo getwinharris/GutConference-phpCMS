@@ -136,7 +136,7 @@ final class AuthController extends BaseController {
         'role' => $existing['role'] ?? 'customer',
         'google_sub' => (string)$profile['sub'],
         'google_email_verified' => (bool)($profile['email_verified'] ?? false),
-        'google_calendar_enabled' => str_contains($scope, 'https://www.googleapis.com/auth/calendar.events'),
+        'google_calendar_enabled' => str_contains($scope, 'https://www.googleapis.com/auth/calendar.events') || str_contains($scope, 'https://www.googleapis.com/auth/calendar.events.created'),
         'google_oauth_scope' => $scope,
         'google_token_expires_at' => time() + (int)($tokens['expires_in'] ?? 0),
         'updated_at' => time(),

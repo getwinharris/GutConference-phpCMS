@@ -46,7 +46,8 @@
           "type": "boolean"
         },
         "google_oauth_scope": {
-          "type": "string"
+          "type": "string",
+          "description": "Space-separated Google OAuth scopes. Includes calendar.events.created (write-only) for event creation, never the read+write calendar.events scope."
         },
         "google_token_expires_at": {
           "type": "number"

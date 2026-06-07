@@ -16,7 +16,7 @@
         <div style="border:1px solid var(--line);border-radius:8px;background:#f6fbfb;padding:14px;margin:12px 0;color:var(--muted)">
             <strong style="display:block;color:var(--ink);margin-bottom:6px">Fix Google 403 access_denied</strong>
             <p style="margin:0 0 8px">If Google says gutconference.online has not completed verification, the OAuth consent screen is still in Testing or the user is not approved. In Google Cloud Console, add customer/admin emails under OAuth consent screen -> Test users, or publish the app and complete verification before public Google login.</p>
-            <p style="margin:0">Authorized redirect URI must exactly match <code>https://gutconference.online/auth/google/callback</code>. Calendar access uses the sensitive <code>calendar.events</code> scope, so public launch may require Google verification.</p>
+            <p style="margin:0">Authorized redirect URI must exactly match <code>https://gutconference.online/auth/google/callback</code>. Calendar access uses the write-only <code>calendar.events.created</code> scope, which avoids the heavier Google verification required for the read+write <code>calendar.events</code> scope.</p>
         </div>
         <div class="admin-form__row">
             <label>Google Client ID<input name="google_client_id" value="<?= e($secrets['google_client_id']??'') ?>" placeholder="xxxxx.apps.googleusercontent.com"></label>
