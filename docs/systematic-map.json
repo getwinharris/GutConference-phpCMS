@@ -1,0 +1,1734 @@
+{
+    "generated_at": "2026-06-07T18:54:31+05:30",
+    "controllers": {
+        "AdminController": {
+            "file": "app/Controllers/AdminController.php",
+            "method_count": 42,
+            "methods": [
+                "__construct",
+                "dashboard",
+                "events",
+                "saveEvent",
+                "deleteEvent",
+                "eventSections",
+                "saveEventSection",
+                "deleteEventSection",
+                "speakers",
+                "saveSpeaker",
+                "deleteSpeaker",
+                "sessions",
+                "saveSession",
+                "deleteSession",
+                "venues",
+                "saveVenue",
+                "deleteVenue",
+                "publishers",
+                "savePublisher",
+                "deletePublisher",
+                "registrations",
+                "notificationTemplates",
+                "saveNotificationTemplate",
+                "deleteNotificationTemplate",
+                "notificationQueue",
+                "processNotificationQueue",
+                "branding",
+                "settings",
+                "saveSettings",
+                "saveAdminCredentials",
+                "integrations",
+                "saveIntegrations",
+                "backups",
+                "audit",
+                "contactSubmissions",
+                "supportTickets",
+                "media",
+                "uploadMedia",
+                "environment",
+                "saveEnvironment",
+                "fixPermissions",
+                "projectMap"
+            ]
+        },
+        "AuthController": {
+            "file": "app/Controllers/AuthController.php",
+            "method_count": 9,
+            "methods": [
+                "logout",
+                "loginPost",
+                "signupPost",
+                "googleRedirect",
+                "googleCallback",
+                "forgotPassword",
+                "forgotPasswordPost",
+                "resetPassword",
+                "resetPasswordPost"
+            ]
+        },
+        "BaseController": {
+            "file": "app/Controllers/BaseController.php",
+            "method_count": 0,
+            "methods": []
+        },
+        "PaymentController": {
+            "file": "app/Controllers/PaymentController.php",
+            "method_count": 2,
+            "methods": [
+                "checkout",
+                "verify"
+            ]
+        },
+        "PublicController": {
+            "file": "app/Controllers/PublicController.php",
+            "method_count": 9,
+            "methods": [
+                "home",
+                "events",
+                "terms",
+                "privacy",
+                "dashboard",
+                "event",
+                "contact",
+                "login",
+                "signup"
+            ]
+        },
+        "SupportController": {
+            "file": "app/Controllers/SupportController.php",
+            "method_count": 2,
+            "methods": [
+                "chat",
+                "adminApply"
+            ]
+        }
+    },
+    "services": {
+        "AgentContextService": {
+            "file": "app/Services/AgentContextService.php",
+            "method_count": 2,
+            "methods": [
+                "__construct",
+                "forUserEmail"
+            ]
+        },
+        "AuditLogService": {
+            "file": "app/Services/AuditLogService.php",
+            "method_count": 3,
+            "methods": [
+                "__construct",
+                "all",
+                "record"
+            ]
+        },
+        "AuthService": {
+            "file": "app/Services/AuthService.php",
+            "method_count": 3,
+            "methods": [
+                "user",
+                "requireUser",
+                "requireAdmin"
+            ]
+        },
+        "ContactService": {
+            "file": "app/Services/ContactService.php",
+            "method_count": 8,
+            "methods": [
+                "__construct",
+                "all",
+                "find",
+                "save",
+                "updateStatus",
+                "delete",
+                "count",
+                "unreadCount"
+            ]
+        },
+        "EmailTemplateService": {
+            "file": "app/Services/EmailTemplateService.php",
+            "method_count": 2,
+            "methods": [
+                "__construct",
+                "render"
+            ]
+        },
+        "EnvService": {
+            "file": "app/Services/EnvService.php",
+            "method_count": 2,
+            "methods": [
+                "adminCredentials",
+                "saveAdminCredentials"
+            ]
+        },
+        "EventService": {
+            "file": "app/Services/EventService.php",
+            "method_count": 14,
+            "methods": [
+                "__construct",
+                "all",
+                "published",
+                "featured",
+                "findBySlug",
+                "sections",
+                "speakers",
+                "sessions",
+                "venue",
+                "timeRange",
+                "slotSummary",
+                "shortSlotSummary",
+                "availability",
+                "countdownDeadline"
+            ]
+        },
+        "GeminiModelRouter": {
+            "file": "app/Services/GeminiModelRouter.php",
+            "method_count": 3,
+            "methods": [
+                "__construct",
+                "answer",
+                "diagnostics"
+            ]
+        },
+        "JsonStoreService": {
+            "file": "app/Services/JsonStoreService.php",
+            "method_count": 5,
+            "methods": [
+                "__construct",
+                "read",
+                "write",
+                "upsert",
+                "delete"
+            ]
+        },
+        "MediaService": {
+            "file": "app/Services/MediaService.php",
+            "method_count": 3,
+            "methods": [
+                "__construct",
+                "all",
+                "upload"
+            ]
+        },
+        "NotificationQueueService": {
+            "file": "app/Services/NotificationQueueService.php",
+            "method_count": 6,
+            "methods": [
+                "__construct",
+                "queueEmail",
+                "queueSignup",
+                "queueBooking",
+                "queueNewEvent",
+                "processDue"
+            ]
+        },
+        "PasswordResetService": {
+            "file": "app/Services/PasswordResetService.php",
+            "method_count": 3,
+            "methods": [
+                "__construct",
+                "createToken",
+                "resetPassword"
+            ]
+        },
+        "PaymentService": {
+            "file": "app/Services/PaymentService.php",
+            "method_count": 2,
+            "methods": [
+                "__construct",
+                "verifySignature"
+            ]
+        },
+        "ProjectMapService": {
+            "file": "app/Services/ProjectMapService.php",
+            "method_count": 0,
+            "methods": []
+        },
+        "PurchaseNotificationService": {
+            "file": "app/Services/PurchaseNotificationService.php",
+            "method_count": 3,
+            "methods": [
+                "__construct",
+                "queuePurchaseSuccess",
+                "newsletterAudience"
+            ]
+        },
+        "ResourceService": {
+            "file": "app/Services/ResourceService.php",
+            "method_count": 4,
+            "methods": [
+                "__construct",
+                "all",
+                "save",
+                "delete"
+            ]
+        },
+        "SchemaService": {
+            "file": "app/Services/SchemaService.php",
+            "method_count": 4,
+            "methods": [
+                "all",
+                "collection",
+                "adminFields",
+                "agentContextFields"
+            ]
+        },
+        "SecretService": {
+            "file": "app/Services/SecretService.php",
+            "method_count": 3,
+            "methods": [
+                "__construct",
+                "all",
+                "save"
+            ]
+        },
+        "SettingsService": {
+            "file": "app/Services/SettingsService.php",
+            "method_count": 3,
+            "methods": [
+                "__construct",
+                "public",
+                "savePublic"
+            ]
+        },
+        "SmtpMailer": {
+            "file": "app/Services/SmtpMailer.php",
+            "method_count": 4,
+            "methods": [
+                "__construct",
+                "configured",
+                "buildMessage",
+                "send"
+            ]
+        },
+        "StoragePermissionService": {
+            "file": "app/Services/StoragePermissionService.php",
+            "method_count": 2,
+            "methods": [
+                "status",
+                "fix"
+            ]
+        },
+        "SupportAgentService": {
+            "file": "app/Services/SupportAgentService.php",
+            "method_count": 2,
+            "methods": [
+                "__construct",
+                "reply"
+            ]
+        },
+        "UserContextService": {
+            "file": "app/Services/UserContextService.php",
+            "method_count": 3,
+            "methods": [
+                "__construct",
+                "snapshot",
+                "appendConversation"
+            ]
+        }
+    },
+    "views": {
+        "views/admin/branding.php": {
+            "file": "views/admin/branding.php",
+            "size": 3524
+        },
+        "views/admin/dashboard.php": {
+            "file": "views/admin/dashboard.php",
+            "size": 1236
+        },
+        "views/admin/environment.php": {
+            "file": "views/admin/environment.php",
+            "size": 3391
+        },
+        "views/admin/integrations.php": {
+            "file": "views/admin/integrations.php",
+            "size": 8082
+        },
+        "views/admin/list.php": {
+            "file": "views/admin/list.php",
+            "size": 2907
+        },
+        "views/admin/media.php": {
+            "file": "views/admin/media.php",
+            "size": 1854
+        },
+        "views/admin/project-map.php": {
+            "file": "views/admin/project-map.php",
+            "size": 2297
+        },
+        "views/admin/resource.php": {
+            "file": "views/admin/resource.php",
+            "size": 12708
+        },
+        "views/admin/settings.php": {
+            "file": "views/admin/settings.php",
+            "size": 2509
+        },
+        "views/layouts/admin.php": {
+            "file": "views/layouts/admin.php",
+            "size": 13847
+        },
+        "views/layouts/app.php": {
+            "file": "views/layouts/app.php",
+            "size": 17095
+        },
+        "views/partials/support-widget.php": {
+            "file": "views/partials/support-widget.php",
+            "size": 5778
+        },
+        "views/public/404.php": {
+            "file": "views/public/404.php",
+            "size": 575
+        },
+        "views/public/checkout.php": {
+            "file": "views/public/checkout.php",
+            "size": 4543
+        },
+        "views/public/contact.php": {
+            "file": "views/public/contact.php",
+            "size": 2531
+        },
+        "views/public/dashboard.php": {
+            "file": "views/public/dashboard.php",
+            "size": 5606
+        },
+        "views/public/event.php": {
+            "file": "views/public/event.php",
+            "size": 38545
+        },
+        "views/public/events.php": {
+            "file": "views/public/events.php",
+            "size": 2536
+        },
+        "views/public/forgot-password.php": {
+            "file": "views/public/forgot-password.php",
+            "size": 838
+        },
+        "views/public/home.php": {
+            "file": "views/public/home.php",
+            "size": 16034
+        },
+        "views/public/login.php": {
+            "file": "views/public/login.php",
+            "size": 1520
+        },
+        "views/public/privacy.php": {
+            "file": "views/public/privacy.php",
+            "size": 1273
+        },
+        "views/public/reset-password.php": {
+            "file": "views/public/reset-password.php",
+            "size": 1138
+        },
+        "views/public/signup.php": {
+            "file": "views/public/signup.php",
+            "size": 1781
+        },
+        "views/public/terms.php": {
+            "file": "views/public/terms.php",
+            "size": 1317
+        }
+    },
+    "integrations": {
+        "GoogleOAuthClient": {
+            "file": "integrations/google-oauth/GoogleOAuthClient.php",
+            "method_count": 5,
+            "methods": [
+                "__construct",
+                "configured",
+                "authUrl",
+                "exchangeCode",
+                "userInfo"
+            ]
+        },
+        "RazorpayClient": {
+            "file": "integrations/razorpay/RazorpayClient.php",
+            "method_count": 2,
+            "methods": [
+                "__construct",
+                "createOrder"
+            ]
+        }
+    },
+    "schema_collections": {
+        "audit_events": {
+            "file": "storage/data/audit_events.json",
+            "primary_key": "id",
+            "fields": [
+                "id",
+                "action",
+                "collection",
+                "record_id",
+                "meta",
+                "created_at"
+            ],
+            "field_count": 6,
+            "admin_fields": [],
+            "media_fields": [],
+            "agent_context": []
+        },
+        "contact_submissions": {
+            "file": "storage/data/contact_submissions.json",
+            "primary_key": "id",
+            "fields": [
+                "id",
+                "name",
+                "email",
+                "phone",
+                "request_type",
+                "event_slug",
+                "subject",
+                "message",
+                "status"
+            ],
+            "field_count": 9,
+            "admin_fields": [],
+            "media_fields": [],
+            "agent_context": []
+        },
+        "event_sections": {
+            "file": "storage/data/event_sections.json",
+            "primary_key": "id",
+            "fields": [
+                "id",
+                "event_slug",
+                "type",
+                "enabled",
+                "sort_order",
+                "title",
+                "subtitle",
+                "body",
+                "items"
+            ],
+            "field_count": 9,
+            "admin_fields": [
+                "event_slug",
+                "type",
+                "enabled",
+                "sort_order",
+                "title",
+                "subtitle",
+                "body",
+                "items"
+            ],
+            "media_fields": [],
+            "agent_context": [
+                "event_slug",
+                "type",
+                "enabled",
+                "sort_order",
+                "title",
+                "body",
+                "items"
+            ]
+        },
+        "events": {
+            "file": "storage/data/events.json",
+            "primary_key": "id",
+            "fields": [
+                "id",
+                "slug",
+                "status",
+                "featured",
+                "name",
+                "eyebrow",
+                "headline",
+                "subheadline",
+                "description",
+                "date_label",
+                "start_time",
+                "end_time",
+                "time_label",
+                "timezone",
+                "delivery_mode",
+                "mode",
+                "slot_label",
+                "total_slots",
+                "remaining_slots",
+                "price",
+                "currency",
+                "payment_mode",
+                "payment_page_url",
+                "registration_url",
+                "cta_label",
+                "logo_url",
+                "hero_image_url",
+                "thumbnail_url",
+                "organizers",
+                "contact_email",
+                "contact_phone"
+            ],
+            "field_count": 31,
+            "admin_fields": [
+                "slug",
+                "status",
+                "featured",
+                "name",
+                "eyebrow",
+                "headline",
+                "subheadline",
+                "description",
+                "date_label",
+                "start_time",
+                "end_time",
+                "time_label",
+                "timezone",
+                "delivery_mode",
+                "mode",
+                "slot_label",
+                "total_slots",
+                "remaining_slots",
+                "price",
+                "currency",
+                "payment_mode",
+                "payment_page_url",
+                "cta_label",
+                "logo_url",
+                "hero_image_url",
+                "thumbnail_url",
+                "organizers",
+                "contact_email",
+                "contact_phone"
+            ],
+            "media_fields": [
+                "logo_url",
+                "hero_image_url",
+                "thumbnail_url"
+            ],
+            "agent_context": [
+                "id",
+                "slug",
+                "status",
+                "featured",
+                "name",
+                "headline",
+                "date_label",
+                "start_time",
+                "end_time",
+                "time_label",
+                "timezone",
+                "delivery_mode",
+                "mode",
+                "slot_label",
+                "total_slots",
+                "remaining_slots",
+                "payment_mode",
+                "payment_page_url"
+            ]
+        },
+        "media_files": {
+            "file": "storage/data/media_files.json",
+            "primary_key": "id",
+            "fields": [
+                "id",
+                "filename",
+                "original_name",
+                "path",
+                "context",
+                "mime",
+                "created_at"
+            ],
+            "field_count": 7,
+            "admin_fields": [],
+            "media_fields": [],
+            "agent_context": []
+        },
+        "notification_queue": {
+            "file": "storage/data/notification_queue.json",
+            "primary_key": "id",
+            "fields": [
+                "id",
+                "event_slug",
+                "registration_id",
+                "channel",
+                "to",
+                "template_key",
+                "payload",
+                "status",
+                "error",
+                "attempts",
+                "available_at",
+                "sent_at",
+                "created_at"
+            ],
+            "field_count": 13,
+            "admin_fields": [],
+            "media_fields": [],
+            "agent_context": []
+        },
+        "notification_templates": {
+            "file": "storage/data/notification_templates.json",
+            "primary_key": "id",
+            "fields": [
+                "id",
+                "key",
+                "channel",
+                "enabled",
+                "subject",
+                "template_name",
+                "language",
+                "body"
+            ],
+            "field_count": 8,
+            "admin_fields": [
+                "key",
+                "channel",
+                "enabled",
+                "subject",
+                "template_name",
+                "language",
+                "body"
+            ],
+            "media_fields": [],
+            "agent_context": []
+        },
+        "publishers": {
+            "file": "storage/data/publishers.json",
+            "primary_key": "id",
+            "fields": [
+                "id",
+                "enabled",
+                "sort_order",
+                "source",
+                "date_label",
+                "title",
+                "summary",
+                "url",
+                "logo_url"
+            ],
+            "field_count": 9,
+            "admin_fields": [
+                "enabled",
+                "sort_order",
+                "source",
+                "date_label",
+                "title",
+                "summary",
+                "url",
+                "logo_url"
+            ],
+            "media_fields": [
+                "logo_url"
+            ],
+            "agent_context": [
+                "source",
+                "date_label",
+                "title",
+                "url"
+            ]
+        },
+        "registrations": {
+            "file": "storage/data/registrations.json",
+            "primary_key": "id",
+            "fields": [
+                "id",
+                "event_slug",
+                "purchase_type",
+                "name",
+                "email",
+                "phone",
+                "profession",
+                "payment_status",
+                "razorpay_order_id",
+                "razorpay_payment_id",
+                "certificate_status",
+                "google_calendar_event_ids",
+                "created_at"
+            ],
+            "field_count": 13,
+            "admin_fields": [],
+            "media_fields": [],
+            "agent_context": [
+                "id",
+                "event_slug",
+                "purchase_type",
+                "name",
+                "email",
+                "phone",
+                "profession",
+                "payment_status",
+                "certificate_status",
+                "created_at"
+            ]
+        },
+        "sessions": {
+            "file": "storage/data/sessions.json",
+            "primary_key": "id",
+            "fields": [
+                "id",
+                "event_slug",
+                "sort_order",
+                "time_label",
+                "title",
+                "speaker_name",
+                "description"
+            ],
+            "field_count": 7,
+            "admin_fields": [
+                "event_slug",
+                "sort_order",
+                "time_label",
+                "title",
+                "speaker_name",
+                "description"
+            ],
+            "media_fields": [],
+            "agent_context": [
+                "event_slug",
+                "time_label",
+                "title",
+                "speaker_name"
+            ]
+        },
+        "settings": {
+            "file": "storage/data/settings.json",
+            "primary_key": "id",
+            "fields": [
+                "id",
+                "key",
+                "value"
+            ],
+            "field_count": 3,
+            "admin_fields": [],
+            "media_fields": [],
+            "agent_context": []
+        },
+        "speakers": {
+            "file": "storage/data/speakers.json",
+            "primary_key": "id",
+            "fields": [
+                "id",
+                "event_slug",
+                "sort_order",
+                "name",
+                "credentials",
+                "country",
+                "topic",
+                "session_time",
+                "profile",
+                "photo_url"
+            ],
+            "field_count": 10,
+            "admin_fields": [
+                "event_slug",
+                "sort_order",
+                "name",
+                "credentials",
+                "country",
+                "topic",
+                "session_time",
+                "profile",
+                "photo_url"
+            ],
+            "media_fields": [
+                "photo_url"
+            ],
+            "agent_context": [
+                "event_slug",
+                "name",
+                "credentials",
+                "country",
+                "topic",
+                "session_time",
+                "profile"
+            ]
+        },
+        "support_tickets": {
+            "file": "storage/data/support_tickets.json",
+            "primary_key": "id",
+            "fields": [
+                "id",
+                "name",
+                "email",
+                "subject",
+                "message",
+                "status",
+                "created_at"
+            ],
+            "field_count": 7,
+            "admin_fields": [],
+            "media_fields": [],
+            "agent_context": [
+                "id",
+                "name",
+                "email",
+                "subject",
+                "status",
+                "created_at"
+            ]
+        },
+        "users": {
+            "file": "storage/data/users.json",
+            "primary_key": "id",
+            "fields": [
+                "id",
+                "email",
+                "name",
+                "certificate_name",
+                "role",
+                "google_sub",
+                "google_email_verified",
+                "google_calendar_enabled",
+                "google_oauth_scope",
+                "google_token_expires_at",
+                "google_refresh_token",
+                "newsletter_opt_in",
+                "password_hash"
+            ],
+            "field_count": 13,
+            "admin_fields": [],
+            "media_fields": [],
+            "agent_context": [
+                "id",
+                "email",
+                "name",
+                "certificate_name",
+                "role"
+            ]
+        },
+        "venues": {
+            "file": "storage/data/venues.json",
+            "primary_key": "id",
+            "fields": [
+                "id",
+                "event_slug",
+                "name",
+                "mode",
+                "address",
+                "map_link",
+                "map_embed_url",
+                "joining_note",
+                "image_url"
+            ],
+            "field_count": 9,
+            "admin_fields": [
+                "event_slug",
+                "name",
+                "mode",
+                "address",
+                "map_link",
+                "map_embed_url",
+                "joining_note",
+                "image_url"
+            ],
+            "media_fields": [
+                "image_url"
+            ],
+            "agent_context": [
+                "event_slug",
+                "name",
+                "mode",
+                "address",
+                "map_link",
+                "joining_note"
+            ]
+        }
+    },
+    "storage_collections": {
+        "adminsecrets": {
+            "file": "storage/data/adminsecrets.json",
+            "record_count": 2,
+            "size": 581
+        },
+        "audit_events": {
+            "file": "storage/data/audit_events.json",
+            "record_count": 2,
+            "size": 782
+        },
+        "contact_submissions": {
+            "file": "storage/data/contact_submissions.json",
+            "record_count": 9,
+            "size": 2927
+        },
+        "event_sections": {
+            "file": "storage/data/event_sections.json",
+            "record_count": 5,
+            "size": 2776
+        },
+        "events": {
+            "file": "storage/data/events.json",
+            "record_count": 1,
+            "size": 1597
+        },
+        "media_files": {
+            "file": "storage/data/media_files.json",
+            "record_count": 12,
+            "size": 4254
+        },
+        "notification_queue": {
+            "file": "storage/data/notification_queue.json",
+            "record_count": 4,
+            "size": 3582
+        },
+        "notification_templates": {
+            "file": "storage/data/notification_templates.json",
+            "record_count": 11,
+            "size": 3504
+        },
+        "publishers": {
+            "file": "storage/data/publishers.json",
+            "record_count": 2,
+            "size": 1224
+        },
+        "registrations": {
+            "file": "storage/data/registrations.json",
+            "record_count": 1,
+            "size": 471
+        },
+        "sessions": {
+            "file": "storage/data/sessions.json",
+            "record_count": 11,
+            "size": 3941
+        },
+        "settings": {
+            "file": "storage/data/settings.json",
+            "record_count": 1,
+            "size": 746
+        },
+        "settings.secrets": {
+            "file": "storage/data/settings.secrets.json",
+            "record_count": 2,
+            "size": 195
+        },
+        "speakers": {
+            "file": "storage/data/speakers.json",
+            "record_count": 9,
+            "size": 7667
+        },
+        "support_tickets": {
+            "file": "storage/data/support_tickets.json",
+            "record_count": 0,
+            "size": 2
+        },
+        "users": {
+            "file": "storage/data/users.json",
+            "record_count": 1,
+            "size": 334
+        },
+        "venues": {
+            "file": "storage/data/venues.json",
+            "record_count": 1,
+            "size": 331
+        }
+    },
+    "routes_by_controller": {
+        "PublicController": [
+            {
+                "method": "home",
+                "path": "/"
+            },
+            {
+                "method": "events",
+                "path": "/events"
+            },
+            {
+                "method": "terms",
+                "path": "/terms"
+            },
+            {
+                "method": "privacy",
+                "path": "/privacy"
+            },
+            {
+                "method": "dashboard",
+                "path": "/dashboard"
+            },
+            {
+                "method": "event",
+                "path": "/events/{slug}"
+            },
+            {
+                "method": "event",
+                "path": "/conference/{slug}"
+            },
+            {
+                "method": "contact",
+                "path": "/contact"
+            },
+            {
+                "method": "contact",
+                "path": "/contact"
+            },
+            {
+                "method": "login",
+                "path": "/login"
+            },
+            {
+                "method": "signup",
+                "path": "/signup"
+            }
+        ],
+        "PaymentController": [
+            {
+                "method": "checkout",
+                "path": "/events/{slug}/checkout"
+            },
+            {
+                "method": "verify",
+                "path": "/events/{slug}/payment/verify"
+            }
+        ],
+        "SupportController": [
+            {
+                "method": "chat",
+                "path": "/support/chat"
+            },
+            {
+                "method": "adminApply",
+                "path": "/support/admin/apply"
+            }
+        ],
+        "AuthController": [
+            {
+                "method": "signupPost",
+                "path": "/signup"
+            },
+            {
+                "method": "forgotPassword",
+                "path": "/forgot-password"
+            },
+            {
+                "method": "forgotPasswordPost",
+                "path": "/forgot-password"
+            },
+            {
+                "method": "resetPassword",
+                "path": "/reset-password"
+            },
+            {
+                "method": "resetPasswordPost",
+                "path": "/reset-password"
+            },
+            {
+                "method": "loginPost",
+                "path": "/login"
+            },
+            {
+                "method": "googleRedirect",
+                "path": "/auth/google"
+            },
+            {
+                "method": "googleCallback",
+                "path": "/auth/google/callback"
+            },
+            {
+                "method": "logout",
+                "path": "/logout"
+            }
+        ],
+        "AdminController": [
+            {
+                "method": "dashboard",
+                "path": "/admin"
+            },
+            {
+                "method": "events",
+                "path": "/admin/events"
+            },
+            {
+                "method": "saveEvent",
+                "path": "/admin/events/save"
+            },
+            {
+                "method": "deleteEvent",
+                "path": "/admin/events/delete"
+            },
+            {
+                "method": "eventSections",
+                "path": "/admin/event_sections"
+            },
+            {
+                "method": "saveEventSection",
+                "path": "/admin/event_sections/save"
+            },
+            {
+                "method": "deleteEventSection",
+                "path": "/admin/event_sections/delete"
+            },
+            {
+                "method": "speakers",
+                "path": "/admin/speakers"
+            },
+            {
+                "method": "saveSpeaker",
+                "path": "/admin/speakers/save"
+            },
+            {
+                "method": "deleteSpeaker",
+                "path": "/admin/speakers/delete"
+            },
+            {
+                "method": "sessions",
+                "path": "/admin/sessions"
+            },
+            {
+                "method": "saveSession",
+                "path": "/admin/sessions/save"
+            },
+            {
+                "method": "deleteSession",
+                "path": "/admin/sessions/delete"
+            },
+            {
+                "method": "venues",
+                "path": "/admin/venues"
+            },
+            {
+                "method": "saveVenue",
+                "path": "/admin/venues/save"
+            },
+            {
+                "method": "deleteVenue",
+                "path": "/admin/venues/delete"
+            },
+            {
+                "method": "publishers",
+                "path": "/admin/publishers"
+            },
+            {
+                "method": "savePublisher",
+                "path": "/admin/publishers/save"
+            },
+            {
+                "method": "deletePublisher",
+                "path": "/admin/publishers/delete"
+            },
+            {
+                "method": "registrations",
+                "path": "/admin/registrations"
+            },
+            {
+                "method": "notificationTemplates",
+                "path": "/admin/notification_templates"
+            },
+            {
+                "method": "saveNotificationTemplate",
+                "path": "/admin/notification_templates/save"
+            },
+            {
+                "method": "deleteNotificationTemplate",
+                "path": "/admin/notification_templates/delete"
+            },
+            {
+                "method": "notificationQueue",
+                "path": "/admin/notification_queue"
+            },
+            {
+                "method": "processNotificationQueue",
+                "path": "/admin/notification_queue/process"
+            },
+            {
+                "method": "settings",
+                "path": "/admin/settings"
+            },
+            {
+                "method": "saveSettings",
+                "path": "/admin/settings/save"
+            },
+            {
+                "method": "saveAdminCredentials",
+                "path": "/admin/settings/admin-credentials"
+            },
+            {
+                "method": "integrations",
+                "path": "/admin/integrations"
+            },
+            {
+                "method": "saveIntegrations",
+                "path": "/admin/integrations/save"
+            },
+            {
+                "method": "contactSubmissions",
+                "path": "/admin/contact-submissions"
+            },
+            {
+                "method": "supportTickets",
+                "path": "/admin/support-tickets"
+            },
+            {
+                "method": "branding",
+                "path": "/admin/branding"
+            },
+            {
+                "method": "media",
+                "path": "/admin/media"
+            },
+            {
+                "method": "uploadMedia",
+                "path": "/admin/media/upload"
+            },
+            {
+                "method": "audit",
+                "path": "/admin/audit-log"
+            },
+            {
+                "method": "backups",
+                "path": "/admin/backups"
+            },
+            {
+                "method": "environment",
+                "path": "/admin/environment"
+            },
+            {
+                "method": "saveEnvironment",
+                "path": "/admin/environment/save"
+            },
+            {
+                "method": "fixPermissions",
+                "path": "/admin/environment/fix-permissions"
+            },
+            {
+                "method": "projectMap",
+                "path": "/admin/developer/project-map"
+            }
+        ]
+    },
+    "routes_by_view": {
+        "public/home": [
+            "/"
+        ],
+        "public/events": [
+            "/events"
+        ],
+        "public/terms": [
+            "/terms"
+        ],
+        "public/privacy": [
+            "/privacy"
+        ],
+        "public/dashboard": [
+            "/dashboard"
+        ],
+        "public/event": [
+            "/events/{slug}",
+            "/conference/{slug}"
+        ],
+        "public/checkout": [
+            "/events/{slug}/checkout",
+            "/events/{slug}/payment/verify"
+        ],
+        "public/contact": [
+            "/contact",
+            "/contact"
+        ],
+        "public/support-widget": [
+            "/support/chat",
+            "/support/admin/apply"
+        ],
+        "public/login": [
+            "/login",
+            "/login",
+            "/auth/google",
+            "/auth/google/callback",
+            "/logout"
+        ],
+        "public/signup": [
+            "/signup",
+            "/signup"
+        ],
+        "public/forgot-password": [
+            "/forgot-password",
+            "/forgot-password"
+        ],
+        "public/reset-password": [
+            "/reset-password",
+            "/reset-password"
+        ],
+        "admin/dashboard": [
+            "/admin"
+        ],
+        "admin/resource": [
+            "/admin/events",
+            "/admin/events/save",
+            "/admin/events/delete",
+            "/admin/event_sections",
+            "/admin/event_sections/save",
+            "/admin/event_sections/delete",
+            "/admin/speakers",
+            "/admin/speakers/save",
+            "/admin/speakers/delete",
+            "/admin/sessions",
+            "/admin/sessions/save",
+            "/admin/sessions/delete",
+            "/admin/venues",
+            "/admin/venues/save",
+            "/admin/venues/delete",
+            "/admin/publishers",
+            "/admin/publishers/save",
+            "/admin/publishers/delete",
+            "/admin/notification_templates",
+            "/admin/notification_templates/save",
+            "/admin/notification_templates/delete",
+            "/admin/contact-submissions"
+        ],
+        "admin/list": [
+            "/admin/registrations",
+            "/admin/notification_queue",
+            "/admin/notification_queue/process",
+            "/admin/support-tickets",
+            "/admin/audit-log",
+            "/admin/backups"
+        ],
+        "admin/settings": [
+            "/admin/settings",
+            "/admin/settings/save",
+            "/admin/settings/admin-credentials"
+        ],
+        "admin/integrations": [
+            "/admin/integrations",
+            "/admin/integrations/save"
+        ],
+        "admin/branding": [
+            "/admin/branding"
+        ],
+        "admin/media": [
+            "/admin/media",
+            "/admin/media/upload"
+        ],
+        "admin/environment": [
+            "/admin/environment",
+            "/admin/environment/save",
+            "/admin/environment/fix-permissions"
+        ],
+        "admin/project-map": [
+            "/admin/developer/project-map"
+        ]
+    },
+    "routes_by_service": {
+        "EventService": [
+            "/",
+            "/events",
+            "/dashboard",
+            "/events/{slug}",
+            "/events/{slug}/checkout",
+            "/events/{slug}/payment/verify",
+            "/conference/{slug}"
+        ],
+        "ResourceService": [
+            "/",
+            "/support/admin/apply",
+            "/admin",
+            "/admin/events",
+            "/admin/events/save",
+            "/admin/events/delete",
+            "/admin/event_sections",
+            "/admin/event_sections/save",
+            "/admin/event_sections/delete",
+            "/admin/speakers",
+            "/admin/speakers/save",
+            "/admin/speakers/delete",
+            "/admin/sessions",
+            "/admin/sessions/save",
+            "/admin/sessions/delete",
+            "/admin/venues",
+            "/admin/venues/save",
+            "/admin/venues/delete",
+            "/admin/publishers",
+            "/admin/publishers/save",
+            "/admin/publishers/delete",
+            "/admin/registrations",
+            "/admin/notification_templates",
+            "/admin/notification_templates/save",
+            "/admin/notification_templates/delete",
+            "/admin/notification_queue",
+            "/admin/support-tickets"
+        ],
+        "AuthService": [
+            "/dashboard",
+            "/events/{slug}/checkout",
+            "/events/{slug}/payment/verify",
+            "/support/chat",
+            "/support/admin/apply",
+            "/login",
+            "/signup",
+            "/logout",
+            "/admin",
+            "/admin/events",
+            "/admin/events/save",
+            "/admin/events/delete",
+            "/admin/event_sections",
+            "/admin/event_sections/save",
+            "/admin/event_sections/delete",
+            "/admin/speakers",
+            "/admin/speakers/save",
+            "/admin/speakers/delete",
+            "/admin/sessions",
+            "/admin/sessions/save",
+            "/admin/sessions/delete",
+            "/admin/venues",
+            "/admin/venues/save",
+            "/admin/venues/delete",
+            "/admin/publishers",
+            "/admin/publishers/save",
+            "/admin/publishers/delete",
+            "/admin/registrations",
+            "/admin/notification_templates",
+            "/admin/notification_templates/save",
+            "/admin/notification_templates/delete",
+            "/admin/notification_queue",
+            "/admin/notification_queue/process",
+            "/admin/settings",
+            "/admin/settings/save",
+            "/admin/settings/admin-credentials",
+            "/admin/integrations",
+            "/admin/integrations/save",
+            "/admin/contact-submissions",
+            "/admin/support-tickets",
+            "/admin/branding",
+            "/admin/media",
+            "/admin/media/upload",
+            "/admin/audit-log",
+            "/admin/backups",
+            "/admin/environment",
+            "/admin/environment/save",
+            "/admin/environment/fix-permissions",
+            "/admin/developer/project-map"
+        ],
+        "JsonStoreService": [
+            "/dashboard",
+            "/events/{slug}/checkout",
+            "/events/{slug}/payment/verify",
+            "/support/chat",
+            "/signup",
+            "/login",
+            "/auth/google/callback",
+            "/admin/backups"
+        ],
+        "SecretService": [
+            "/events/{slug}",
+            "/events/{slug}/checkout",
+            "/events/{slug}/payment/verify",
+            "/conference/{slug}",
+            "/support/chat",
+            "/auth/google",
+            "/auth/google/callback",
+            "/admin/settings/admin-credentials",
+            "/admin/integrations",
+            "/admin/integrations/save",
+            "/admin/branding"
+        ],
+        "PaymentService": [
+            "/events/{slug}/payment/verify"
+        ],
+        "PurchaseNotificationService": [
+            "/events/{slug}/payment/verify"
+        ],
+        "ContactService": [
+            "/contact",
+            "/admin/contact-submissions"
+        ],
+        "SupportAgentService": [
+            "/support/chat"
+        ],
+        "AgentContextService": [
+            "/support/chat"
+        ],
+        "SchemaService": [
+            "/support/admin/apply",
+            "/admin/events",
+            "/admin/event_sections",
+            "/admin/speakers",
+            "/admin/sessions",
+            "/admin/venues",
+            "/admin/publishers",
+            "/admin/notification_templates"
+        ],
+        "AuditLogService": [
+            "/support/admin/apply",
+            "/admin/events/save",
+            "/admin/events/delete",
+            "/admin/event_sections/save",
+            "/admin/event_sections/delete",
+            "/admin/speakers/save",
+            "/admin/speakers/delete",
+            "/admin/sessions/save",
+            "/admin/sessions/delete",
+            "/admin/venues/save",
+            "/admin/venues/delete",
+            "/admin/publishers/save",
+            "/admin/publishers/delete",
+            "/admin/notification_templates/save",
+            "/admin/notification_templates/delete",
+            "/admin/media/upload",
+            "/admin/audit-log",
+            "/admin/environment/save",
+            "/admin/environment/fix-permissions"
+        ],
+        "PasswordResetService": [
+            "/forgot-password",
+            "/forgot-password",
+            "/reset-password",
+            "/reset-password"
+        ],
+        "NotificationQueueService": [
+            "/admin/notification_queue/process"
+        ],
+        "SettingsService": [
+            "/admin/settings",
+            "/admin/settings/save",
+            "/admin/branding"
+        ],
+        "MediaService": [
+            "/admin/media",
+            "/admin/media/upload"
+        ],
+        "StoragePermissionService": [
+            "/admin/environment",
+            "/admin/environment/fix-permissions"
+        ],
+        "ProjectMapService": [
+            "/admin/developer/project-map"
+        ]
+    },
+    "collection_usage": {
+        "adminsecrets": [
+            "ProjectMapService"
+        ],
+        "audit_events": [
+            "AuditLogService",
+            "ProjectMapService"
+        ],
+        "contact_submissions": [
+            "ContactService",
+            "ProjectMapService",
+            "UserContextService"
+        ],
+        "event_sections": [
+            "EventService",
+            "ProjectMapService",
+            "SupportAgentService"
+        ],
+        "events": [
+            "AgentContextService",
+            "EventService",
+            "MediaService",
+            "NotificationQueueService",
+            "ProjectMapService",
+            "SupportAgentService"
+        ],
+        "media_files": [
+            "MediaService",
+            "ProjectMapService"
+        ],
+        "notification_queue": [
+            "NotificationQueueService",
+            "ProjectMapService",
+            "PurchaseNotificationService"
+        ],
+        "notification_templates": [
+            "EmailTemplateService",
+            "ProjectMapService"
+        ],
+        "publishers": [
+            "ProjectMapService",
+            "SupportAgentService"
+        ],
+        "registrations": [
+            "AgentContextService",
+            "EventService",
+            "ProjectMapService",
+            "SupportAgentService",
+            "UserContextService"
+        ],
+        "sessions": [
+            "AgentContextService",
+            "EventService",
+            "ProjectMapService",
+            "SupportAgentService"
+        ],
+        "settings": [
+            "AgentContextService",
+            "ProjectMapService",
+            "SettingsService",
+            "SupportAgentService"
+        ],
+        "speakers": [
+            "AgentContextService",
+            "EventService",
+            "MediaService",
+            "ProjectMapService",
+            "SupportAgentService"
+        ],
+        "support_tickets": [
+            "ProjectMapService",
+            "SupportAgentService",
+            "UserContextService"
+        ],
+        "user-context": [
+            "ProjectMapService",
+            "UserContextService"
+        ],
+        "users": [
+            "AgentContextService",
+            "NotificationQueueService",
+            "PasswordResetService",
+            "ProjectMapService",
+            "PurchaseNotificationService"
+        ],
+        "venues": [
+            "EventService",
+            "MediaService",
+            "ProjectMapService",
+            "SupportAgentService"
+        ]
+    },
+    "gaps": [
+        {
+            "type": "controller_unwired",
+            "severity": "high",
+            "detail": "Controller BaseController is declared in app/Controllers/ but not referenced by any route."
+        },
+        {
+            "type": "service_unwired",
+            "severity": "high",
+            "detail": "Service EmailTemplateService is declared in app/Services/ but not referenced by any route. It may still be used by another service (see collection_usage)."
+        },
+        {
+            "type": "service_unwired",
+            "severity": "high",
+            "detail": "Service EnvService is declared in app/Services/ but not referenced by any route. It may still be used by another service (see collection_usage)."
+        },
+        {
+            "type": "service_unwired",
+            "severity": "high",
+            "detail": "Service GeminiModelRouter is declared in app/Services/ but not referenced by any route. It may still be used by another service (see collection_usage)."
+        },
+        {
+            "type": "service_unwired",
+            "severity": "high",
+            "detail": "Service SmtpMailer is declared in app/Services/ but not referenced by any route. It may still be used by another service (see collection_usage)."
+        },
+        {
+            "type": "service_unwired",
+            "severity": "high",
+            "detail": "Service UserContextService is declared in app/Services/ but not referenced by any route. It may still be used by another service (see collection_usage)."
+        },
+        {
+            "type": "storage_collection_unused",
+            "severity": "low",
+            "detail": "Collection settings.secrets has no service that reads it (static search). May still be used via a generic path."
+        },
+        {
+            "type": "storage_file_no_schema",
+            "severity": "medium",
+            "detail": "storage/data/adminsecrets.json exists on disk but has no schema entry in storage/schema/collections.json."
+        },
+        {
+            "type": "storage_file_no_schema",
+            "severity": "medium",
+            "detail": "storage/data/settings.secrets.json exists on disk but has no schema entry in storage/schema/collections.json."
+        },
+        {
+            "type": "view_unwired",
+            "severity": "medium",
+            "detail": "View views/public/404.php is on disk but not bound to any route in the registry."
+        }
+    ],
+    "summary": {
+        "routes": 65,
+        "controllers": 6,
+        "services": 23,
+        "views": 25,
+        "integrations": 2,
+        "schema_collections": 15,
+        "storage_collections": 17,
+        "gap_count": 10
+    }
+}

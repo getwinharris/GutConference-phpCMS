@@ -84,6 +84,187 @@ final class ProjectMapService {
         ];
     }
 
+    public static function scan(): array {
+        $root = dirname(__DIR__, 2);
+        $map = self::registry();
+        $controllers = [];
+        foreach (glob($root . '/app/Controllers/*.php') ?: [] as $file) {
+            $cls = basename($file, '.php');
+            $src = (string)file_get_contents($file);
+            preg_match_all('/public function ([A-Za-z0-9_]+)/', $src, $m);
+            $controllers[$cls] = [
+                'file' => 'app/Controllers/' . basename($file),
+                'method_count' => count($m[1] ?? []),
+                'methods' => $m[1] ?? [],
+            ];
+        }
+        ksort($controllers);
+
+        $services = [];
+        foreach (glob($root . '/app/Services/*.php') ?: [] as $file) {
+            $cls = basename($file, '.php');
+            $src = (string)file_get_contents($file);
+            preg_match_all('/public function ([A-Za-z0-9_]+)/', $src, $m);
+            $services[$cls] = [
+                'file' => 'app/Services/' . basename($file),
+                'method_count' => count($m[1] ?? []),
+                'methods' => $m[1] ?? [],
+            ];
+        }
+        ksort($services);
+
+        $views = [];
+        foreach (glob($root . '/views/**/*.php') ?: [] as $file) {
+            $rel = 'views/' . ltrim(str_replace($root . '/views/', '', $file), '/');
+            $views[$rel] = ['file' => $rel, 'size' => filesize($file)];
+        }
+        ksort($views);
+
+        $integrations = [];
+        foreach (glob($root . '/integrations/**/*.php') ?: [] as $file) {
+            $rel = 'integrations/' . ltrim(str_replace($root . '/integrations/', '', $file), '/');
+            $cls = basename($file, '.php');
+            $src = (string)file_get_contents($file);
+            preg_match_all('/public function ([A-Za-z0-9_]+)/', $src, $m);
+            $integrations[$cls] = [
+                'file' => $rel,
+                'method_count' => count($m[1] ?? []),
+                'methods' => $m[1] ?? [],
+            ];
+        }
+        ksort($integrations);
+
+        $schema = [];
+        $schemaFile = $root . '/storage/schema/collections.json';
+        if (is_file($schemaFile)) {
+            $data = json_decode((string)file_get_contents($schemaFile), true) ?: [];
+            foreach (($data['collections'] ?? []) as $name => $spec) {
+                $schema[$name] = [
+                    'file' => $spec['file'] ?? null,
+                    'primary_key' => $spec['primary_key'] ?? null,
+                    'fields' => array_keys($spec['fields'] ?? []),
+                    'field_count' => count($spec['fields'] ?? []),
+                    'admin_fields' => $spec['admin_fields'] ?? [],
+                    'media_fields' => $spec['media_fields'] ?? [],
+                    'agent_context' => $spec['agent_context'] ?? [],
+                ];
+            }
+            ksort($schema);
+        }
+
+        $storage = [];
+        foreach (glob($root . '/storage/data/*.json') ?: [] as $file) {
+            $name = basename($file, '.json');
+            $arr = json_decode((string)file_get_contents($file), true);
+            $storage[$name] = [
+                'file' => 'storage/data/' . basename($file),
+                'record_count' => is_array($arr) ? count($arr) : 0,
+                'size' => filesize($file),
+            ];
+        }
+        ksort($storage);
+
+        $routesByController = [];
+        $routesByView = [];
+        $routesByService = [];
+        foreach ($map['routes'] as $route) {
+            [$cls, $method] = array_pad(explode('@', $route['controller']), 2, null);
+            $routesByController[$cls][] = ['method' => $method, 'path' => $route['path']];
+            $routesByView[$route['page']][] = $route['path'];
+            foreach ($route['services'] as $svc) {
+                $routesByService[$svc][] = $route['path'];
+            }
+        }
+
+        $collections = ['users','events','event_sections','speakers','sessions','venues','publishers','registrations','notification_templates','notification_queue','settings','audit_events','contact_submissions','support_tickets','media_files','adminsecrets','user-context'];
+        $collectionUsage = [];
+        foreach (glob($root . '/app/Services/*.php') ?: [] as $file) {
+            $cls = basename($file, '.php');
+            $src = (string)file_get_contents($file);
+            foreach ($collections as $col) {
+                if (str_contains($src, "'" . $col . "'") || str_contains($src, '"' . $col . '"') || str_contains($src, $col . '/')) {
+                    $collectionUsage[$col][] = $cls;
+                }
+            }
+        }
+        foreach ($collectionUsage as $col => $svcs) {
+            $collectionUsage[$col] = array_values(array_unique($svcs));
+            sort($collectionUsage[$col]);
+        }
+        ksort($collectionUsage);
+
+        $gaps = [];
+        foreach ($controllers as $cls => $info) {
+            if (!isset($routesByController[$cls])) {
+                $gaps[] = ['type' => 'controller_unwired', 'severity' => 'high', 'detail' => "Controller $cls is declared in app/Controllers/ but not referenced by any route."];
+            }
+        }
+        foreach ($services as $cls => $info) {
+            if (!isset($routesByService[$cls])) {
+                $gaps[] = ['type' => 'service_unwired', 'severity' => 'high', 'detail' => "Service $cls is declared in app/Services/ but not referenced by any route. It may still be used by another service (see collection_usage)."];
+            }
+        }
+        foreach ($views as $path => $info) {
+            $logicalKey = preg_replace('/\.php$/', '', $path);
+            $logicalKey = str_replace('views/', '', $logicalKey);
+            if (!isset($routesByView[$logicalKey]) && !str_starts_with($path, 'views/layouts/') && !str_starts_with($path, 'views/partials/')) {
+                $gaps[] = ['type' => 'view_unwired', 'severity' => 'medium', 'detail' => "View $path is on disk but not bound to any route in the registry."];
+            }
+        }
+        foreach ($integrations as $cls => $info) {
+            if (!in_array($cls, $map['integrations'], true)) {
+                $gaps[] = ['type' => 'integration_unregistered', 'severity' => 'medium', 'detail' => "Integration $cls exists on disk but is not listed in ProjectMapService::registry() integrations."];
+            }
+        }
+        foreach ($schema as $name => $info) {
+            if (!in_array($name, $map['collections'], true)) {
+                $gaps[] = ['type' => 'schema_collection_unregistered', 'severity' => 'low', 'detail' => "Schema collection $name is defined in storage/schema/collections.json but not listed in ProjectMapService::registry() collections."];
+            }
+            if (!isset($storage[$name])) {
+                $gaps[] = ['type' => 'schema_collection_no_file', 'severity' => 'low', 'detail' => "Schema collection $name is defined in the schema but has no storage/data/$name.json file on disk."];
+            }
+        }
+        foreach ($storage as $name => $info) {
+            if (!isset($schema[$name])) {
+                $gaps[] = ['type' => 'storage_file_no_schema', 'severity' => 'medium', 'detail' => "storage/data/$name.json exists on disk but has no schema entry in storage/schema/collections.json."];
+            }
+            if (empty($collectionUsage[$name])) {
+                $gaps[] = ['type' => 'storage_collection_unused', 'severity' => 'low', 'detail' => "Collection $name has no service that reads it (static search). May still be used via a generic path."];
+            }
+        }
+        foreach ($map['collections'] as $name) {
+            if (!isset($schema[$name])) {
+                $gaps[] = ['type' => 'registry_collection_no_schema', 'severity' => 'high', 'detail' => "ProjectMapService::registry() lists collection $name but it has no schema entry."];
+            }
+        }
+        usort($gaps, fn($a, $b) => [$a['severity'], $a['type']] <=> [$b['severity'], $b['type']]);
+
+        return [
+            'generated_at' => date('c'),
+            'controllers' => $controllers,
+            'services' => $services,
+            'views' => $views,
+            'integrations' => $integrations,
+            'schema_collections' => $schema,
+            'storage_collections' => $storage,
+            'routes_by_controller' => $routesByController,
+            'routes_by_view' => $routesByView,
+            'routes_by_service' => $routesByService,
+            'collection_usage' => $collectionUsage,
+            'gaps' => $gaps,
+            'summary' => [
+                'routes' => count($map['routes']),
+                'controllers' => count($controllers),
+                'services' => count($services),
+                'views' => count($views),
+                'integrations' => count($integrations),
+                'schema_collections' => count($schema),
+                'storage_collections' => count($storage),
+                'gap_count' => count($gaps),
+            ],
+        ];
+    }
+
     public static function validate(array $map): array {
         $missingRouteMappings = array_values(array_filter($map['routes'], fn($r) => empty($r['controller']) || empty($r['page'])));
         $used = array_unique(array_merge(...array_map(fn($r) => $r['services'], $map['routes'])));
