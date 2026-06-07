@@ -148,12 +148,13 @@ php tools/validate-project-map.php
 php tools/smoke-local.php
 ```
 2. **Write a PR-style change summary** that includes:
+   - The GitHub issue number that this resolves (e.g., `Resolves #15`).
    - A short title describing the release.
    - A bullet list of all changed areas (controllers, services, views, schema, data, assets, config, docs).
    - Any new files or deleted files called out explicitly.
    - Known risks, breaking changes, or migration notes.
    - Verification steps already completed (lint, tests, smoke, browser checks).
-3. **Present the summary to the user** and explicitly ask: _"This will update the live site at gutconference.online. Approve push to origin/main?"_
+3. **Present the summary to the user** and explicitly ask: _"Issue #[number] is resolved. Approve push to origin/main to deploy to gutconference.online?"_
 4. **Wait for the user's explicit approval** before running `git push`.
 5. **Do not push** if the user declines or asks for changes — address the feedback first, amend the commit if needed, and re-present the summary.
 
