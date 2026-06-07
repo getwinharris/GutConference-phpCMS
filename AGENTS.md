@@ -85,7 +85,7 @@ If the project map needs a new section (e.g. tools, integrations, gaps), extend 
 
 ## Rules
 
-- **Skill conflicts:** If two or more loaded skills give conflicting instructions for the same action, stop and ask the user which rule to follow before proceeding. Do not silently pick one.
+- **Skill conflicts:** If two or more loaded skills give conflicting instructions for the same action, stop and report which skills conflict and which specific instructions overlap. Ask the user to resolve before proceeding. Do not silently pick one.
 - Keep JSON storage first. Do not introduce SQL/Postgres/MySQL unless the user explicitly asks for a separate migration.
 - Update `storage/schema/collections.json` before changing collection shapes, admin fields, media fields, or agent-visible context.
 - Keep route -> controller -> service -> JSON-store boundaries.
