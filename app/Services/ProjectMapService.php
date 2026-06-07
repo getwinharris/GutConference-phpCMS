@@ -265,6 +265,185 @@ final class ProjectMapService {
         ];
     }
 
+    public static function renderSystematicMermaid(): string {
+        $map = self::registry();
+        $scan = self::scan();
+        $mmd = "flowchart LR\n";
+        $mmd .= "  classDef route fill:#e3f2fd,stroke:#1976d2,color:#0d47a1\n";
+        $mmd .= "  classDef controller fill:#fff3e0,stroke:#f57c00,color:#e65100\n";
+        $mmd .= "  classDef service fill:#e8f5e9,stroke:#388e3c,color:#1b5e20\n";
+        $mmd .= "  classDef view fill:#f3e5f5,stroke:#7b1fa2,color:#4a148c\n";
+        $mmd .= "  classDef integration fill:#fce4ec,stroke:#c2185b,color:#880e4f\n";
+        $mmd .= "  classDef schema fill:#e0f7fa,stroke:#00838f,color:#006064\n";
+        $mmd .= "  classDef storage fill:#fff8e1,stroke:#ff8f00,color:#e65100\n";
+        $mmd .= "  classDef tool fill:#ede7f6,stroke:#5e35b1,color:#311b92\n";
+  $mmd .= "  classDef gap fill:#ffebee,stroke:#c62828,color:#b71c1c\n";
+  $mmd .= "  %% Do not edit by hand. Regenerate with php tools/generate-project-map.php. The %% Summary line below is the only metadata and keeps the output byte-deterministic for the validator.\n";
+  $mmd .= "  %% Summary: " . json_encode($scan['summary']) . "\n\n";
+
+        $bucket = function (string $path): string {
+            if (str_starts_with($path, '/admin')) return 'ADMIN';
+            if (str_starts_with($path, '/auth') || $path === '/login' || $path === '/signup' || str_starts_with($path, '/forgot') || str_starts_with($path, '/reset') || $path === '/logout') return 'AUTH';
+            if (str_contains($path, 'checkout') || str_contains($path, 'payment') || str_starts_with($path, '/payment')) return 'PAYMENT';
+            if (str_starts_with($path, '/support')) return 'SUPPORT';
+            return 'PUBLIC';
+        };
+        $routesByBucket = ['PUBLIC' => [], 'AUTH' => [], 'PAYMENT' => [], 'SUPPORT' => [], 'ADMIN' => []];
+        foreach ($map['routes'] as $i => $route) {
+            $routesByBucket[$bucket($route['path'])][] = [$i, $route];
+        }
+        foreach ($routesByBucket as $name => $routes) {
+            if (empty($routes)) continue;
+            $mmd .= "  subgraph B{$name}[\"{$name} routes\"]\n";
+            foreach ($routes as [$i, $route]) {
+                $routeNode = 'r'.$i;
+                $mmd .= "    {$routeNode}[\"" . $route['method'] . ' ' . $route['path'] . "\"]:::route\n";
+            }
+            $mmd .= "  end\n\n";
+        }
+
+        $mmd .= "  subgraph CTRL[\"Controllers (app/Controllers/)\"]\n";
+        foreach (array_keys($scan['controllers']) as $cls) {
+            $node = 'c_'.preg_replace('/[^A-Za-z0-9]/', '_', $cls);
+            $mmd .= "    {$node}[\"$cls\"]:::controller\n";
+        }
+        $mmd .= "  end\n\n";
+
+        $mmd .= "  subgraph SVC[\"Services (app/Services/)\"]\n";
+        foreach (array_keys($scan['services']) as $cls) {
+            $node = 's_'.preg_replace('/[^A-Za-z0-9]/', '_', $cls);
+            $mmd .= "    {$node}[\"$cls\"]:::service\n";
+        }
+        $mmd .= "  end\n\n";
+
+        $mmd .= "  subgraph VIEW[\"Views (views/)\"]\n";
+        foreach (array_keys($scan['views']) as $path) {
+            $node = 'v_'.md5($path);
+            $label = str_replace(['/', '.'], ['_', '_'], $path);
+            $mmd .= "    {$node}[\"$label\"]:::view\n";
+        }
+        $mmd .= "  end\n\n";
+
+        $mmd .= "  subgraph INT[\"Integrations (integrations/)\"]\n";
+        foreach (array_keys($scan['integrations']) as $cls) {
+            $node = 'i_'.preg_replace('/[^A-Za-z0-9]/', '_', $cls);
+            $mmd .= "    {$node}[\"$cls\"]:::integration\n";
+        }
+        $mmd .= "  end\n\n";
+
+        $mmd .= "  subgraph SCH[\"Schema collections (storage/schema/collections.json)\"]\n";
+        foreach (array_keys($scan['schema_collections']) as $name) {
+            $node = 'sc_'.preg_replace('/[^A-Za-z0-9]/', '_', $name);
+            $mmd .= "    {$node}[\"$name\"]:::schema\n";
+        }
+        $mmd .= "  end\n\n";
+
+        $mmd .= "  subgraph DAT[\"Storage data files (storage/data/)\"]\n";
+        foreach (array_keys($scan['storage_collections']) as $name) {
+            $node = 'd_'.preg_replace('/[^A-Za-z0-9]/', '_', $name);
+            $mmd .= "    {$node}[\"$name.json\"]:::storage\n";
+        }
+        $mmd .= "  end\n\n";
+
+        $mmd .= "  subgraph TOL[\"Tools (tools/)\"]\n";
+        foreach (['generate-project-map.php', 'validate-project-map.php', 'smoke-local.php'] as $tool) {
+            $node = 't_'.preg_replace('/[^A-Za-z0-9]/', '_', $tool);
+            $mmd .= "    {$node}[\"$tool\"]:::tool\n";
+        }
+        $mmd .= "  end\n\n";
+
+        $mmd .= "  subgraph GAP[\"Gaps & missing links\"]\n";
+        $gi = 0;
+        foreach ($scan['gaps'] as $g) {
+            $node = 'g'.$gi++;
+            $mmd .= "    {$node}[\"[" . $g['severity'] . "] " . $g['type'] . "\"]:::gap\n";
+        }
+        $mmd .= "  end\n\n";
+
+        $mmd .= "  %% Edges: route -> controller -> service\n";
+        foreach ($map['routes'] as $i => $route) {
+            $routeNode = 'r'.$i;
+            $ctrlNode = 'c_'.preg_replace('/[^A-Za-z0-9]/', '_', $route['controller']);
+            $mmd .= "  {$routeNode} --> {$ctrlNode}\n";
+            foreach ($route['services'] as $service) {
+                $svcNode = 's_'.preg_replace('/[^A-Za-z0-9]/', '_', $service);
+                $mmd .= "  {$ctrlNode} --> {$svcNode}\n";
+            }
+            $viewKey = $route['page'];
+            if (isset($scan['views']['views/' . $viewKey . '.php'])) {
+                $viewNode = 'v_'.md5('views/' . $viewKey . '.php');
+                $mmd .= "  {$ctrlNode} -.renders.-> {$viewNode}\n";
+            }
+        }
+        $mmd .= "\n  %% Edges: service -> schema collection -> storage file\n";
+        foreach ($scan['collection_usage'] as $col => $svcs) {
+            $svcNode = 's_'.preg_replace('/[^A-Za-z0-9]/', '_', $svcs[0] ?? '');
+            $colNode = 'sc_'.preg_replace('/[^A-Za-z0-9]/', '_', $col);
+            $datNode = 'd_'.preg_replace('/[^A-Za-z0-9]/', '_', $col);
+            if (isset($scan['schema_collections'][$col])) {
+                $mmd .= "  {$svcNode} --> {$colNode}\n";
+            }
+            if (isset($scan['storage_collections'][$col])) {
+                $mmd .= "  {$colNode} -.file.-> {$datNode}\n";
+            }
+        }
+
+        if (isset($scan['integrations']['RazorpayClient'])) {
+            $mmd .= "\n  %% Edges: payment + google integrations\n";
+            $mmd .= "  s_PaymentService --> i_RazorpayClient\n";
+        }
+        if (isset($scan['integrations']['GoogleOAuthClient'])) {
+            $mmd .= "  s_SecretService --> i_GoogleOAuthClient\n";
+        }
+
+        $mmd .= "\n  %% Edges: tools regenerate / validate / smoke the map\n";
+        $mmd .= "  t_generate_project_map_php -.regenerates.-> TOL\n";
+        $mmd .= "  t_validate_project_map_php -.checks.-> TOL\n";
+        $mmd .= "  t_smoke_local_php -.smoke.-> TOL\n\n";
+
+        $mmd .= "  %% Dashed edges: missing links (red gaps)\n";
+        $gi = 0;
+        foreach ($scan['controllers'] as $cls => $info) {
+            if (!isset($scan['routes_by_controller'][$cls])) {
+                $ctrlNode = 'c_'.preg_replace('/[^A-Za-z0-9]/', '_', $cls);
+                $gapNode = 'g'.$gi++;
+                $mmd .= "  {$ctrlNode} -.missing-route.-> {$gapNode}\n";
+            }
+        }
+        foreach ($scan['services'] as $cls => $info) {
+            if (!isset($scan['routes_by_service'][$cls])) {
+                $svcNode = 's_'.preg_replace('/[^A-Za-z0-9]/', '_', $cls);
+                $gapNode = 'g'.$gi++;
+                $mmd .= "  {$svcNode} -.no-route.-> {$gapNode}\n";
+            }
+        }
+        foreach ($scan['views'] as $path => $info) {
+            $logicalKey = preg_replace('/\.php$/', '', $path);
+            $logicalKey = str_replace('views/', '', $logicalKey);
+            if (!isset($scan['routes_by_view'][$logicalKey]) && !str_starts_with($path, 'views/layouts/') && !str_starts_with($path, 'views/partials/')) {
+                $viewNode = 'v_'.md5($path);
+                $gapNode = 'g'.$gi++;
+                $mmd .= "  {$viewNode} -.no-route.-> {$gapNode}\n";
+            }
+        }
+        foreach ($scan['storage_collections'] as $name => $info) {
+            if (!isset($scan['schema_collections'][$name])) {
+                $datNode = 'd_'.preg_replace('/[^A-Za-z0-9]/', '_', $name);
+                $gapNode = 'g'.$gi++;
+                $mmd .= "  {$datNode} -.no-schema.-> {$gapNode}\n";
+            }
+        }
+        foreach ($scan['schema_collections'] as $name => $info) {
+            if (!isset($scan['storage_collections'][$name])) {
+                $colNode = 'sc_'.preg_replace('/[^A-Za-z0-9]/', '_', $name);
+                $gapNode = 'g'.$gi++;
+                $mmd .= "  {$colNode} -.no-file.-> {$gapNode}\n";
+            }
+        }
+
+        return $mmd;
+    }
+
     public static function validate(array $map): array {
         $missingRouteMappings = array_values(array_filter($map['routes'], fn($r) => empty($r['controller']) || empty($r['page'])));
         $used = array_unique(array_merge(...array_map(fn($r) => $r['services'], $map['routes'])));

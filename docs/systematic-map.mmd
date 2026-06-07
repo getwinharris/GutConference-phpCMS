@@ -8,6 +8,9 @@ flowchart LR
   classDef storage fill:#fff8e1,stroke:#ff8f00,color:#e65100
   classDef tool fill:#ede7f6,stroke:#5e35b1,color:#311b92
   classDef gap fill:#ffebee,stroke:#c62828,color:#b71c1c
+  %% Do not edit by hand. Regenerate with php tools/generate-project-map.php. The %% Summary line below is the only metadata and keeps the output byte-deterministic for the validator.
+  %% Summary: {"routes":65,"controllers":6,"services":23,"views":25,"integrations":2,"schema_collections":15,"storage_collections":17,"gap_count":10}
+
   subgraph BPUBLIC["PUBLIC routes"]
     r0["GET /"]:::route
     r1["GET /events"]:::route
@@ -19,6 +22,7 @@ flowchart LR
     r9["GET /contact"]:::route
     r10["POST /contact"]:::route
   end
+
   subgraph BAUTH["AUTH routes"]
     r13["GET /login"]:::route
     r14["GET /signup"]:::route
@@ -32,14 +36,17 @@ flowchart LR
     r22["GET /auth/google/callback"]:::route
     r23["GET /logout"]:::route
   end
+
   subgraph BPAYMENT["PAYMENT routes"]
     r6["POST /events/{slug}/checkout"]:::route
     r7["POST /events/{slug}/payment/verify"]:::route
   end
+
   subgraph BSUPPORT["SUPPORT routes"]
     r11["POST /support/chat"]:::route
     r12["POST /support/admin/apply"]:::route
   end
+
   subgraph BADMIN["ADMIN routes"]
     r24["GET /admin"]:::route
     r25["GET /admin/events"]:::route
@@ -83,7 +90,8 @@ flowchart LR
     r63["POST /admin/environment/fix-permissions"]:::route
     r64["GET /admin/developer/project-map"]:::route
   end
-  subgraph CTRL["Controllers"]
+
+  subgraph CTRL["Controllers (app/Controllers/)"]
     c_AdminController["AdminController"]:::controller
     c_AuthController["AuthController"]:::controller
     c_BaseController["BaseController"]:::controller
@@ -91,7 +99,8 @@ flowchart LR
     c_PublicController["PublicController"]:::controller
     c_SupportController["SupportController"]:::controller
   end
-  subgraph SVC["Services"]
+
+  subgraph SVC["Services (app/Services/)"]
     s_AgentContextService["AgentContextService"]:::service
     s_AuditLogService["AuditLogService"]:::service
     s_AuthService["AuthService"]:::service
@@ -116,7 +125,8 @@ flowchart LR
     s_SupportAgentService["SupportAgentService"]:::service
     s_UserContextService["UserContextService"]:::service
   end
-  subgraph VIEW["Views"]
+
+  subgraph VIEW["Views (views/)"]
     v_3ab877986fb4e4bbadd74915d6732966["views_admin_branding_php"]:::view
     v_d02f8978e528a33c375287ca0baca090["views_admin_dashboard_php"]:::view
     v_bf035116efa00542032bf53e291d0678["views_admin_environment_php"]:::view
@@ -143,10 +153,12 @@ flowchart LR
     v_06ea11892c09a3ff6250f798a6ea2bd2["views_public_signup_php"]:::view
     v_ea0656e90ac69484832e68685e81647f["views_public_terms_php"]:::view
   end
-  subgraph INT["Integrations"]
+
+  subgraph INT["Integrations (integrations/)"]
     i_GoogleOAuthClient["GoogleOAuthClient"]:::integration
     i_RazorpayClient["RazorpayClient"]:::integration
   end
+
   subgraph SCH["Schema collections (storage/schema/collections.json)"]
     sc_audit_events["audit_events"]:::schema
     sc_contact_submissions["contact_submissions"]:::schema
@@ -164,6 +176,7 @@ flowchart LR
     sc_users["users"]:::schema
     sc_venues["venues"]:::schema
   end
+
   subgraph DAT["Storage data files (storage/data/)"]
     d_adminsecrets["adminsecrets.json"]:::storage
     d_audit_events["audit_events.json"]:::storage
@@ -183,11 +196,13 @@ flowchart LR
     d_users["users.json"]:::storage
     d_venues["venues.json"]:::storage
   end
+
   subgraph TOL["Tools (tools/)"]
     t_generate_project_map_php["generate-project-map.php"]:::tool
     t_validate_project_map_php["validate-project-map.php"]:::tool
     t_smoke_local_php["smoke-local.php"]:::tool
   end
+
   subgraph GAP["Gaps & missing links"]
     g0["[high] controller_unwired"]:::gap
     g1["[high] service_unwired"]:::gap
@@ -200,6 +215,8 @@ flowchart LR
     g8["[medium] storage_file_no_schema"]:::gap
     g9["[medium] view_unwired"]:::gap
   end
+
+  %% Edges: route -> controller -> service
   r0 --> c_PublicController_home
   c_PublicController_home --> s_EventService
   c_PublicController_home --> s_ResourceService
@@ -476,6 +493,8 @@ flowchart LR
   c_AdminController_projectMap --> s_ProjectMapService
   c_AdminController_projectMap --> s_AuthService
   c_AdminController_projectMap -.renders.-> v_54455030e9a112d23341d1f3dae2cb53
+
+  %% Edges: service -> schema collection -> storage file
   sc_adminsecrets -.file.-> d_adminsecrets
   s_AuditLogService --> sc_audit_events
   sc_audit_events -.file.-> d_audit_events
@@ -507,11 +526,17 @@ flowchart LR
   sc_users -.file.-> d_users
   s_EventService --> sc_venues
   sc_venues -.file.-> d_venues
+
+  %% Edges: payment + google integrations
   s_PaymentService --> i_RazorpayClient
   s_SecretService --> i_GoogleOAuthClient
+
+  %% Edges: tools regenerate / validate / smoke the map
   t_generate_project_map_php -.regenerates.-> TOL
   t_validate_project_map_php -.checks.-> TOL
   t_smoke_local_php -.smoke.-> TOL
+
+  %% Dashed edges: missing links (red gaps)
   c_BaseController -.missing-route.-> g0
   s_EmailTemplateService -.no-route.-> g1
   s_EnvService -.no-route.-> g2
