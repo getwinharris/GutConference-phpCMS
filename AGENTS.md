@@ -136,31 +136,39 @@ git branch --set-upstream-to=origin/main main
 
 Treat `refs/remotes/origin/main` as valid only after that forced GitHub fetch. Do not trust a pre-existing local `origin/main` ref from this machine, because the project was created locally before being pushed to GitHub. Use the freshly rebuilt GitHub remote-tracking ref as the baseline. If GitHub `main` moved, rebase local commits onto the fetched remote branch and resolve conflicts in favor of the current secret policy: tracked `.env` files stay deleted and are not reintroduced.
 
-### Before pushing to `origin/main`, the agent MUST:
+### Before opening a PR, the agent MUST:
 
-1. Check for uncommitted changes:
-```bash
-git status
-```
-If there are modified, new, or deleted files, commit them before proceeding.
+1. **Create a branch** for the fix:
+   ```bash
+   git checkout -b fix/issue-19-smoke-test-pollution
+   ```
 
-2. Run validation:
-```bash
-php -l path/to/changed.php
-php tests/run.php
-php tools/generate-project-map.php
-php tools/validate-project-map.php
-```
+2. **Commit changes** on the branch with a clear message referencing the issue.
 
-3. **Write a user-facing release summary** that includes:
-   - The GitHub issue number (e.g., `Resolves #15`).
-   - A short title describing the release.
-   - A bullet list of precise changes — what was changed and why, per file. No agent instructions or internal checklist.
-4. **Present the summary to the user** and explicitly ask: _"Issue #[number] is resolved. Approve push to origin/main to deploy to gutconference.online?"_
-5. **Wait for the user's explicit approval** before running `git push`.
-6. **Do not push** if the user declines or asks for changes — address the feedback first, amend the commit if needed, and re-present the summary.
+3. **Run validation:**
+   ```bash
+   php -l path/to/changed.php
+   php tests/run.php
+   php tools/generate-project-map.php
+   php tools/validate-project-map.php
+   ```
 
-### After pushing:
+4. **Push the branch** to origin:
+   ```bash
+   git push origin fix/issue-19-smoke-test-pollution
+   ```
 
-- Confirm the push succeeded and report the commit hash.
-- Remind the user to verify the live site at `https://gutconference.online`.
+5. **Draft a PR title and body** describing the issue and precise changes per file. No agent instructions or internal checklist.
+
+6. **Present the PR draft to the user** for confirmation before creating it.
+
+7. **Create the PR** once confirmed:
+   ```bash
+   gh pr create --title "..." --body "..." --base main
+   ```
+
+8. **Report the PR URL** and wait for merge approval.
+
+### After merging:
+
+- Confirm the merge and remind the user to verify the live site at `https://gutconference.online`.
