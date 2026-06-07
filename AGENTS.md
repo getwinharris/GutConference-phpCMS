@@ -139,7 +139,13 @@ Treat `refs/remotes/origin/main` as valid only after that forced GitHub fetch. D
 
 ### Before pushing to `origin/main`, the agent MUST:
 
-1. Run validation:
+1. Check for uncommitted changes:
+```bash
+git status
+```
+If there are modified, new, or deleted files, commit them before proceeding.
+
+2. Run validation:
 ```bash
 php -l path/to/changed.php
 php tests/run.php
@@ -147,16 +153,17 @@ php tools/generate-project-map.php
 php tools/validate-project-map.php
 php tools/smoke-local.php
 ```
-2. **Write a PR-style change summary** that includes:
+
+3. **Write a PR-style change summary** that includes:
    - The GitHub issue number that this resolves (e.g., `Resolves #15`).
    - A short title describing the release.
    - A bullet list of all changed areas (controllers, services, views, schema, data, assets, config, docs).
    - Any new files or deleted files called out explicitly.
    - Known risks, breaking changes, or migration notes.
    - Verification steps already completed (lint, tests, smoke, browser checks).
-3. **Present the summary to the user** and explicitly ask: _"Issue #[number] is resolved. Approve push to origin/main to deploy to gutconference.online?"_
-4. **Wait for the user's explicit approval** before running `git push`.
-5. **Do not push** if the user declines or asks for changes — address the feedback first, amend the commit if needed, and re-present the summary.
+4. **Present the summary to the user** and explicitly ask: _"Issue #[number] is resolved. Approve push to origin/main to deploy to gutconference.online?"_
+5. **Wait for the user's explicit approval** before running `git push`.
+6. **Do not push** if the user declines or asks for changes — address the feedback first, amend the commit if needed, and re-present the summary.
 
 ### After pushing:
 
