@@ -133,6 +133,14 @@ Verify before proceeding:
 
 ### Step 2 — Analyze Changes
 
+First, refresh the remote tracking ref to avoid stale local state:
+
+```bash
+git fetch --prune origin
+```
+
+Then check what commits are waiting to be pushed:
+
 ```bash
 git log --oneline origin/main..HEAD
 git diff origin/main..HEAD --stat
@@ -204,14 +212,14 @@ Adds per-user data isolation section to privacy policy.
 
 ### Step 6 — Report
 
-Display the created PR URL. Remind user that pushes to `origin/main` auto-deploy to gutconference.online.
+Display the created PR URL. Remind user that pushes to `main` auto-deploy to gutconference.online.
 
 ---
 
 ## Safety Rules
 
 - Never create an issue or PR without explicit user confirmation
-- Never push to `origin/main` without approval — it auto-deploys to production
+- Never push to `main` without approval — it auto-deploys to production
 - Always verify code before writing issue body — quote file paths and line numbers
 - Check for duplicates before creating issues
 - Use full repository issue references when linking: `getwinharris/GutConference-phpCMS#15`
