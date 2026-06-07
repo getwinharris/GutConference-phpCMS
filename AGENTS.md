@@ -31,6 +31,7 @@ This repo is a GutConference Online PHP/JSON full-stack CMS for shared hosting. 
 2. `storage/schema/collections.json`
 3. `docs/systematic-map.mmd` (the single project-map artifact — comprehensive mermaid flowchart with all routes, controllers, services, views, integrations, schema, storage, tools, and gaps)
 4. The narrow GutConference skill under `.agents/skills/<skill-name>/SKILL.md` that matches the task. For admin work use the `gutconference-admin` skill.
+5. When creating GitHub issues or pull requests, follow `.agents/skills/gutconference-github-issue-pr/SKILL.md`.
 
 ## Project Map as the Source of Truth
 
