@@ -577,6 +577,10 @@
         "razorpay_payment_id": {
           "type": "string"
         },
+        "failure_reason": {
+          "type": "string",
+          "description": "Set when payment_status=failed. One of: missing, signature, not_found, closed, unknown."
+        },
         "certificate_status": {
           "type": "enum",
           "values": [

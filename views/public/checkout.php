@@ -72,7 +72,8 @@ const checkoutOptions = {
         backdropclose: false,
         confirm_close: true,
         ondismiss: function () {
-            document.getElementById('razorpay-pay-button').focus();
+            var url = '/payment/failed?event=<?= e($event['slug'] ?? '') ?>&registration_id=<?= e($registration['id'] ?? '') ?>&order_id=<?= e($registration['razorpay_order_id'] ?? '') ?>&reason=closed';
+            window.location.href = url;
         }
     }
 };

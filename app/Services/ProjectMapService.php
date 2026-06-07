@@ -12,6 +12,8 @@ final class ProjectMapService {
             ['method'=>'GET','path'=>'/events/{slug}','name'=>'events.show','page'=>'public/event','controller'=>'PublicController@event','services'=>['EventService','SecretService']],
             ['method'=>'POST','path'=>'/events/{slug}/checkout','name'=>'events.checkout','page'=>'public/checkout','controller'=>'PaymentController@checkout','services'=>['AuthService','EventService','SecretService','JsonStoreService']],
             ['method'=>'POST','path'=>'/events/{slug}/payment/verify','name'=>'events.payment.verify','page'=>'public/checkout','controller'=>'PaymentController@verify','services'=>['AuthService','EventService','SecretService','JsonStoreService','PaymentService','PurchaseNotificationService']],
+            ['method'=>'GET','path'=>'/payment/success','name'=>'payment.success','page'=>'public/payment-result','controller'=>'PaymentController@success','services'=>['AuthService','EventService','JsonStoreService']],
+            ['method'=>'GET','path'=>'/payment/failed','name'=>'payment.failed','page'=>'public/payment-result','controller'=>'PaymentController@failed','services'=>['AuthService','EventService','JsonStoreService']],
             ['method'=>'GET','path'=>'/conference/{slug}','name'=>'conference.show','page'=>'public/event','controller'=>'PublicController@event','services'=>['EventService','SecretService']],
             ['method'=>'GET','path'=>'/contact','name'=>'contact','page'=>'public/contact','controller'=>'PublicController@contact','services'=>[]],
             ['method'=>'POST','path'=>'/contact','name'=>'contact.post','page'=>'public/contact','controller'=>'PublicController@contact','services'=>['ContactService']],
