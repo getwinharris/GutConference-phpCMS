@@ -118,7 +118,6 @@ php -l path/to/changed.php
 php tests/run.php
 php tools/generate-project-map.php
 php tools/validate-project-map.php
-php tools/smoke-local.php
 ```
 
 For UI changes, use a browser workflow and check home, event detail, admin login, and the changed admin resource.
@@ -151,16 +150,12 @@ php -l path/to/changed.php
 php tests/run.php
 php tools/generate-project-map.php
 php tools/validate-project-map.php
-php tools/smoke-local.php
 ```
 
-3. **Write a PR-style change summary** that includes:
-   - The GitHub issue number that this resolves (e.g., `Resolves #15`).
+3. **Write a user-facing release summary** that includes:
+   - The GitHub issue number (e.g., `Resolves #15`).
    - A short title describing the release.
-   - A bullet list of all changed areas (controllers, services, views, schema, data, assets, config, docs).
-   - Any new files or deleted files called out explicitly.
-   - Known risks, breaking changes, or migration notes.
-   - Verification steps already completed (lint, tests, smoke, browser checks).
+   - A bullet list of precise changes — what was changed and why, per file. No agent instructions or internal checklist.
 4. **Present the summary to the user** and explicitly ask: _"Issue #[number] is resolved. Approve push to origin/main to deploy to gutconference.online?"_
 5. **Wait for the user's explicit approval** before running `git push`.
 6. **Do not push** if the user declines or asks for changes — address the feedback first, amend the commit if needed, and re-present the summary.

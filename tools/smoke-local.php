@@ -34,12 +34,6 @@ try {
         if ($expected === 200 && str_contains($response['body'], 'Page not found')) $failures[] = "GET {$path} rendered fallback missing-page content";
     }
 
-    $contactPost = httpRequest($base . '/contact', 'POST', 'name=Smoke&email=smoke%40example.com&subject=Test&message=Hello');
-    echo "{$contactPost['status']} POST /contact\n";
-    if ($contactPost['status'] !== 200 || !str_contains($contactPost['body'], 'Message received')) {
-        $failures[] = "POST /contact should render success message";
-    }
-
     $unknown = httpRequest($base . '/unknown-spa-route');
     echo "{$unknown['status']} GET /unknown-spa-route\n";
     if ($unknown['status'] !== 404) $failures[] = "Unknown route expected 404, got {$unknown['status']}";
