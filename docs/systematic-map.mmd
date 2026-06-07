@@ -9,7 +9,7 @@ flowchart LR
   classDef tool fill:#ede7f6,stroke:#5e35b1,color:#311b92
   classDef gap fill:#ffebee,stroke:#c62828,color:#b71c1c
   %% Do not edit by hand. Regenerate with php tools/generate-project-map.php. The %% Summary line below is the only metadata and keeps the output byte-deterministic for the validator.
-  %% Summary: {"routes":65,"controllers":6,"services":23,"views":25,"integrations":2,"schema_collections":15,"storage_collections":17,"gap_count":10}
+  %% Summary: {"routes":67,"controllers":6,"services":23,"views":26,"integrations":2,"schema_collections":15,"storage_collections":17,"gap_count":10}
 
   subgraph BPUBLIC["PUBLIC routes"]
     r0["GET /"]:::route
@@ -18,77 +18,79 @@ flowchart LR
     r3["GET /privacy"]:::route
     r4["GET /dashboard"]:::route
     r5["GET /events/{slug}"]:::route
-    r8["GET /conference/{slug}"]:::route
-    r9["GET /contact"]:::route
-    r10["POST /contact"]:::route
+    r10["GET /conference/{slug}"]:::route
+    r11["GET /contact"]:::route
+    r12["POST /contact"]:::route
   end
 
   subgraph BAUTH["AUTH routes"]
-    r13["GET /login"]:::route
-    r14["GET /signup"]:::route
-    r15["POST /signup"]:::route
-    r16["GET /forgot-password"]:::route
-    r17["POST /forgot-password"]:::route
-    r18["GET /reset-password"]:::route
-    r19["POST /reset-password"]:::route
-    r20["POST /login"]:::route
-    r21["GET /auth/google"]:::route
-    r22["GET /auth/google/callback"]:::route
-    r23["GET /logout"]:::route
+    r15["GET /login"]:::route
+    r16["GET /signup"]:::route
+    r17["POST /signup"]:::route
+    r18["GET /forgot-password"]:::route
+    r19["POST /forgot-password"]:::route
+    r20["GET /reset-password"]:::route
+    r21["POST /reset-password"]:::route
+    r22["POST /login"]:::route
+    r23["GET /auth/google"]:::route
+    r24["GET /auth/google/callback"]:::route
+    r25["GET /logout"]:::route
   end
 
   subgraph BPAYMENT["PAYMENT routes"]
     r6["POST /events/{slug}/checkout"]:::route
     r7["POST /events/{slug}/payment/verify"]:::route
+    r8["GET /payment/success"]:::route
+    r9["GET /payment/failed"]:::route
   end
 
   subgraph BSUPPORT["SUPPORT routes"]
-    r11["POST /support/chat"]:::route
-    r12["POST /support/admin/apply"]:::route
+    r13["POST /support/chat"]:::route
+    r14["POST /support/admin/apply"]:::route
   end
 
   subgraph BADMIN["ADMIN routes"]
-    r24["GET /admin"]:::route
-    r25["GET /admin/events"]:::route
-    r26["POST /admin/events/save"]:::route
-    r27["POST /admin/events/delete"]:::route
-    r28["GET /admin/event_sections"]:::route
-    r29["POST /admin/event_sections/save"]:::route
-    r30["POST /admin/event_sections/delete"]:::route
-    r31["GET /admin/speakers"]:::route
-    r32["POST /admin/speakers/save"]:::route
-    r33["POST /admin/speakers/delete"]:::route
-    r34["GET /admin/sessions"]:::route
-    r35["POST /admin/sessions/save"]:::route
-    r36["POST /admin/sessions/delete"]:::route
-    r37["GET /admin/venues"]:::route
-    r38["POST /admin/venues/save"]:::route
-    r39["POST /admin/venues/delete"]:::route
-    r40["GET /admin/publishers"]:::route
-    r41["POST /admin/publishers/save"]:::route
-    r42["POST /admin/publishers/delete"]:::route
-    r43["GET /admin/registrations"]:::route
-    r44["GET /admin/notification_templates"]:::route
-    r45["POST /admin/notification_templates/save"]:::route
-    r46["POST /admin/notification_templates/delete"]:::route
-    r47["GET /admin/notification_queue"]:::route
-    r48["POST /admin/notification_queue/process"]:::route
-    r49["GET /admin/settings"]:::route
-    r50["POST /admin/settings/save"]:::route
-    r51["POST /admin/settings/admin-credentials"]:::route
-    r52["GET /admin/integrations"]:::route
-    r53["POST /admin/integrations/save"]:::route
-    r54["GET /admin/contact-submissions"]:::route
-    r55["GET /admin/support-tickets"]:::route
-    r56["GET /admin/branding"]:::route
-    r57["GET /admin/media"]:::route
-    r58["POST /admin/media/upload"]:::route
-    r59["GET /admin/audit-log"]:::route
-    r60["GET /admin/backups"]:::route
-    r61["GET /admin/environment"]:::route
-    r62["POST /admin/environment/save"]:::route
-    r63["POST /admin/environment/fix-permissions"]:::route
-    r64["GET /admin/developer/project-map"]:::route
+    r26["GET /admin"]:::route
+    r27["GET /admin/events"]:::route
+    r28["POST /admin/events/save"]:::route
+    r29["POST /admin/events/delete"]:::route
+    r30["GET /admin/event_sections"]:::route
+    r31["POST /admin/event_sections/save"]:::route
+    r32["POST /admin/event_sections/delete"]:::route
+    r33["GET /admin/speakers"]:::route
+    r34["POST /admin/speakers/save"]:::route
+    r35["POST /admin/speakers/delete"]:::route
+    r36["GET /admin/sessions"]:::route
+    r37["POST /admin/sessions/save"]:::route
+    r38["POST /admin/sessions/delete"]:::route
+    r39["GET /admin/venues"]:::route
+    r40["POST /admin/venues/save"]:::route
+    r41["POST /admin/venues/delete"]:::route
+    r42["GET /admin/publishers"]:::route
+    r43["POST /admin/publishers/save"]:::route
+    r44["POST /admin/publishers/delete"]:::route
+    r45["GET /admin/registrations"]:::route
+    r46["GET /admin/notification_templates"]:::route
+    r47["POST /admin/notification_templates/save"]:::route
+    r48["POST /admin/notification_templates/delete"]:::route
+    r49["GET /admin/notification_queue"]:::route
+    r50["POST /admin/notification_queue/process"]:::route
+    r51["GET /admin/settings"]:::route
+    r52["POST /admin/settings/save"]:::route
+    r53["POST /admin/settings/admin-credentials"]:::route
+    r54["GET /admin/integrations"]:::route
+    r55["POST /admin/integrations/save"]:::route
+    r56["GET /admin/contact-submissions"]:::route
+    r57["GET /admin/support-tickets"]:::route
+    r58["GET /admin/branding"]:::route
+    r59["GET /admin/media"]:::route
+    r60["POST /admin/media/upload"]:::route
+    r61["GET /admin/audit-log"]:::route
+    r62["GET /admin/backups"]:::route
+    r63["GET /admin/environment"]:::route
+    r64["POST /admin/environment/save"]:::route
+    r65["POST /admin/environment/fix-permissions"]:::route
+    r66["GET /admin/developer/project-map"]:::route
   end
 
   subgraph CTRL["Controllers (app/Controllers/)"]
@@ -148,6 +150,7 @@ flowchart LR
     v_e5fa14328e90172727fcb411952bd3d5["views_public_forgot-password_php"]:::view
     v_f9c680babf226f13c844fb15ffd10017["views_public_home_php"]:::view
     v_092425269ed1179e04c77d0ffa5d45e5["views_public_login_php"]:::view
+    v_6f6b011b7da74ff843ca16ea1a3d0c05["views_public_payment-result_php"]:::view
     v_efe1050ba6821690c76cc1f8ae4bc60d["views_public_privacy_php"]:::view
     v_bbb51cd82b41cef4b342b7c3f22403e7["views_public_reset-password_php"]:::view
     v_06ea11892c09a3ff6250f798a6ea2bd2["views_public_signup_php"]:::view
@@ -251,245 +254,255 @@ flowchart LR
   c_PaymentController_verify --> s_PaymentService
   c_PaymentController_verify --> s_PurchaseNotificationService
   c_PaymentController_verify -.renders.-> v_292bcc43071fc9937e09dc46e2a2da11
-  r8 --> c_PublicController_event
+  r8 --> c_PaymentController_success
+  c_PaymentController_success --> s_AuthService
+  c_PaymentController_success --> s_EventService
+  c_PaymentController_success --> s_JsonStoreService
+  c_PaymentController_success -.renders.-> v_6f6b011b7da74ff843ca16ea1a3d0c05
+  r9 --> c_PaymentController_failed
+  c_PaymentController_failed --> s_AuthService
+  c_PaymentController_failed --> s_EventService
+  c_PaymentController_failed --> s_JsonStoreService
+  c_PaymentController_failed -.renders.-> v_6f6b011b7da74ff843ca16ea1a3d0c05
+  r10 --> c_PublicController_event
   c_PublicController_event --> s_EventService
   c_PublicController_event --> s_SecretService
   c_PublicController_event -.renders.-> v_5070c13af5e8b7d20a6c34c29bc9f67d
-  r9 --> c_PublicController_contact
+  r11 --> c_PublicController_contact
   c_PublicController_contact -.renders.-> v_03f31e9e37cb8ba139cfd09f209f89f1
-  r10 --> c_PublicController_contact
+  r12 --> c_PublicController_contact
   c_PublicController_contact --> s_ContactService
   c_PublicController_contact -.renders.-> v_03f31e9e37cb8ba139cfd09f209f89f1
-  r11 --> c_SupportController_chat
+  r13 --> c_SupportController_chat
   c_SupportController_chat --> s_AuthService
   c_SupportController_chat --> s_SupportAgentService
   c_SupportController_chat --> s_AgentContextService
   c_SupportController_chat --> s_JsonStoreService
   c_SupportController_chat --> s_SecretService
-  r12 --> c_SupportController_adminApply
+  r14 --> c_SupportController_adminApply
   c_SupportController_adminApply --> s_AuthService
   c_SupportController_adminApply --> s_ResourceService
   c_SupportController_adminApply --> s_SchemaService
   c_SupportController_adminApply --> s_AuditLogService
-  r13 --> c_PublicController_login
+  r15 --> c_PublicController_login
   c_PublicController_login --> s_AuthService
   c_PublicController_login -.renders.-> v_092425269ed1179e04c77d0ffa5d45e5
-  r14 --> c_PublicController_signup
+  r16 --> c_PublicController_signup
   c_PublicController_signup --> s_AuthService
   c_PublicController_signup -.renders.-> v_06ea11892c09a3ff6250f798a6ea2bd2
-  r15 --> c_AuthController_signupPost
+  r17 --> c_AuthController_signupPost
   c_AuthController_signupPost --> s_JsonStoreService
   c_AuthController_signupPost -.renders.-> v_06ea11892c09a3ff6250f798a6ea2bd2
-  r16 --> c_AuthController_forgotPassword
+  r18 --> c_AuthController_forgotPassword
   c_AuthController_forgotPassword --> s_PasswordResetService
   c_AuthController_forgotPassword -.renders.-> v_e5fa14328e90172727fcb411952bd3d5
-  r17 --> c_AuthController_forgotPasswordPost
+  r19 --> c_AuthController_forgotPasswordPost
   c_AuthController_forgotPasswordPost --> s_PasswordResetService
   c_AuthController_forgotPasswordPost -.renders.-> v_e5fa14328e90172727fcb411952bd3d5
-  r18 --> c_AuthController_resetPassword
+  r20 --> c_AuthController_resetPassword
   c_AuthController_resetPassword --> s_PasswordResetService
   c_AuthController_resetPassword -.renders.-> v_bbb51cd82b41cef4b342b7c3f22403e7
-  r19 --> c_AuthController_resetPasswordPost
+  r21 --> c_AuthController_resetPasswordPost
   c_AuthController_resetPasswordPost --> s_PasswordResetService
   c_AuthController_resetPasswordPost -.renders.-> v_bbb51cd82b41cef4b342b7c3f22403e7
-  r20 --> c_AuthController_loginPost
+  r22 --> c_AuthController_loginPost
   c_AuthController_loginPost --> s_JsonStoreService
   c_AuthController_loginPost -.renders.-> v_092425269ed1179e04c77d0ffa5d45e5
-  r21 --> c_AuthController_googleRedirect
+  r23 --> c_AuthController_googleRedirect
   c_AuthController_googleRedirect --> s_SecretService
   c_AuthController_googleRedirect -.renders.-> v_092425269ed1179e04c77d0ffa5d45e5
-  r22 --> c_AuthController_googleCallback
+  r24 --> c_AuthController_googleCallback
   c_AuthController_googleCallback --> s_SecretService
   c_AuthController_googleCallback --> s_JsonStoreService
   c_AuthController_googleCallback -.renders.-> v_092425269ed1179e04c77d0ffa5d45e5
-  r23 --> c_AuthController_logout
+  r25 --> c_AuthController_logout
   c_AuthController_logout --> s_AuthService
   c_AuthController_logout -.renders.-> v_092425269ed1179e04c77d0ffa5d45e5
-  r24 --> c_AdminController_dashboard
+  r26 --> c_AdminController_dashboard
   c_AdminController_dashboard --> s_ResourceService
   c_AdminController_dashboard --> s_AuthService
   c_AdminController_dashboard -.renders.-> v_d02f8978e528a33c375287ca0baca090
-  r25 --> c_AdminController_events
+  r27 --> c_AdminController_events
   c_AdminController_events --> s_ResourceService
   c_AdminController_events --> s_SchemaService
   c_AdminController_events --> s_AuthService
   c_AdminController_events -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r26 --> c_AdminController_saveEvent
+  r28 --> c_AdminController_saveEvent
   c_AdminController_saveEvent --> s_ResourceService
   c_AdminController_saveEvent --> s_AuditLogService
   c_AdminController_saveEvent --> s_AuthService
   c_AdminController_saveEvent -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r27 --> c_AdminController_deleteEvent
+  r29 --> c_AdminController_deleteEvent
   c_AdminController_deleteEvent --> s_ResourceService
   c_AdminController_deleteEvent --> s_AuditLogService
   c_AdminController_deleteEvent --> s_AuthService
   c_AdminController_deleteEvent -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r28 --> c_AdminController_eventSections
+  r30 --> c_AdminController_eventSections
   c_AdminController_eventSections --> s_ResourceService
   c_AdminController_eventSections --> s_SchemaService
   c_AdminController_eventSections --> s_AuthService
   c_AdminController_eventSections -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r29 --> c_AdminController_saveEventSection
+  r31 --> c_AdminController_saveEventSection
   c_AdminController_saveEventSection --> s_ResourceService
   c_AdminController_saveEventSection --> s_AuditLogService
   c_AdminController_saveEventSection --> s_AuthService
   c_AdminController_saveEventSection -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r30 --> c_AdminController_deleteEventSection
+  r32 --> c_AdminController_deleteEventSection
   c_AdminController_deleteEventSection --> s_ResourceService
   c_AdminController_deleteEventSection --> s_AuditLogService
   c_AdminController_deleteEventSection --> s_AuthService
   c_AdminController_deleteEventSection -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r31 --> c_AdminController_speakers
+  r33 --> c_AdminController_speakers
   c_AdminController_speakers --> s_ResourceService
   c_AdminController_speakers --> s_SchemaService
   c_AdminController_speakers --> s_AuthService
   c_AdminController_speakers -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r32 --> c_AdminController_saveSpeaker
+  r34 --> c_AdminController_saveSpeaker
   c_AdminController_saveSpeaker --> s_ResourceService
   c_AdminController_saveSpeaker --> s_AuditLogService
   c_AdminController_saveSpeaker --> s_AuthService
   c_AdminController_saveSpeaker -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r33 --> c_AdminController_deleteSpeaker
+  r35 --> c_AdminController_deleteSpeaker
   c_AdminController_deleteSpeaker --> s_ResourceService
   c_AdminController_deleteSpeaker --> s_AuditLogService
   c_AdminController_deleteSpeaker --> s_AuthService
   c_AdminController_deleteSpeaker -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r34 --> c_AdminController_sessions
+  r36 --> c_AdminController_sessions
   c_AdminController_sessions --> s_ResourceService
   c_AdminController_sessions --> s_SchemaService
   c_AdminController_sessions --> s_AuthService
   c_AdminController_sessions -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r35 --> c_AdminController_saveSession
+  r37 --> c_AdminController_saveSession
   c_AdminController_saveSession --> s_ResourceService
   c_AdminController_saveSession --> s_AuditLogService
   c_AdminController_saveSession --> s_AuthService
   c_AdminController_saveSession -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r36 --> c_AdminController_deleteSession
+  r38 --> c_AdminController_deleteSession
   c_AdminController_deleteSession --> s_ResourceService
   c_AdminController_deleteSession --> s_AuditLogService
   c_AdminController_deleteSession --> s_AuthService
   c_AdminController_deleteSession -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r37 --> c_AdminController_venues
+  r39 --> c_AdminController_venues
   c_AdminController_venues --> s_ResourceService
   c_AdminController_venues --> s_SchemaService
   c_AdminController_venues --> s_AuthService
   c_AdminController_venues -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r38 --> c_AdminController_saveVenue
+  r40 --> c_AdminController_saveVenue
   c_AdminController_saveVenue --> s_ResourceService
   c_AdminController_saveVenue --> s_AuditLogService
   c_AdminController_saveVenue --> s_AuthService
   c_AdminController_saveVenue -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r39 --> c_AdminController_deleteVenue
+  r41 --> c_AdminController_deleteVenue
   c_AdminController_deleteVenue --> s_ResourceService
   c_AdminController_deleteVenue --> s_AuditLogService
   c_AdminController_deleteVenue --> s_AuthService
   c_AdminController_deleteVenue -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r40 --> c_AdminController_publishers
+  r42 --> c_AdminController_publishers
   c_AdminController_publishers --> s_ResourceService
   c_AdminController_publishers --> s_SchemaService
   c_AdminController_publishers --> s_AuthService
   c_AdminController_publishers -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r41 --> c_AdminController_savePublisher
+  r43 --> c_AdminController_savePublisher
   c_AdminController_savePublisher --> s_ResourceService
   c_AdminController_savePublisher --> s_AuditLogService
   c_AdminController_savePublisher --> s_AuthService
   c_AdminController_savePublisher -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r42 --> c_AdminController_deletePublisher
+  r44 --> c_AdminController_deletePublisher
   c_AdminController_deletePublisher --> s_ResourceService
   c_AdminController_deletePublisher --> s_AuditLogService
   c_AdminController_deletePublisher --> s_AuthService
   c_AdminController_deletePublisher -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r43 --> c_AdminController_registrations
+  r45 --> c_AdminController_registrations
   c_AdminController_registrations --> s_ResourceService
   c_AdminController_registrations --> s_AuthService
   c_AdminController_registrations -.renders.-> v_23455c65ad126a304dcb7ba7423bb7aa
-  r44 --> c_AdminController_notificationTemplates
+  r46 --> c_AdminController_notificationTemplates
   c_AdminController_notificationTemplates --> s_ResourceService
   c_AdminController_notificationTemplates --> s_SchemaService
   c_AdminController_notificationTemplates --> s_AuthService
   c_AdminController_notificationTemplates -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r45 --> c_AdminController_saveNotificationTemplate
+  r47 --> c_AdminController_saveNotificationTemplate
   c_AdminController_saveNotificationTemplate --> s_ResourceService
   c_AdminController_saveNotificationTemplate --> s_AuditLogService
   c_AdminController_saveNotificationTemplate --> s_AuthService
   c_AdminController_saveNotificationTemplate -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r46 --> c_AdminController_deleteNotificationTemplate
+  r48 --> c_AdminController_deleteNotificationTemplate
   c_AdminController_deleteNotificationTemplate --> s_ResourceService
   c_AdminController_deleteNotificationTemplate --> s_AuditLogService
   c_AdminController_deleteNotificationTemplate --> s_AuthService
   c_AdminController_deleteNotificationTemplate -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r47 --> c_AdminController_notificationQueue
+  r49 --> c_AdminController_notificationQueue
   c_AdminController_notificationQueue --> s_ResourceService
   c_AdminController_notificationQueue --> s_AuthService
   c_AdminController_notificationQueue -.renders.-> v_23455c65ad126a304dcb7ba7423bb7aa
-  r48 --> c_AdminController_processNotificationQueue
+  r50 --> c_AdminController_processNotificationQueue
   c_AdminController_processNotificationQueue --> s_NotificationQueueService
   c_AdminController_processNotificationQueue --> s_AuthService
   c_AdminController_processNotificationQueue -.renders.-> v_23455c65ad126a304dcb7ba7423bb7aa
-  r49 --> c_AdminController_settings
+  r51 --> c_AdminController_settings
   c_AdminController_settings --> s_SettingsService
   c_AdminController_settings --> s_AuthService
   c_AdminController_settings -.renders.-> v_346f584d8a1316bb633e7b1888285595
-  r50 --> c_AdminController_saveSettings
+  r52 --> c_AdminController_saveSettings
   c_AdminController_saveSettings --> s_SettingsService
   c_AdminController_saveSettings --> s_AuthService
   c_AdminController_saveSettings -.renders.-> v_346f584d8a1316bb633e7b1888285595
-  r51 --> c_AdminController_saveAdminCredentials
+  r53 --> c_AdminController_saveAdminCredentials
   c_AdminController_saveAdminCredentials --> s_SecretService
   c_AdminController_saveAdminCredentials --> s_AuthService
   c_AdminController_saveAdminCredentials -.renders.-> v_346f584d8a1316bb633e7b1888285595
-  r52 --> c_AdminController_integrations
+  r54 --> c_AdminController_integrations
   c_AdminController_integrations --> s_SecretService
   c_AdminController_integrations --> s_AuthService
   c_AdminController_integrations -.renders.-> v_3a3a5cfe25c6dcfa5b0b2e7c502978a4
-  r53 --> c_AdminController_saveIntegrations
+  r55 --> c_AdminController_saveIntegrations
   c_AdminController_saveIntegrations --> s_SecretService
   c_AdminController_saveIntegrations --> s_AuthService
   c_AdminController_saveIntegrations -.renders.-> v_3a3a5cfe25c6dcfa5b0b2e7c502978a4
-  r54 --> c_AdminController_contactSubmissions
+  r56 --> c_AdminController_contactSubmissions
   c_AdminController_contactSubmissions --> s_ContactService
   c_AdminController_contactSubmissions --> s_AuthService
   c_AdminController_contactSubmissions -.renders.-> v_dc035279c3f1622f4ad7ab192730647d
-  r55 --> c_AdminController_supportTickets
+  r57 --> c_AdminController_supportTickets
   c_AdminController_supportTickets --> s_ResourceService
   c_AdminController_supportTickets --> s_AuthService
   c_AdminController_supportTickets -.renders.-> v_23455c65ad126a304dcb7ba7423bb7aa
-  r56 --> c_AdminController_branding
+  r58 --> c_AdminController_branding
   c_AdminController_branding --> s_SettingsService
   c_AdminController_branding --> s_SecretService
   c_AdminController_branding --> s_AuthService
   c_AdminController_branding -.renders.-> v_3ab877986fb4e4bbadd74915d6732966
-  r57 --> c_AdminController_media
+  r59 --> c_AdminController_media
   c_AdminController_media --> s_MediaService
   c_AdminController_media --> s_AuthService
   c_AdminController_media -.renders.-> v_13893a01173af97f85c2d7211ddc4700
-  r58 --> c_AdminController_uploadMedia
+  r60 --> c_AdminController_uploadMedia
   c_AdminController_uploadMedia --> s_MediaService
   c_AdminController_uploadMedia --> s_AuditLogService
   c_AdminController_uploadMedia --> s_AuthService
   c_AdminController_uploadMedia -.renders.-> v_13893a01173af97f85c2d7211ddc4700
-  r59 --> c_AdminController_audit
+  r61 --> c_AdminController_audit
   c_AdminController_audit --> s_AuditLogService
   c_AdminController_audit --> s_AuthService
   c_AdminController_audit -.renders.-> v_23455c65ad126a304dcb7ba7423bb7aa
-  r60 --> c_AdminController_backups
+  r62 --> c_AdminController_backups
   c_AdminController_backups --> s_JsonStoreService
   c_AdminController_backups --> s_AuthService
   c_AdminController_backups -.renders.-> v_23455c65ad126a304dcb7ba7423bb7aa
-  r61 --> c_AdminController_environment
+  r63 --> c_AdminController_environment
   c_AdminController_environment --> s_StoragePermissionService
   c_AdminController_environment --> s_AuthService
   c_AdminController_environment -.renders.-> v_bf035116efa00542032bf53e291d0678
-  r62 --> c_AdminController_saveEnvironment
+  r64 --> c_AdminController_saveEnvironment
   c_AdminController_saveEnvironment --> s_AuditLogService
   c_AdminController_saveEnvironment --> s_AuthService
   c_AdminController_saveEnvironment -.renders.-> v_bf035116efa00542032bf53e291d0678
-  r63 --> c_AdminController_fixPermissions
+  r65 --> c_AdminController_fixPermissions
   c_AdminController_fixPermissions --> s_StoragePermissionService
   c_AdminController_fixPermissions --> s_AuditLogService
   c_AdminController_fixPermissions --> s_AuthService
   c_AdminController_fixPermissions -.renders.-> v_bf035116efa00542032bf53e291d0678
-  r64 --> c_AdminController_projectMap
+  r66 --> c_AdminController_projectMap
   c_AdminController_projectMap --> s_ProjectMapService
   c_AdminController_projectMap --> s_AuthService
   c_AdminController_projectMap -.renders.-> v_54455030e9a112d23341d1f3dae2cb53

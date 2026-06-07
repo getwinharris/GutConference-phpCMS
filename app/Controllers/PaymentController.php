@@ -68,15 +68,15 @@ final class PaymentController extends BaseController {
         $paymentId = trim((string)($_POST['razorpay_payment_id'] ?? ''));
         $signature = trim((string)($_POST['razorpay_signature'] ?? ''));
         if ($registrationId === '' || $orderId === '' || $paymentId === '' || $signature === '') {
-            $this->flash('Payment verification details were incomplete.');
-            $this->redirect('/events/' . $slug . '#registration');
+            $this->redirectToFailed($slug, 'missing', $registrationId, $orderId, $paymentId);
+            return;
         }
 
         $secrets = (new SecretService())->all();
         $secret = trim((string)($secrets['razorpay_key_secret'] ?? ''));
         if ($secret === '' || !(new PaymentService($secret))->verifySignature($orderId, $paymentId, $signature)) {
-            $this->flash('Payment verification failed. Please contact support if money was debited.');
-            $this->redirect('/events/' . $slug . '#registration');
+            $this->redirectToFailed($slug, 'signature', $registrationId, $orderId, $paymentId);
+            return;
         }
 
         $store = new JsonStoreService();
@@ -89,19 +89,116 @@ final class PaymentController extends BaseController {
             }
         }
         if (!$registration) {
-            $this->flash('Registration record was not found for this payment.');
-            $this->redirect('/events/' . $slug . '#registration');
+            $this->redirectToFailed($slug, 'not_found', $registrationId, $orderId, $paymentId);
+            return;
         }
 
         $registration['payment_status'] = 'paid';
         $registration['razorpay_payment_id'] = $paymentId;
+        $registration['failure_reason'] = null;
         $registration['certificate_status'] = $registration['certificate_status'] ?? 'pending';
         $store->upsert('registrations', $registration);
 
         $event = (new EventService())->findBySlug($slug) ?? [];
         (new PurchaseNotificationService($store))->queuePurchaseSuccess($registration, $event, (new AuthService())->user() ?? []);
-        $this->flash('Payment verified. Confirmation and event reminders are being queued.');
-        $this->redirect('/events/' . $slug . '#registration');
+
+        $this->redirectToSuccess($slug, $registrationId, $orderId, $paymentId);
+    }
+
+    public function success(): void {
+        (new AuthService())->requireUser();
+        $slug = trim((string)($_GET['event'] ?? ''));
+        $registrationId = trim((string)($_GET['registration_id'] ?? ''));
+        $orderId = trim((string)($_GET['order_id'] ?? ''));
+        $paymentId = trim((string)($_GET['payment_id'] ?? ''));
+
+        $eventService = new EventService();
+        $event = $slug !== '' ? $eventService->findBySlug($slug) : null;
+        if (!$event) {
+            http_response_code(404);
+            $this->render('public/404');
+            return;
+        }
+        $event['venue'] = $eventService->venue($slug) ?? [];
+
+        $store = new JsonStoreService();
+        $registration = $this->findRegistration($store, $slug, $registrationId);
+
+        $this->render('public/payment-result', [
+            'outcome' => 'success',
+            'event' => $event,
+            'registration' => $registration ?: [],
+            'orderId' => $orderId,
+            'paymentId' => $paymentId,
+            'reason' => '',
+        ]);
+    }
+
+    public function failed(): void {
+        (new AuthService())->requireUser();
+        $slug = trim((string)($_GET['event'] ?? ''));
+        $registrationId = trim((string)($_GET['registration_id'] ?? ''));
+        $orderId = trim((string)($_GET['order_id'] ?? ''));
+        $paymentId = trim((string)($_GET['payment_id'] ?? ''));
+        $reason = trim((string)($_GET['reason'] ?? 'unknown'));
+
+        $eventService = new EventService();
+        $event = $slug !== '' ? $eventService->findBySlug($slug) : null;
+        if ($event) {
+            $event['venue'] = $eventService->venue($slug) ?? [];
+        }
+
+        $store = new JsonStoreService();
+        $registration = $this->findRegistration($store, $slug, $registrationId);
+
+        $this->render('public/payment-result', [
+            'outcome' => 'failed',
+            'event' => $event ?: [],
+            'registration' => $registration ?: [],
+            'orderId' => $orderId,
+            'paymentId' => $paymentId,
+            'reason' => $reason,
+        ]);
+    }
+
+    private function redirectToSuccess(string $slug, string $registrationId, string $orderId, string $paymentId): void {
+        $query = http_build_query([
+            'event' => $slug,
+            'registration_id' => $registrationId,
+            'order_id' => $orderId,
+            'payment_id' => $paymentId,
+        ]);
+        $this->redirect('/payment/success?' . $query);
+    }
+
+    private function redirectToFailed(string $slug, string $reason, string $registrationId, string $orderId, string $paymentId): void {
+        $store = new JsonStoreService();
+        $registration = $this->findRegistration($store, $slug, $registrationId);
+        if ($registration) {
+            $registration['payment_status'] = 'failed';
+            $registration['failure_reason'] = $reason;
+            if ($orderId !== '') $registration['razorpay_order_id'] = $orderId;
+            if ($paymentId !== '') $registration['razorpay_payment_id'] = $paymentId;
+            $store->upsert('registrations', $registration);
+        }
+        $query = http_build_query([
+            'event' => $slug,
+            'registration_id' => $registrationId,
+            'order_id' => $orderId,
+            'payment_id' => $paymentId,
+            'reason' => $reason,
+        ]);
+        $this->redirect('/payment/failed?' . $query);
+    }
+
+    private function findRegistration(JsonStoreService $store, string $slug, string $registrationId): ?array {
+        if ($slug === '' || $registrationId === '') return null;
+        foreach ($store->read('registrations') as $item) {
+            if (($item['id'] ?? '') === $registrationId && ($item['event_slug'] ?? '') === $slug) {
+                return $item;
+            }
+        }
+        return null;
     }
 
     private function pendingRegistration(array $event, array $user): array {
